@@ -219,6 +219,34 @@ figcaption{font-size:13px;color:var(--muted);margin-top:4px}
 .pf input[type=text],.pf input[type=tel],.pf select{width:100%;font:inherit;font-size:16px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);min-height:44px}
 .pfp{display:flex;align-items:center;gap:14px}
 .yas{background:var(--soft);border-radius:14px;padding:12px;margin:10px 0}.yas textarea{width:100%;font:inherit;font-size:16px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);min-height:90px}.yas select,.yas input{width:100%;font:inherit;font-size:16px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);min-height:44px}.yas label{display:block;font-size:14px;color:var(--muted);margin:10px 0 4px}.stp{font-weight:700;color:var(--petrol);margin:14px 0 0}.ans{white-space:pre-wrap;font-size:15px;line-height:1.5;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px;margin:6px 0}
+
+/* ---------- Visual: vidro, brilho e movimento ---------- */
+body{background:radial-gradient(circle at 8% -4%,color-mix(in srgb,var(--gold) 24%,transparent) 0,transparent 42%),radial-gradient(circle at 100% 18%,color-mix(in srgb,var(--marsala) 14%,transparent) 0,transparent 38%),var(--bg);background-attachment:fixed}
+.btn{background:linear-gradient(135deg,color-mix(in srgb,var(--marsala) 88%,#fff),var(--marsala));box-shadow:0 6px 16px color-mix(in srgb,var(--marsala) 30%,transparent),inset 0 1px 0 rgba(255,255,255,.28);transition:transform .15s,box-shadow .15s}
+.btn:active,.tab:active,.chip:active{transform:scale(.95)}
+.btn.alt{background:color-mix(in srgb,var(--card) 50%,transparent);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1.5px solid color-mix(in srgb,var(--marsala) 55%,transparent);box-shadow:none;color:var(--marsala)}
+.tab{background:color-mix(in srgb,var(--card) 55%,transparent);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-color:color-mix(in srgb,var(--gold) 45%,transparent);transition:transform .15s,background .2s,box-shadow .2s}
+.tab[aria-selected="true"]{background:linear-gradient(135deg,color-mix(in srgb,var(--marsala) 88%,#fff),var(--marsala));box-shadow:0 5px 14px color-mix(in srgb,var(--marsala) 35%,transparent);border-color:transparent}
+.card,.info,.panel,.week{background:color-mix(in srgb,var(--card) 80%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:0 4px 18px rgba(60,30,20,.07);border-color:color-mix(in srgb,var(--gold) 35%,var(--line))}
+.chip{background:color-mix(in srgb,var(--card) 60%,transparent)}
+.bar i{background:linear-gradient(90deg,var(--petrol),var(--gold))}
+.nav{position:sticky;top:0;z-index:30;padding:8px 0;margin:0 0 12px;background:color-mix(in srgb,var(--bg) 72%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+#app.go>*{animation:rise .4s both}
+#app.go>*:nth-child(2){animation-delay:.05s}#app.go>*:nth-child(3){animation-delay:.1s}#app.go>*:nth-child(4){animation-delay:.15s}
+.hero{display:flex;align-items:center;gap:14px;padding:12px 14px;margin:0 0 6px;border-radius:20px;background:linear-gradient(135deg,color-mix(in srgb,var(--marsala) 16%,var(--card)),color-mix(in srgb,var(--gold) 16%,var(--card)));border:1px solid color-mix(in srgb,var(--gold) 45%,transparent);box-shadow:0 6px 22px rgba(60,30,20,.10)}
+.ring{position:relative;width:84px;height:84px;flex:none;border:0;background:none;padding:0;cursor:pointer;transition:transform .15s}
+.ring:active{transform:scale(.94)}
+.ring svg{position:absolute;inset:0;width:84px;height:84px;transform:rotate(-90deg)}
+.ring .av{position:absolute;left:9px;top:9px;width:66px;height:66px;border:0;font-size:30px}
+.ring .pc{position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);background:var(--marsala);color:var(--on-marsala);font-size:12px;font-weight:700;border-radius:999px;padding:1px 9px;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.hinfo{flex:1;min-width:0}
+.hinfo .nm{font-family:var(--display);font-weight:600;font-size:24px;line-height:1.1;color:var(--ink)}
+.hinfo .msg{font-size:14px;color:var(--muted);margin:3px 0 8px}
+.mini{display:flex;gap:6px;flex-wrap:wrap}
+.mini button{font:inherit;font-size:13px;font-weight:600;border:1px solid color-mix(in srgb,var(--gold) 55%,transparent);background:color-mix(in srgb,var(--card) 55%,transparent);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:var(--ink);border-radius:999px;padding:5px 10px;cursor:pointer;min-height:32px}
+.mini button:active{transform:scale(.94)}
+@media (prefers-reduced-motion:reduce){#app.go>*{animation:none}.btn,.tab,.ring{transition:none}}
 </style>
 </head>
 <body>
@@ -227,7 +255,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:4px}
   <p class="sub">Um exercício de cada vez. Leve, seguro e no seu ritmo.</p>
   <hr class="rule">
   <div id="app"></div>
-  <p class="brand"><a href="https://instagram.com/corage.produtosdigitais" target="_blank" rel="noopener"><b>CorAge</b> · Produtos Digitais</a><br><a href="https://instagram.com/imagemmarca" target="_blank" rel="noopener">@imagemmarca</a><br>© 2026 · Todos os direitos reservados</p>
+  <p class="brand"><a href="https://instagram.com/corage.produtosdigitais" target="_blank" rel="noopener"><b>CorAge</b> · Produtos Digitais</a><br><a href="https://instagram.com/eve.imagememarca" target="_blank" rel="noopener">@eve.imagememarca</a><br>© 2026 · Todos os direitos reservados</p>
 </div>
 <div class="timer" id="timer" role="timer" aria-live="polite">
   <div><div class="t" id="tt">0:00</div><div class="l" id="tl"></div></div>
@@ -760,6 +788,20 @@ function teamBox(){
 
 
 function avatarHtml(){return S.avatar?'<img class="av" alt="Sua foto" src="'+S.avatar+'">':'<div class="av" aria-hidden="true">🙂</div>';}
+
+function heroHtml(){
+  const P=S.prof||{},n=P.n||'';
+  const wp=Math.min(100,Math.round(weekHist().length/wkg()*100));
+  const wtp=Math.min(100,Math.round((S.water||0)/wg()*100));
+  const mp=Math.round(MEALS.filter(m=>S.meals[m[0]]).length/MEALS.length*100);
+  const C=2*Math.PI*38,off=C*(1-wp/100);
+  const msg=wp>=100?'Meta da semana batida! 🏆':wp>=50?'Quase lá! Continue assim.':wp>0?'Você já começou. Isso é o mais difícil!':'Bora começar a semana?';
+  return '<div class="hero"><button class="ring" data-act="goperfil" aria-label="Abrir meu perfil. Progresso da semana: '+wp+' por cento">'
+   +'<svg viewBox="0 0 84 84" aria-hidden="true"><circle cx="42" cy="42" r="38" fill="none" stroke="var(--line)" stroke-width="5"/><circle cx="42" cy="42" r="38" fill="none" stroke="var(--gold)" stroke-width="5" stroke-linecap="round" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'" style="transition:stroke-dashoffset .8s"/></svg>'
+   +avatarHtml()+'<span class="pc">'+wp+'%</span></button>'
+   +'<div class="hinfo"><div class="nm">Oi, '+esc(n||'linda')+'!</div><div class="msg">'+msg+' '+weekHist().length+' de '+wkg()+' treinos na semana.</div>'
+   +'<div class="mini"><button data-act="view" data-v="treino">🏋️ '+wp+'%</button><button data-act="goagua">💧 '+wtp+'%</button><button data-act="goagua">🥗 '+mp+'%</button></div></div></div>';
+}
 function meHeader(){const n=(S.prof&&S.prof.n)||'';if(!n&&!S.avatar)return '';
   return '<div class="me">'+avatarHtml()+'<div><div class="name" style="font-size:20px">Oi, '+esc(n||'você')+'!</div>'+(S.prof.g?'<div class="how">Meu objetivo: '+esc(S.prof.g)+'</div>':'')+'</div></div>';}
 function profBox(){
@@ -1091,11 +1133,13 @@ function renderReceitas(){
 /* ---------- Tela principal ---------- */
 const VIEWS=[['treino','Treino'],['corpo','Corpo'],['cardio','Cardio'],['agenda','Agenda'],['prog','Progresso'],['compras','Compras'],['receitas','Receitas']];
 const FIRSTBOX={corpo:'peso',cardio:'medidor',prog:'trein',treino:null,agenda:null,compras:null,receitas:null};
+let lastView=null;
 function render(){
   let h='<div class="nav" role="tablist">'+VIEWS.map(v=>'<button class="tab" role="tab" data-act="view" data-v="'+v[0]+'" aria-selected="'+(view===v[0])+'">'+v[1]+'</button>').join('')+'</div>';
-  h=meHeader()+h;
+  h=heroHtml()+h;
   h+=view==='treino'?renderTreino():view==='corpo'?renderCorpo():view==='cardio'?renderCardio():view==='agenda'?renderAgenda():view==='compras'?renderCompras():view==='receitas'?renderReceitas():renderProgresso();
-  document.getElementById('app').innerHTML=h;
+  const ap=document.getElementById('app');ap.innerHTML=h;
+  if(lastView!==view){lastView=view;ap.classList.add('go');setTimeout(()=>ap.classList.remove('go'),700);}
   startAnim();
 }
 
@@ -1169,6 +1213,8 @@ document.getElementById('app').addEventListener('click',e=>{
   else if(a==='yassave'){const t=(S.yas.r||'').trim();if(!t){toast('Cole a resposta primeiro');return;}
     S.yas.list=S.yas.list||[];S.yas.list.unshift({d:today,q:S.yas.q||'',t:t});S.yas.list=S.yas.list.slice(0,10);S.yas.r='';save();render();celebrate('Guardado! Boa escolha 🥗',false);}
   else if(a==='yasdel'){S.yas.list.splice(+b.dataset.i,1);save();render();}
+  else if(a==='goperfil'){view='corpo';openId='perfil';render();window.scrollTo({top:0});}
+  else if(a==='goagua'){view='treino';openId='agua';render();window.scrollTo({top:0});}
   else if(a==='avdel'){delete S.avatar;save();render();}
   else if(a==='teamwa'){const f=b.dataset.f,d=((S.team||{})[f+'t']||'').replace(/\D/g,'');
     if(d.length<10){toast('Digite o WhatsApp com DDD primeiro');}else{window.open('https://wa.me/'+(d.length<=11?'55'+d:d),'_blank','noopener');}}
