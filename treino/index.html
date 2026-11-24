@@ -1044,9 +1044,16 @@ const RECEITAS=[
  ['Escorra o feijão do molho e ponha na panela.','Junte água, alho e louro.','Cozinhe 25 minutos na pressão.','Deixe sair a pressão sozinha. Guarde em potes na geladeira por até 4 dias.']]
 ];
 
-const YQ=['','Montar meu cardápio de hoje','Ideia de lanche leve','Trocar um alimento por outro','O que cozinhar com o que tenho em casa','Mercado: o que comprar esta semana','Como comer antes e depois do treino'];
+const YQ=['','Montar meu cardápio de hoje','Ideia de lanche leve','Trocar um alimento por outro','O que cozinhar com o que tenho em casa','Mercado: o que comprar esta semana','Como comer antes e depois do treino','Treino: montar um treino de 20 minutos','Treino: trocar um exercício do meu dia','Treino: tirar dúvida de postura','Treino: como subir a carga com segurança','Treino: motivação para hoje'];
 function yasPrompt(){
   const Y=S.yas,P=S.prof||{};
+  const co=(Y.q||'').indexOf('Treino:')===0;
+  const dy=DAYS.find(d=>d.n===S.cur),ex=dy?dy.itens.map(it=>EX[it.id].nome).join(', '):'';
+  if(co)return 'Você é a IAsmin, uma coach esportiva e personal trainer virtual, simpática e leve. Responda em português, com frases curtas e simples, sem termos difíceis.\n'
+   +'Sobre mim: mulher, '+(S.age||46)+' anos, treino na academia do meu prédio '+wkg()+' vezes por semana, com halteres leves, elástico, bike, esteira, elíptico e máquinas.'
+   +(P.g?' Meu objetivo: '+P.g+'.':'')+(P.t?' Gosto de treinar: '+P.t+'.':'')+(ex?' Meu treino de hoje tem: '+ex+'.':'')+'\n'
+   +'Meu pedido: '+Y.q.replace('Treino: ','')+'.\n'
+   +'Dê no máximo 5 linhas. Priorize segurança: carga leve, respiração solta e parar se doer. Não faça diagnóstico. No fim, lembre que isso é uma orientação e que devo falar com minha personal trainer.';
   return 'Você é a IAsmin, uma nutricionista virtual simpática e leve. Responda em português, com frases curtas e simples, sem termos difíceis. Use medidas em colheres, palma da mão ou copos, nunca frações.\n'
    +'Sobre mim: mulher, '+(S.age||46)+' anos. Treino na academia '+wkg()+' vezes por semana.'
    +(P.g?' Meu objetivo: '+P.g+'.':'')+(P.c?' Gosto de comer: '+P.c+'.':'')+(P.a?' Não posso comer: '+P.a+'.':'')
@@ -1056,7 +1063,7 @@ function yasPrompt(){
 }
 function yasBox(){
   const Y=S.yas;
-  let h='<div class="yas"><p style="margin:0">Oi! Eu sou a <b>IAsmin</b>, sua nutri virtual. Sigo 3 passos. É só uma orientação e não troca a sua nutricionista.</p>'
+  let h='<div class="yas"><p style="margin:0">Oi! Eu sou a <b>IAsmin</b>, sua nutri e coach esportiva virtual. Sigo 3 passos. É só uma orientação e não troca a sua nutricionista nem a sua personal.</p>'
    +'<p class="stp">1. O que você quer?</p><select data-act="yas" data-f="q">'+YQ.map(o=>'<option value="'+esc(o)+'"'+(Y.q===o?' selected':'')+'>'+(o||'Escolher')+'</option>').join('')+'</select>'
    +'<label>O que tem em casa? (opcional)</label><input type="text" data-act="yas" data-f="h" value="'+esc(Y.h||'')+'" placeholder="ex.: batata-doce, ovos, frango">'
    +'<p class="stp">2. Peça para a IAsmin</p><div class="row"><button class="btn" data-act="yasgo">Pedir e abrir o Gemini</button></div>'
@@ -1064,7 +1071,7 @@ function yasBox(){
    +'<p class="stp">3. Guarde a resposta aqui</p><textarea data-act="yas" data-f="r" placeholder="Cole aqui a resposta da IAsmin">'+esc(Y.r||'')+'</textarea>'
    +'<div class="row"><button class="btn" data-act="yassave">Guardar no app</button></div></div>';
   if(Y.list&&Y.list.length){h+='<h3>Respostas guardadas</h3>'+Y.list.map((e,i)=>'<div class="ans"><b>'+esc(e.q||'')+'</b> · '+dm(e.d)+'\n'+esc(e.t)+'</div><button class="lnk" data-act="yasdel" data-i="'+i+'">Apagar</button>').join('');}
-  return box('yas','<span class="emo">🥗</span>IAsmin, nutri virtual','',h);
+  return box('yas','<span class="emo">🥗</span>IAsmin, nutri e coach','',h);
 }
 
 function renderReceitas(){
