@@ -243,6 +243,14 @@ body{background:radial-gradient(circle at 8% -4%,color-mix(in srgb,var(--gold) 2
 @keyframes msn{0%{opacity:0;transform:scale(.9)}12%{opacity:1;transform:scale(1)}80%{opacity:1}100%{opacity:0}}
 .xp{margin-top:6px;font-size:14px;color:var(--muted)}.xp i{display:block;height:5px;border-radius:3px;background:var(--line);margin-top:4px;overflow:hidden}.xp i u{display:block;height:100%;background:var(--marsala);text-decoration:none}
 @media (prefers-reduced-motion:reduce){.mission{animation:none}}
+.anim{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 40' preserveAspectRatio='none'%3E%3Cg fill='%230B0C0E'%3E%3Crect x='0' y='22' width='14' height='18'/%3E%3Crect x='16' y='10' width='12' height='30'/%3E%3Crect x='30' y='18' width='16' height='22'/%3E%3Crect x='48' y='6' width='10' height='34'/%3E%3Crect x='60' y='20' width='18' height='20'/%3E%3Crect x='80' y='12' width='12' height='28'/%3E%3Crect x='94' y='24' width='14' height='16'/%3E%3Crect x='110' y='4' width='11' height='36'/%3E%3Crect x='123' y='16' width='16' height='24'/%3E%3Crect x='141' y='9' width='12' height='31'/%3E%3Crect x='155' y='21' width='15' height='19'/%3E%3Crect x='172' y='13' width='11' height='27'/%3E%3Crect x='185' y='19' width='15' height='21'/%3E%3C/g%3E%3Cg fill='%23FFC48A'%3E%3Crect x='19' y='16' width='2' height='2'/%3E%3Crect x='22' y='24' width='2' height='2'/%3E%3Crect x='50' y='12' width='2' height='2'/%3E%3Crect x='113' y='10' width='2' height='2'/%3E%3Crect x='116' y='20' width='2' height='2'/%3E%3Crect x='144' y='15' width='2' height='2'/%3E%3Crect x='83' y='18' width='2' height='2'/%3E%3Crect x='175' y='19' width='2' height='2'/%3E%3C/g%3E%3C/svg%3E") repeat-x bottom/220px 22%,linear-gradient(180deg,#140F1A 0%,#3A1D24 62%,#8A3A1C 100%);border:1px solid color-mix(in srgb,var(--marsala) 45%,transparent)}
+.anim .ag{filter:drop-shadow(0 0 1.2px #FF7A3D) drop-shadow(0 0 3px #F2642E)}
+.anim .bd{stroke:#0B0C0E}.anim .hd{fill:#0B0C0E;stroke:#0B0C0E}.anim .foot{fill:#0B0C0E;stroke:#0B0C0E}
+.anim .foc{stroke:#5CC0CC;opacity:.8}.anim .foc2{fill:#5CC0CC;opacity:.8}.anim .db{fill:#0B0C0E}
+.anim .floorl{stroke:#F2642E;opacity:.7}.anim .far{opacity:.55}
+.anim .acap{color:#FFB07A;font-family:var(--display);font-size:22px;letter-spacing:.06em;text-transform:uppercase;text-shadow:0 0 12px #F2642E}
+.energy{height:14px;border-radius:4px;background:#0B0C0E;border:1px solid var(--line)}
+.energy i{background:repeating-linear-gradient(90deg,var(--marsala) 0 10px,transparent 10px 13px);box-shadow:0 0 10px var(--marsala)}
 </style>
 </head>
 <body>
@@ -726,7 +734,7 @@ function renderTreino(){
   if(day.n===sug)h+='<p class="sug">Missão de hoje</p>';
   h+='<h2>'+esc(day.nome)+'</h2><p class="sub" style="margin:4px 0 0">'+esc(day.foco)+'</p>';
   h+='<div class="meta"><span class="chip">cerca de '+day.min+' min</span><span class="chip">'+day.itens.length+' exercícios</span></div>';
-  h+='<div class="bar"><i style="width:'+pct+'%"></i></div><p class="cnt">'+doneCount+' de '+day.itens.length+' feitos</p>';
+  h+='<div class="bar energy"><i style="width:'+pct+'%"></i></div><p class="cnt"><b>ENERGIA</b> · '+doneCount+' de '+day.itens.length+' feitos</p>';
   day.itens.forEach((it,i)=>{
     const e=EX[it.id], key=day.n+':'+i, isDone=!!S.done[key], isOpen=openId===key;
     h+='<div class="card'+(isDone?' done':'')+(isOpen?' open':'')+'">'
