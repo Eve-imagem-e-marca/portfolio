@@ -251,6 +251,9 @@ body{background:radial-gradient(circle at 8% -4%,color-mix(in srgb,var(--gold) 2
 .anim .acap{color:#FFB07A;font-family:var(--display);font-size:22px;letter-spacing:.06em;text-transform:uppercase;text-shadow:0 0 12px #F2642E}
 .energy{height:14px;border-radius:4px;background:#0B0C0E;border:1px solid var(--line)}
 .energy i{background:repeating-linear-gradient(90deg,var(--marsala) 0 10px,transparent 10px 13px);box-shadow:0 0 10px var(--marsala)}
+.stars{display:flex;gap:4px;margin-top:6px;font-size:24px;line-height:1}.stars span{color:var(--line);transition:color .3s,transform .3s}.stars span.on{color:#FFC24B;text-shadow:0 0 10px #F2642E;animation:pop .5s ease}
+@keyframes pop{0%{transform:scale(.4)}60%{transform:scale(1.3)}100%{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.stars span.on{animation:none}}
 </style>
 </head>
 <body>
@@ -825,6 +828,7 @@ function teamBox(){
 
 function avatarHtml(){return S.avatar?'<img class="av" alt="Sua foto" src="'+S.avatar+'">':'<div class="av" aria-hidden="true">💪</div>';}
 
+function starsHtml(){const n=wkg(),f=Math.min(n,weekHist().length);let h='<div class="stars" role="img" aria-label="'+f+' de '+n+' estrelas da semana">';for(let i=0;i<n;i++)h+='<span class="'+(i<f?'on':'')+'">★</span>';return h+'</div>';}
 function xpHtml(){const xp=S.hist.length*100,lv=Math.floor(xp/500)+1,pc=Math.round((xp%500)/5);return '<div class="xp"><b>Nível '+lv+'</b> · '+xp+' XP<i><u style="width:'+pc+'%"></u></i></div>';}
 function heroHtml(){
   const P=S.prof||{},n=P.n||'';
@@ -837,7 +841,7 @@ function heroHtml(){
    +'<svg viewBox="0 0 84 84" aria-hidden="true"><circle cx="42" cy="42" r="38" fill="none" stroke="var(--line)" stroke-width="5"/><circle cx="42" cy="42" r="38" fill="none" stroke="var(--gold)" stroke-width="5" stroke-linecap="round" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'" style="transition:stroke-dashoffset .8s"/></svg>'
    +avatarHtml()+'<span class="pc">'+wp+'%</span></button>'
    +'<div class="hinfo"><div class="nm">Oi, '+esc(n||'Frank')+'!</div><div class="msg">'+msg+' '+weekHist().length+' de '+wkg()+' treinos na semana.</div>'
-   +xpHtml()
+   +starsHtml()+xpHtml()
    +'<div class="mini"><button data-act="view" data-v="treino">🏋️ '+wp+'%</button><button data-act="goagua">💧 '+wtp+'%</button><button data-act="goagua">🥗 '+mp+'%</button></div></div></div>';
 }
 function meHeader(){const n=(S.prof&&S.prof.n)||'';if(!n&&!S.avatar)return '';
@@ -925,11 +929,6 @@ function renderProgresso(){
   h+=box('cargas','Minhas cargas','',
     ids.length?ids.map(id=>{const a=S.kgHist[id],f=a[0].kg,l=a[a.length-1].kg;return '<div class="li"><span>'+esc(EX[id].nome)+'</span><b>'+(a.length>1?k1(f)+' → '+k1(l)+' kg':k1(l)+' kg')+'</b></div>';}).join('')+'<p class="how" style="margin:10px 0 0">Anote a carga em cada exercício e finalize o treino. Aqui você vê a evolução.</p>'
         :'<p>Ainda sem cargas. Anote o peso usado em cada exercício e finalize o treino.</p>');
-  const ck=S.checks.slice(-6).reverse();
-  h+=box('sent','Como me senti','',
-    ck.length?'<div class="tbl"><div class="tr th"><span>Dia</span><span>Esforço</span><span>Lombar</span><span>Tornozelo</span></div>'+ck.map(c=>'<div class="tr"><span>'+dm(c.d)+'</span><span>'+c.e+'</span><span>'+c.l+'</span><span>'+c.a+'</span></div>').join('')+'</div>'
-      +'<div class="tip"><b>Atenção:</b> se a dor na lombar ou no tornozelo aumentar ou não passar, avise seu médico ou fisioterapeuta.</div>'
-      :'<p>Ao finalizar um treino, o app pergunta como você se sentiu. Assim você acompanha a lombar e o tornozelo.</p>');
   h+=box('backup','Guardar meus dados','',
     '<p style="margin-top:0">Seus dados ficam só neste aparelho e podem se perder se você limpar o navegador. Copie e guarde no seu bloco de notas.</p>'
    +'<div class="row"><button class="btn small" data-act="copy">Copiar meus dados</button></div>'
@@ -989,7 +988,6 @@ function renderAgenda(){
   if(x.c)det+=li('Cintura',k1(x.c.cm)+' cm');
   if(x.b.length)det+=li('Pressão',x.b.map(b=>b.s+'/'+b.di).join(', '));
   if(x.sl)det+=li('Sono',k1(x.sl.h)+' h');
-  if(x.ck.length)det+=li('Como me senti','esforço '+x.ck[x.ck.length-1].e+', lombar '+x.ck[x.ck.length-1].l+', tornozelo '+x.ck[x.ck.length-1].a);
   if(x.ph.length)det+='<div class="phg" style="margin-top:10px">'+x.ph.map(p=>'<img src="'+p.img+'" alt="Foto de progresso de '+dm(p.d)+'">').join('')+'</div>';
   if(selD===today)det+='<div class="row"><button class="btn small" data-act="goTreino">Ir para o treino de hoje</button></div>';
   h+='<div class="panel" style="margin:12px 0 16px">'+det+'</div>';
@@ -1280,7 +1278,7 @@ function doFinish(){
   if(cm>0)S.cardio.push({d:today,min:cm,auto:true});
   S.hist.push({d:today,day:S.cur});S.hist=S.hist.slice(-400);
   day.itens.forEach((it,i)=>{delete S.done[S.cur+':'+i]});
-  finished=true;ckPending=true;openId=null;save();render();
+  finished=true;ckPending=false;openId=null;save();render();
   {const n=weekHist().length;celebrate(n>=wkg()?'Meta da semana batida! Você é incrível 🏆':'Parabéns! Treino feito 🎉',true);}
   const m=document.querySelector('.done-msg');if(m)m.scrollIntoView({behavior:'smooth',block:'center'});
 }
