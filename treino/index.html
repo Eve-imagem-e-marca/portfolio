@@ -588,7 +588,7 @@ function ymd(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate
 const today=ymd(new Date());
 S.shop=S.shop||{};S.team=S.team||{};S.prof=S.prof||{};S.yas=S.yas||{list:[]};
 if(S.doneDate!==today){if(S.doneDate)S.wh[S.doneDate]=S.water||0;S.done={};S.water=0;S.meals={};S.doneDate=today;}
-if(!S.weights.length)S.weights.push({d:today,kg:60});
+if(!S.weights.length)S.weights.push({d:today,kg:60,seed:1});
 function wsOf(ds){const d=new Date(ds+'T12:00:00');const k=(d.getDay()+6)%7;d.setDate(d.getDate()-k);return ymd(d)}
 function weekStart(){return wsOf(today)}
 function weekHist(){const w=weekStart();return S.hist.filter(h=>h.d>=w)}
@@ -783,7 +783,17 @@ function teamBox(){
     +'<button class="btn alt" data-act="teamwa" data-f="'+k+'">Abrir conversa</button></div>';
   return box('equipe','Minha equipe','· personal e nutri',
     '<p class="how" style="margin:0 0 4px">Guarde aqui o contato de quem cuida de você. Se ainda não tem, deixe em branco e preencha depois. Fica salvo só no seu celular.</p>'
-    +row('p','Personal trainer','💪')+row('n','Nutricionista','🥗'));
+    +row('p','Personal trainer','💪')+row('n','Nutricionista','🥗')
+    +'<h3>Como achar uma profissional de verdade</h3>'
+    +'<p class="how" style="margin:0 0 6px">Eu não indico nomes, para não errar. Mas você pode conferir se a pessoa tem registro de verdade:</p>'
+    +'<div class="tip"><b>Nutricionista:</b> precisa ter faculdade de Nutrição e registro ativo no CRN. Confira o nome na Consulta Nacional de Nutricionistas.</div>'
+    +'<div class="row"><a class="btn alt yt" target="_blank" rel="noopener" href="https://cfn.org.br/consulta-nacional-de-nutricionistas">Conferir nutricionista</a></div>'
+    +'<div class="tip"><b>Personal ou coach:</b> precisa ter registro no CREF. Peça para ver a carteira profissional (ela tem um QR Code para conferir). Quem não tem registro não pode atuar como profissional de Educação Física.</div>'
+    +'<div class="row"><a class="btn alt yt" target="_blank" rel="noopener" href="https://www.confef.org.br">Site do CONFEF (CREF)</a></div>'
+    +'<h3>Levar para a consulta</h3>'
+    +'<p class="how" style="margin:0 0 6px">Junta seu último peso, cintura, pressão e treinos da semana num texto para você mostrar ou enviar.</p>'
+    +'<div class="row"><button class="btn" data-act="resumo">Copiar resumo</button></div>'
+    +'<div class="tip"><b>Cuidado:</b> se você está numa fase de mudanças no corpo, tem pressão alta ou toma remédios, conte isso para a nutricionista e para a médica antes de mudar a alimentação ou o treino.</div>');
 }
 
 
@@ -1095,17 +1105,17 @@ function yasPrompt(){
    +'Sobre mim: mulher, '+(S.age||46)+' anos, treino na academia do meu prédio '+wkg()+' vezes por semana, com halteres leves, elástico, bike, esteira, elíptico e máquinas.'
    +(P.g?' Meu objetivo: '+P.g+'.':'')+(P.t?' Gosto de treinar: '+P.t+'.':'')+(ex?' Meu treino de hoje tem: '+ex+'.':'')+'\n'
    +'Meu pedido: '+Y.q.replace('Treino: ','')+'.\n'
-   +'Dê no máximo 5 linhas. Priorize segurança: carga leve, respiração solta e parar se doer. Não faça diagnóstico. No fim, lembre que isso é uma orientação e que devo falar com minha personal trainer.';
+   +'Dê no máximo 5 linhas. Priorize segurança: carga leve, respiração solta e parar se doer. Não faça diagnóstico. Se você não tiver certeza de algo, diga que não sabe. Não invente dados, doses, remédios, suplementos ou estudos. Sobre hormônios, remédios, doenças ou dor, diga para eu procurar um médico. No fim, lembre que isso é uma orientação e que devo falar com minha personal trainer.';
   return 'Você é a IAsmin, uma nutricionista virtual simpática e leve. Responda em português, com frases curtas e simples, sem termos difíceis. Use medidas em colheres, palma da mão ou copos, nunca frações.\n'
    +'Sobre mim: mulher, '+(S.age||46)+' anos. Treino na academia '+wkg()+' vezes por semana.'
    +(P.g?' Meu objetivo: '+P.g+'.':'')+(P.c?' Gosto de comer: '+P.c+'.':'')+(P.a?' Não posso comer: '+P.a+'.':'')
    +(Y.h?' Tenho em casa: '+Y.h+'.':'')+' Tenho air fryer e panela de pressão elétrica. Evito sal em excesso.\n'
    +'Meu pedido: '+Y.q+'.\n'
-   +'Dê no máximo 5 linhas. Não faça diagnóstico nem dieta radical. No fim, lembre que isso é uma orientação e que devo falar com minha nutricionista.';
+   +'Dê no máximo 5 linhas. Não faça diagnóstico nem dieta radical. Se você não tiver certeza de algo, diga que não sabe. Não invente dados, doses, remédios, suplementos ou estudos. Sobre hormônios, remédios, doenças ou dor, diga para eu procurar um médico. No fim, lembre que isso é uma orientação e que devo falar com minha nutricionista.';
 }
 function yasBox(){
   const Y=S.yas;
-  let h='<div class="yas"><p style="margin:0">Oi! Eu sou a <b>IAsmin</b>, sua nutri e coach esportiva virtual. Sigo 3 passos. É só uma orientação e não troca a sua nutricionista nem a sua personal.</p>'
+  let h='<div class="yas"><p style="margin:0">Oi! Eu sou a <b>IAsmin</b>, sua nutri e coach esportiva virtual. Sigo 3 passos.</p><div class="tip"><b>Importante:</b> a IAsmin é uma ajuda virtual e pode errar. Ela não substitui nutricionista, personal ou médica. Para saúde, remédios, hormônios ou dor, confirme com uma profissional de verdade.</div>'
    +'<p class="stp">1. O que você quer?</p><select data-act="yas" data-f="q">'+YQ.map(o=>'<option value="'+esc(o)+'"'+(Y.q===o?' selected':'')+'>'+(o||'Escolher')+'</option>').join('')+'</select>'
    +'<label>O que tem em casa? (opcional)</label><input type="text" data-act="yas" data-f="h" value="'+esc(Y.h||'')+'" placeholder="ex.: batata-doce, ovos, frango">'
    +'<p class="stp">2. Peça para a IAsmin</p><div class="row"><button class="btn" data-act="yasgo">Pedir e abrir o Gemini</button></div>'
@@ -1215,6 +1225,15 @@ document.getElementById('app').addEventListener('click',e=>{
   else if(a==='yasdel'){S.yas.list.splice(+b.dataset.i,1);save();render();}
   else if(a==='goperfil'){view='corpo';openId='perfil';render();window.scrollTo({top:0});}
   else if(a==='goagua'){view='treino';openId='agua';render();window.scrollTo({top:0});}
+  else if(a==='resumo'){
+    const w=S.weights[S.weights.length-1],c=S.waist[S.waist.length-1],bp=S.bp[S.bp.length-1];
+    let t='Meu resumo ('+dm(today)+')\n';
+    t+=(w&&!w.seed)?'Peso: '+k1(w.kg)+' kg (em '+dm(w.d)+')\n':'';
+    t+=c?'Cintura: '+k1(c.cm)+' cm (em '+dm(c.d)+')\n':'';
+    t+=bp?'Pressão: '+bp.s+'/'+bp.di+' (em '+dm(bp.d)+')\n':'';
+    t+='Treinos nesta semana: '+weekHist().length+' de '+wkg()+'\n';
+    t+='Água hoje: '+(S.water||0)+' de '+wg()+' copos\n';
+    try{if(navigator.share){navigator.share({text:t}).catch(()=>{});}else{navigator.clipboard.writeText(t).then(()=>toast('Resumo copiado!'),()=>toast('Não consegui copiar'));}}catch(er){toast('Não consegui copiar');}}
   else if(a==='avdel'){delete S.avatar;save();render();}
   else if(a==='teamwa'){const f=b.dataset.f,d=((S.team||{})[f+'t']||'').replace(/\D/g,'');
     if(d.length<10){toast('Digite o WhatsApp com DDD primeiro');}else{window.open('https://wa.me/'+(d.length<=11?'55'+d:d),'_blank','noopener');}}
@@ -1261,7 +1280,7 @@ document.getElementById('app').addEventListener('click',e=>{
       if(typeof o.waterGoal==='number')S.waterGoal=o.waterGoal;
       if(typeof o.cardioGoal==='number')S.cardioGoal=o.cardioGoal;
       if(!S.plan.length)S.plan=[1,2,3,4,5];
-      if(!S.weights.length)S.weights.push({d:today,kg:60});
+      if(!S.weights.length)S.weights.push({d:today,kg:60,seed:1});
       save();render();
     }catch(er){msg.textContent='Não consegui ler. Cole o texto completo que você copiou.';}
   }
