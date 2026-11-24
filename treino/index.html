@@ -217,6 +217,7 @@ figcaption{font-size:13px;color:var(--muted);margin-top:4px}
 .pf label{display:block;font-size:14px;margin:10px 0 4px;color:var(--muted)}
 .pf input[type=text],.pf input[type=tel],.pf select{width:100%;font:inherit;font-size:16px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);min-height:44px}
 .pfp{display:flex;align-items:center;gap:14px}
+.yas{background:var(--soft);border-radius:14px;padding:12px;margin:10px 0}.yas textarea{width:100%;font:inherit;font-size:16px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);min-height:90px}.yas select,.yas input{width:100%;font:inherit;font-size:16px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);min-height:44px}.yas label{display:block;font-size:14px;color:var(--muted);margin:10px 0 4px}.stp{font-weight:700;color:var(--petrol);margin:14px 0 0}.ans{white-space:pre-wrap;font-size:15px;line-height:1.5;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px;margin:6px 0}
 </style>
 </head>
 <body>
@@ -556,7 +557,7 @@ function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 function pad(n){return String(n).padStart(2,'0')}
 function ymd(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
 const today=ymd(new Date());
-S.shop=S.shop||{};S.team=S.team||{};S.prof=S.prof||{};
+S.shop=S.shop||{};S.team=S.team||{};S.prof=S.prof||{};S.yas=S.yas||{list:[]};
 if(S.doneDate!==today){if(S.doneDate)S.wh[S.doneDate]=S.water||0;S.done={};S.water=0;S.meals={};S.doneDate=today;}
 if(!S.weights.length)S.weights.push({d:today,kg:60});
 function wsOf(ds){const d=new Date(ds+'T12:00:00');const k=(d.getDay()+6)%7;d.setDate(d.getDate()-k);return ymd(d)}
@@ -1041,8 +1042,33 @@ const RECEITAS=[
  ['1 xícara de feijão (já de molho 8 horas)','4 xícaras de água','1 dente de alho','1 folha de louro'],
  ['Escorra o feijão do molho e ponha na panela.','Junte água, alho e louro.','Cozinhe 25 minutos na pressão.','Deixe sair a pressão sozinha. Guarde em potes na geladeira por até 4 dias.']]
 ];
+
+const YQ=['','Montar meu cardápio de hoje','Ideia de lanche leve','Trocar um alimento por outro','O que cozinhar com o que tenho em casa','Mercado: o que comprar esta semana','Como comer antes e depois do treino'];
+function yasPrompt(){
+  const Y=S.yas,P=S.prof||{};
+  return 'Você é a IAsmin, uma nutricionista virtual simpática e leve. Responda em português, com frases curtas e simples, sem termos difíceis. Use medidas em colheres, palma da mão ou copos, nunca frações.\n'
+   +'Sobre mim: mulher, '+(S.age||46)+' anos. Treino na academia '+wkg()+' vezes por semana.'
+   +(P.g?' Meu objetivo: '+P.g+'.':'')+(P.c?' Gosto de comer: '+P.c+'.':'')+(P.a?' Não posso comer: '+P.a+'.':'')
+   +(Y.h?' Tenho em casa: '+Y.h+'.':'')+' Tenho air fryer e panela de pressão elétrica. Evito sal em excesso.\n'
+   +'Meu pedido: '+Y.q+'.\n'
+   +'Dê no máximo 5 linhas. Não faça diagnóstico nem dieta radical. No fim, lembre que isso é uma orientação e que devo falar com minha nutricionista.';
+}
+function yasBox(){
+  const Y=S.yas;
+  let h='<div class="yas"><p style="margin:0">Oi! Eu sou a <b>IAsmin</b>, sua nutri virtual. Sigo 3 passos. É só uma orientação e não troca a sua nutricionista.</p>'
+   +'<p class="stp">1. O que você quer?</p><select data-act="yas" data-f="q">'+YQ.map(o=>'<option value="'+esc(o)+'"'+(Y.q===o?' selected':'')+'>'+(o||'Escolher')+'</option>').join('')+'</select>'
+   +'<label>O que tem em casa? (opcional)</label><input type="text" data-act="yas" data-f="h" value="'+esc(Y.h||'')+'" placeholder="ex.: batata-doce, ovos, frango">'
+   +'<p class="stp">2. Peça para a IAsmin</p><div class="row"><button class="btn" data-act="yasgo">Pedir e abrir o Gemini</button></div>'
+   +'<p class="how" style="margin:6px 0 0">O pedido é copiado sozinho. No Gemini, é só colar e enviar. Crie sua conta grátis com o Gmail, se ainda não tiver.</p>'
+   +'<p class="stp">3. Guarde a resposta aqui</p><textarea data-act="yas" data-f="r" placeholder="Cole aqui a resposta da IAsmin">'+esc(Y.r||'')+'</textarea>'
+   +'<div class="row"><button class="btn" data-act="yassave">Guardar no app</button></div></div>';
+  if(Y.list&&Y.list.length){h+='<h3>Respostas guardadas</h3>'+Y.list.map((e,i)=>'<div class="ans"><b>'+esc(e.q||'')+'</b> · '+dm(e.d)+'\n'+esc(e.t)+'</div><button class="lnk" data-act="yasdel" data-i="'+i+'">Apagar</button>').join('');}
+  return box('yas','<span class="emo">🥗</span>IAsmin, nutri virtual','',h);
+}
+
 function renderReceitas(){
   let h='<h2>Receitas fáceis</h2><p class="sub" style="margin:4px 0 12px">Feitas na air fryer e na panela elétrica, com o que está na lista de compras.</p>';
+  h+=yasBox();
   RECEITAS.forEach(r=>{
     h+=box('rc-'+r[0],'<span class="emo">'+r[1]+'</span>'+r[2],'',
      '<div class="rc"><div class="meta"><span class="chip">'+r[3]+'</span><span class="chip">'+r[4]+'</span></div>'
@@ -1120,7 +1146,7 @@ function doFinish(){
 document.getElementById('app').addEventListener('click',e=>{
   const b=e.target.closest('[data-act]'); if(!b)return;
   const a=b.dataset.act;
-  if(a==='kg'||a==='rng'||a==='bpm'||a==='age'||a==='photo'||a==='team'||a==='prof'||a==='avatar'||a==='avdel')return;
+  if(a==='kg'||a==='rng'||a==='bpm'||a==='age'||a==='photo'||a==='team'||a==='prof'||a==='avatar'||a==='avdel'||a==='yas')return;
   if(a==='view'){view=b.dataset.v;openId=FIRSTBOX[view];save();render();window.scrollTo({top:0});}
   else if(a==='box'||a==='info'||a==='agua'){const k=b.dataset.k||a;openId=openId===k?null:k;render();}
   else if(a==='day'){S.cur=+b.dataset.n;openId=null;finished=false;ckPending=false;save();render();window.scrollTo({top:0});}
@@ -1129,6 +1155,12 @@ document.getElementById('app').addEventListener('click',e=>{
     if(S.done[k]){const dy=DAYS.find(d=>d.n===S.cur);if(dy.itens.every((it,i)=>S.done[dy.n+':'+i]))celebrate('Parabéns! Todos os exercícios de hoje 🎉',true);else celebrate(PRAISE[Math.floor(Math.random()*PRAISE.length)],false);}}
   else if(a==='shop'){const k=b.dataset.k;S.shop[k]=!S.shop[k];save();render();
     let all=true;SHOP.forEach((g,gi)=>g[2].forEach((it,ii)=>{if(!S.shop[gi+'-'+ii])all=false;}));if(all)celebrate('Compras completas! 🛒',true);}
+  else if(a==='yasgo'){if(!S.yas.q){toast('Escolha primeiro o que você quer');return;}
+    const t=yasPrompt();const go=()=>{toast('Pedido copiado! Cole no Gemini');setTimeout(()=>window.open('https://gemini.google.com/app','_blank','noopener'),700);};
+    try{navigator.clipboard.writeText(t).then(go,()=>{prompt('Copie este pedido:',t);});}catch(er){go();}}
+  else if(a==='yassave'){const t=(S.yas.r||'').trim();if(!t){toast('Cole a resposta primeiro');return;}
+    S.yas.list=S.yas.list||[];S.yas.list.unshift({d:today,q:S.yas.q||'',t:t});S.yas.list=S.yas.list.slice(0,10);S.yas.r='';save();render();celebrate('Guardado! Boa escolha 🥗',false);}
+  else if(a==='yasdel'){S.yas.list.splice(+b.dataset.i,1);save();render();}
   else if(a==='avdel'){delete S.avatar;save();render();}
   else if(a==='teamwa'){const f=b.dataset.f,d=((S.team||{})[f+'t']||'').replace(/\D/g,'');
     if(d.length<10){toast('Digite o WhatsApp com DDD primeiro');}else{window.open('https://wa.me/'+(d.length<=11?'55'+d:d),'_blank','noopener');}}
@@ -1185,6 +1217,7 @@ document.getElementById('app').addEventListener('input',e=>{
   const i=e.target.closest('[data-act]'); if(!i)return;
   const a=i.dataset.act;
   if(a==='kg'){S.kg[i.dataset.id]=i.value;save();}
+  else if(a==='yas'){S.yas=S.yas||{list:[]};S.yas[i.dataset.f]=i.value;save();}
   else if(a==='prof'){S.prof=S.prof||{};S.prof[i.dataset.f]=i.value;save();}
   else if(a==='team'){S.team=S.team||{};S.team[i.dataset.f]=i.value;save();}
   else if(a==='rng'){const o=document.getElementById(i.id+'-o');if(o)o.textContent=i.value;}
