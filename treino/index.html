@@ -1140,14 +1140,54 @@ function renderReceitas(){
   return h;
 }
 
+/* ---------- Mesa: harmonização e etiqueta ---------- */
+const HARM=[
+ ['frango','🍗','Frango','Limão, alho, ervas (salsinha, tomilho), páprica','Arroz, legumes assados, salada verde, batata doce','Água com gás e limão, chá gelado sem açúcar','Branco leve ou rosé'],
+ ['carne','🥩','Carne vermelha (bife, patinho, acém)','Alho, cebola, alecrim, pimenta-do-reino','Batata doce, feijão, couve refogada, salada de folhas','Suco de uva integral, limonada, água com gás','Tinto de corpo médio'],
+ ['porco','🥓','Carne de porco (lombo)','Maçã, abacaxi, laranja, mostarda','Purê de abóbora, repolho refogado, arroz','Suco de laranja ou de maçã sem açúcar','Branco aromático ou espumante'],
+ ['branco','🐟','Peixe branco (tilápia, pescada, merluza)','Limão, salsinha, azeite, alho','Legumes no vapor, arroz, salada, purê leve','Água com gás, limonada, chá de capim-santo gelado','Branco seco e leve'],
+ ['salmao','🍣','Salmão e atum','Limão, mostarda, ervas, um fio de mel','Brócolis, abobrinha, arroz, salada de pepino','Chá verde gelado, água com gás e limão','Branco encorpado, rosé ou tinto bem leve'],
+ ['camarao','🍤','Camarão','Alho, limão, coentro, pimenta suave','Arroz, salada, legumes salteados','Água de coco, limonada, água com gás','Branco seco ou espumante'],
+ ['ovo','🍳','Ovos e omelete','Cebolinha, queijo branco, tomate','Salada, pão integral, abacate','Suco natural sem açúcar, café sem açúcar','—']
+];
+const ETIQ=[
+ ['Ao sentar','Guardanapo no colo, celular guardado e no silencioso. Espere o anfitrião começar ou todos serem servidos.'],
+ ['Talheres','Use de fora para dentro, um para cada prato. Garfo à esquerda, faca e colher à direita. Os de sobremesa ficam acima do prato.'],
+ ['Pausa e fim','Pausou? Talheres cruzados ou em V no prato. Terminou? Garfo e faca juntos, lado a lado, na diagonal.'],
+ ['Guardanapo','Limpe os lábios com batidinhas. Se levantar, deixe ao lado do prato. No fim, também ao lado, sem dobrar certinho.'],
+ ['Ao comer','Boca fechada ao mastigar e sem falar de boca cheia. Cotovelos fora da mesa enquanto come. Pedaços pequenos.'],
+ ['Pão','Parta com a mão um pedaço de cada vez e passe a manteiga só nesse pedaço.'],
+ ['Sopa','Colher de dentro para fora, sem fazer barulho. Incline o prato para longe de você no final.'],
+ ['Copos','Água à frente, à direita. Taça de vinho branco e espumante: segure pela haste.'],
+ ['Passar a comida','Passe as travessas sempre para o mesmo lado, em geral para a direita. Sal e pimenta vão juntos. Sirva-se pouco, pode repetir.'],
+ ['Brinde','Olhe nos olhos, encoste a taça de leve e sorria. Não precisa beber se não quiser.'],
+ ['Imprevistos','Algo caiu? Não se desespere, peça ajuda com calma. Osso ou espinha: tire discretamente com o garfo.'],
+ ['No fim','Agradeça e elogie a comida. Palito e retoque fora da mesa.']
+];
+function renderMesa(){
+  let h='<h2>Mesa</h2><p class="sub" style="margin:4px 0 12px">O que combina com o quê, e como se comportar à mesa.</p>';
+  HARM.forEach(r=>{
+    h+=box('hm-'+r[0],'<span class="emo">'+r[1]+'</span>'+r[2],'',
+     '<div class="rc"><h3>Tempero que combina</h3><p>'+esc(r[3])+'</p>'
+     +'<h3>Acompanhamentos</h3><p>'+esc(r[4])+'</p>'
+     +'<h3>Para beber (sem álcool)</h3><p>'+esc(r[5])+'</p>'
+     +(r[6]!=='—'?'<h3>Se for beber vinho</h3><p>'+esc(r[6])+'</p>':'')+'</div>');
+  });
+  h+=box('hm-beb','<span class="emo">🥤</span>Bebidas: o que escolher','',
+   '<div class="rc"><ul><li>Água é a principal. Água com gás e limão deixa a refeição mais festiva.</li><li>Sucos: prefira naturais e sem açúcar. Suco de uva integral e limonada combinam com quase tudo.</li><li>Chás gelados sem açúcar: capim-santo, camomila, frutas, verde.</li><li>Álcool: se for beber, pouco, sempre com comida e com um copo de água entre as taças. Converse com seu médico se tiver dúvida.</li></ul></div>');
+  h+='<h2 style="margin-top:18px">Etiqueta à mesa</h2>';
+  h+=box('et','<span class="emo">🍽️</span>Regras de ouro','', '<div class="rc"><ol>'+ETIQ.map(x=>'<li><b>'+esc(x[0])+':</b> '+esc(x[1])+'</li>').join('')+'</ol></div>');
+  return h;
+}
+
 /* ---------- Tela principal ---------- */
-const VIEWS=[['treino','Treino'],['corpo','Corpo'],['cardio','Cardio'],['agenda','Agenda'],['prog','Progresso'],['compras','Compras'],['receitas','Receitas']];
-const FIRSTBOX={corpo:'peso',cardio:'medidor',prog:'trein',treino:null,agenda:null,compras:null,receitas:null};
+const VIEWS=[['treino','Treino'],['corpo','Corpo'],['cardio','Cardio'],['agenda','Agenda'],['prog','Progresso'],['compras','Compras'],['receitas','Receitas'],['mesa','Mesa']];
+const FIRSTBOX={corpo:'peso',cardio:'medidor',prog:'trein',treino:null,agenda:null,compras:null,receitas:null,mesa:null};
 let lastView=null;
 function render(){
   let h='<div class="nav" role="tablist">'+VIEWS.map(v=>'<button class="tab" role="tab" data-act="view" data-v="'+v[0]+'" aria-selected="'+(view===v[0])+'">'+v[1]+'</button>').join('')+'</div>';
   h=heroHtml()+h;
-  h+=view==='treino'?renderTreino():view==='corpo'?renderCorpo():view==='cardio'?renderCardio():view==='agenda'?renderAgenda():view==='compras'?renderCompras():view==='receitas'?renderReceitas():renderProgresso();
+  h+=view==='treino'?renderTreino():view==='corpo'?renderCorpo():view==='cardio'?renderCardio():view==='agenda'?renderAgenda():view==='compras'?renderCompras():view==='receitas'?renderReceitas():view==='mesa'?renderMesa():renderProgresso();
   const ap=document.getElementById('app');ap.innerHTML=h;
   if(lastView!==view){lastView=view;ap.classList.add('go');setTimeout(()=>ap.classList.remove('go'),700);}
   startAnim();
