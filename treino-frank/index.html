@@ -420,6 +420,8 @@ A.remada_h={type:'pose',focus:['back'],db:true,caps:['Puxe o halter até a cintu
 A.desenv={type:'pose',focus:['shoulder','arm'],db:true,caps:['Empurre para cima','Desça devagar'],
   frames:[{hip:[130,128.5],t:184,th:90,sh:0,ua:15,fa:170},{hip:[130,128.5],t:184,th:90,sh:0,ua:176,fa:178}],
   dyn:o=>rect(o.hip[0]-22,o.hip[1]+4,52,172-o.hip[1]-4)+line([o.hip[0]-10,o.hip[1]],[o.shoulder[0]-12,o.shoulder[1]-14],'prop2')};
+A.rosca={type:'pose',focus:['arm'],db:true,caps:['Dobre o cotovelo e suba o halter','Desça devagar'],
+  frames:[{hx:140,t:172,th:0,sh:0,ua:0,fa:8},{hx:140,t:172,th:0,sh:0,ua:0,fa:140}]};
 A.along={type:'pose',focus:['back'],caps:['Leve o quadril para trás e estique os braços','Volte devagar'],
   frames:[{ax:110,t:180,th:0,sh:270,ft:270,ua:0,fa:0},{ax:110,t:70,h:-10,th:60,sh:270,ft:270,ua:88,fa:88}],bg:MAT};
 /* cíclicos */
@@ -547,27 +549,38 @@ const EX={
   desenv:{nome:'Ombros sentada',onde:'Banco e halteres',
     passos:['Sente no banco com as costas bem apoiadas.','Com halteres leves ao lado dos ombros, empurre para cima.','Desça devagar.'],
     respire:'Solte o ar ao empurrar.',cuidado:'Halteres leves e sem arquear a lombar.'},
+  rosca:{nome:'Rosca direta com halteres',onde:'Halteres',
+    passos:['Em pé, um halter em cada mão, braços ao lado do corpo e palmas para frente.','Dobre os cotovelos e suba os halteres até a altura dos ombros.','Desça devagar até esticar os braços.'],
+    respire:'Solte o ar ao subir.',cuidado:'Cotovelos colados ao corpo. Não balance as costas para subir.'},
+  martelo:{nome:'Rosca martelo',onde:'Halteres',
+    passos:['Em pé, um halter em cada mão, com as palmas viradas uma para a outra.','Dobre os cotovelos e suba os halteres, sem girar os punhos.','Desça devagar.'],
+    respire:'Solte o ar ao subir.',cuidado:'Cotovelos parados e costas retas.'},
+  pallof:{nome:'Empurrar o elástico (abdômen)',onde:'Elástico preso no espaldar',
+    passos:['Prenda o elástico no espaldar na altura do peito e fique de lado para ele.','Segure o elástico junto ao peito com as duas mãos.','Estique os braços para frente, segure 3 segundos sem deixar o corpo girar, e volte devagar.'],
+    respire:'Solte o ar ao esticar os braços.',cuidado:'Barriga firme e quadril parado. Troque de lado na série seguinte.'},
+  joelho:{nome:'Joelho ao peito em pé',onde:'Em pé, perto do espaldar',
+    passos:['Em pé, apoie a mão no espaldar se precisar de equilíbrio.','Suba um joelho até a altura do quadril, contraindo a barriga.','Desça devagar e troque de perna.'],
+    respire:'Solte o ar ao subir o joelho.',cuidado:'Costas retas. Sem pressa e sem balançar o corpo.'},
   along:{nome:'Alongar para finalizar',onde:'Em pé, perto do espaldar',
     passos:['Alongue a frente e a parte de trás das coxas, 20 segundos cada.','Abra o peito com os braços para trás.','Termine em pé: abraçando o próprio corpo, solte os ombros e respire fundo.'],
     respire:'Lenta e profunda.',cuidado:'Alongue sem dor.'}
 };
 
 const DAYS=[
- {n:1,nome:'Pernas e glúteos',foco:'Força para queimar mais energia',min:40,itens:[
-  {id:'bike_aq',s:'5 minutos',t:300},{id:'legpress',s:'3 séries de 12',d:60},{id:'caixa',s:'3 séries de 10',d:60},
-  {id:'extensora',s:'3 séries de 12',d:60},{id:'panturrilha',s:'3 séries de 15',d:45},{id:'along',s:'5 minutos',t:300}]},
- {n:2,nome:'Costas, peito e ombros',foco:'Parte de cima forte',min:40,itens:[
-  {id:'esteira_aq',s:'5 minutos',t:300},{id:'puxada',s:'3 séries de 12',d:60},{id:'remada',s:'3 séries de 12',d:60},
-  {id:'supino',s:'3 séries de 12',d:60},{id:'lateral',s:'2 séries de 12',d:45},{id:'triceps',s:'2 séries de 12',d:45},{id:'along',s:'5 minutos',t:300}]},
- {n:3,nome:'Pernas e equilíbrio',foco:'Estabilidade e força das pernas',min:40,itens:[
-  {id:'eliptico_aq',s:'5 minutos',t:300},{id:'afundo',s:'3 séries de 8 por perna',d:60},{id:'panturrilha',s:'3 séries de 15',d:45},
-  {id:'equilibrio',s:'3 vezes de 30 segundos por pé',t:30,d:30},{id:'lateral_el',s:'3 séries de 10 passos por lado',d:45},
-  {id:'tornozelo',s:'2 séries de 12 por pé',d:30},{id:'extensora',s:'3 séries de 12',d:60},{id:'along',s:'5 minutos',t:300}]},
- {n:4,nome:'Cardio e alongamento',foco:'Queimar energia e soltar o corpo',min:35,itens:[
-  {id:'bike_cardio',s:'20 minutos',t:1200},{id:'esteira_cardio',s:'10 minutos',t:600},{id:'along',s:'5 minutos',t:300}]},
- {n:5,nome:'Corpo todo',foco:'Fechar a semana com ritmo',min:35,itens:[
-  {id:'esteira_cardio',s:'15 minutos',t:900},{id:'caixa',s:'2 séries de 12',d:45},{id:'puxada',s:'2 séries de 12',d:45},{id:'remada_h',s:'2 séries de 12 por lado',d:45},
-  {id:'desenv',s:'2 séries de 10',d:45},{id:'along',s:'5 minutos',t:300}]}
+ {n:1,nome:'Braços',foco:'Bíceps e tríceps',min:35,itens:[
+  {id:'esteira_aq',s:'5 minutos',t:300},{id:'rosca',s:'3 séries de 12',d:60},{id:'martelo',s:'3 séries de 12',d:60},
+  {id:'triceps',s:'3 séries de 12',d:60},{id:'along',s:'5 minutos',t:300}]},
+ {n:2,nome:'Ombros e panturrilha',foco:'Ombros largos e panturrilha firme',min:35,itens:[
+  {id:'bike_aq',s:'5 minutos',t:300},{id:'desenv',s:'3 séries de 12',d:60},{id:'lateral',s:'3 séries de 12',d:45},
+  {id:'panturrilha',s:'3 séries de 15',d:45},{id:'along',s:'5 minutos',t:300}]},
+ {n:3,nome:'Barriga e cardio',foco:'Queimar energia e firmar o abdômen',min:35,itens:[
+  {id:'esteira_cardio',s:'15 minutos',t:900},{id:'pallof',s:'3 séries de 10 por lado',d:45},{id:'joelho',s:'3 séries de 12 por perna',d:45},{id:'along',s:'5 minutos',t:300}]},
+ {n:4,nome:'Braços e ombros',foco:'Parte de cima forte',min:40,itens:[
+  {id:'esteira_aq',s:'5 minutos',t:300},{id:'rosca',s:'3 séries de 12',d:60},{id:'triceps',s:'3 séries de 12',d:60},
+  {id:'lateral',s:'3 séries de 12',d:45},{id:'desenv',s:'3 séries de 10',d:60},{id:'along',s:'5 minutos',t:300}]},
+ {n:5,nome:'Cardio e barriga',foco:'Fechar a semana queimando energia',min:35,itens:[
+  {id:'bike_cardio',s:'20 minutos',t:1200},{id:'pallof',s:'3 séries de 10 por lado',d:45},{id:'joelho',s:'3 séries de 12 por perna',d:45},
+  {id:'panturrilha',s:'2 séries de 15',d:45},{id:'along',s:'5 minutos',t:300}]}
 ];
 
 /* ---------- Estado salvo no celular (se o navegador permitir) ---------- */
@@ -715,7 +728,7 @@ function renderTreino(){
     h+='<div class="card'+(isDone?' done':'')+(isOpen?' open':'')+'">'
      +'<div class="head"><button class="chk" data-act="done" data-k="'+key+'" role="checkbox" aria-checked="'+isDone+'" aria-label="Marcar '+esc(e.nome)+' como feito">'+ICON_CHK+'</button>'
      +'<button class="toggle" data-act="open" data-k="'+key+'" aria-expanded="'+isOpen+'"><span class="name">'+esc(e.nome)+'</span><span class="how">'+esc(it.s)+'</span></button>'+ICON_CHEV+'</div>'
-     +'<div class="body"><div class="anim" data-id="'+it.id+'"><svg viewBox="0 0 300 190" role="img" aria-label="Animação: '+esc(e.nome)+'"><g class="ag"></g></svg><div class="acap" aria-live="off"></div><button class="btn alt small" data-act="pause">Pausar</button></div>'
+     +'<div class="body"><div class="anim" data-id="'+it.id+'"'+(ANIM.A[ANIMMAP[it.id]||it.id]?'':' hidden')+'><svg viewBox="0 0 300 190" role="img" aria-label="Animação: '+esc(e.nome)+'"><g class="ag"></g></svg><div class="acap" aria-live="off"></div><button class="btn alt small" data-act="pause">Pausar</button></div>'
      +'<h3>Onde</h3><p style="margin:0">'+esc(e.onde)+'</p>'
      +'<h3>Como fazer</h3><ol>'+e.passos.map(p=>'<li>'+esc(p)+'</li>').join('')+'</ol>'
      +'<div class="tip"><b>Respire:</b> '+esc(e.respire)+'</div>'
@@ -1226,7 +1239,7 @@ function tick(){
 document.getElementById('tx').addEventListener('click',()=>{clearInterval(tm);tBox.classList.remove('on')});
 
 /* ---------- Animação do exercício aberto ---------- */
-const ANIMMAP={bike_aq:'bike',bike_cardio:'bike',esteira_aq:'walk',esteira_cardio:'walk',eliptico_aq:'elip'};
+const ANIMMAP={bike_aq:'bike',bike_cardio:'bike',esteira_aq:'walk',esteira_cardio:'walk',eliptico_aq:'elip',martelo:'rosca'};
 let raf=0,lastTs=0,animClock=0;
 let animPaused=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches);
 function startAnim(){
