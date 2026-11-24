@@ -533,7 +533,7 @@ if(!S.cur)S.cur=suggested();
 let view='treino', openId=null, finished=false, ckPending=false;
 const wg=()=>S.waterGoal||8; // copos de 250 ml (8 = 2 litros, cerca de 35 ml por kg)
 const wkg=()=>(S.plan&&S.plan.length)||5, cg=()=>S.cardioGoal||150;
-const MEALS=[['cafe','Café da manhã','Uma proteína (ovo, iogurte ou queijo branco) e uma fruta.'],['lm','Lanche da manhã','Uma fruta ou um punhado de castanhas.'],['almoco','Almoço','Metade do prato de salada e legumes, um quarto de proteína e um quarto de arroz e feijão.'],['lt','Lanche da tarde','Iogurte, fruta ou pão integral com ovo.'],['jantar','Jantar','Leve, no mesmo estilo do almoço.']];
+const MEALS=[['cafe','Café da manhã','2 ovos, ou 6 colheres de sopa de iogurte, ou 2 fatias de queijo branco. E 1 fruta.'],['lm','Lanche da manhã','1 fruta ou 4 a 5 castanhas.'],['almoco','Almoço','Salada e legumes à vontade. Proteína: 1 filé do tamanho da palma da mão. Arroz: 3 colheres de sopa. Feijão: 2 colheres de sopa.'],['lt','Lanche da tarde','6 colheres de sopa de iogurte, ou 1 fruta, ou 1 fatia de pão integral com 1 ovo.'],['jantar','Jantar','Leve, no mesmo estilo do almoço.']];
 const CARDIO_IDS=['bike_aq','bike_cardio','esteira_aq','esteira_cardio','eliptico_aq'];
 
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
