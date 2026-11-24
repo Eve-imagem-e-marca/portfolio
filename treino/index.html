@@ -1150,6 +1150,13 @@ const HARM=[
  ['camarao','🍤','Camarão','Alho, limão, coentro, pimenta suave','Arroz, salada, legumes salteados','Água de coco, limonada, água com gás','Branco seco ou espumante'],
  ['ovo','🍳','Ovos e omelete','Cebolinha, queijo branco, tomate','Salada, pão integral, abacate','Suco natural sem açúcar, café sem açúcar','—']
 ];
+const POSTA=[
+ ['dia','☕','Dia a dia (simples e bonita)',['Prato raso no centro e, se tiver, um prato fundo por cima.','Garfo à esquerda, faca à direita com o fio virado para o prato, colher ao lado da faca.','Copo à direita, um pouco acima da faca.','Guardanapo de pano ou papel dobrado à esquerda ou sobre o prato.','Um detalhe só: uma florzinha num copo ou uma vela pequena.']],
+ ['jantar','🍷','Jantar com visita',['Prato de sousplat (base) com o prato raso por cima.','Garfos à esquerda (o de salada por fora), facas e colher de sopa à direita.','Talher de sobremesa na horizontal, acima do prato.','Copo de água e taça de vinho à direita, em diagonal.','Guardanapo de pano sobre o prato ou à esquerda, e um cartãozinho com o nome de cada pessoa.','Centro de mesa baixo, para todo mundo se ver.']],
+ ['cafe','🥐','Café da manhã ou da tarde',['Prato pequeno, faca de manteiga em cima e xícara com pires à direita.','Tábua de frutas, pães, queijos e geleias no centro, em potinhos.','Jarra de suco e garrafa térmica de café ao alcance.','Guardanapo e uma florzinha ou folhagem.']],
+ ['festa','🎉','Ocasião especial',['Toalha lisa e clara, e a cor da festa só nos detalhes (guardanapos, flores, velas).','Alturas diferentes no centro: velas, frutas e flores em grupos de 3.','Luz quente e suave. Velas de preferência sem cheiro, para não competir com a comida.','Deixe espaço: cada pessoa precisa de uns 60 cm de largura.']],
+ ['dicas','✨','Dicas para qualquer mesa',['Menos é mais: tudo que não vai ser usado, fica fora.','Escolha 2 ou 3 cores e repita.','Flores e velas baixas, para não atrapalhar a conversa.','Lembre da cor da sua marca: marrom, creme e verde combinam e são elegantes.','Teste o arranjo antes e deixe a comida por último.']]
+];
 const ETIQ=[
  ['Ao sentar','Guardanapo no colo, celular guardado e no silencioso. Espere o anfitrião começar ou todos serem servidos.'],
  ['Talheres','Use de fora para dentro, um para cada prato. Garfo à esquerda, faca e colher à direita. Os de sobremesa ficam acima do prato.'],
@@ -1165,7 +1172,7 @@ const ETIQ=[
  ['No fim','Agradeça e elogie a comida. Palito e retoque fora da mesa.']
 ];
 function renderMesa(){
-  let h='<h2>Mesa</h2><p class="sub" style="margin:4px 0 12px">O que combina com o quê, e como se comportar à mesa.</p>';
+  let h='<h2>Mesa</h2><p class="sub" style="margin:4px 0 12px">O que combina com o quê, como arrumar a mesa e como se comportar à mesa.</p>';
   HARM.forEach(r=>{
     h+=box('hm-'+r[0],'<span class="emo">'+r[1]+'</span>'+r[2],'',
      '<div class="rc"><h3>Tempero que combina</h3><p>'+esc(r[3])+'</p>'
@@ -1175,6 +1182,8 @@ function renderMesa(){
   });
   h+=box('hm-beb','<span class="emo">🥤</span>Bebidas: o que escolher','',
    '<div class="rc"><ul><li>Água é a principal. Água com gás e limão deixa a refeição mais festiva.</li><li>Sucos: prefira naturais e sem açúcar. Suco de uva integral e limonada combinam com quase tudo.</li><li>Chás gelados sem açúcar: capim-santo, camomila, frutas, verde.</li><li>Álcool: se for beber, pouco, sempre com comida e com um copo de água entre as taças. Converse com seu médico se tiver dúvida.</li></ul></div>');
+  h+='<h2 style="margin-top:18px">Mesa posta</h2>';
+  POSTA.forEach(r=>{h+=box('mp-'+r[0],'<span class="emo">'+r[1]+'</span>'+r[2],'','<div class="rc"><ul>'+r[3].map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div>');});
   h+='<h2 style="margin-top:18px">Etiqueta à mesa</h2>';
   h+=box('et','<span class="emo">🍽️</span>Regras de ouro','', '<div class="rc"><ol>'+ETIQ.map(x=>'<li><b>'+esc(x[0])+':</b> '+esc(x[1])+'</li>').join('')+'</ol></div>');
   return h;
