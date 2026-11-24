@@ -549,7 +549,7 @@ function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 function pad(n){return String(n).padStart(2,'0')}
 function ymd(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
 const today=ymd(new Date());
-S.shop=S.shop||{};
+S.shop=S.shop||{};S.team=S.team||{};
 if(S.doneDate!==today){if(S.doneDate)S.wh[S.doneDate]=S.water||0;S.done={};S.water=0;S.meals={};S.doneDate=today;}
 if(!S.weights.length)S.weights.push({d:today,kg:60});
 function wsOf(ds){const d=new Date(ds+'T12:00:00');const k=(d.getDay()+6)%7;d.setDate(d.getDate()-k);return ymd(d)}
@@ -731,8 +731,21 @@ function renderCorpo(){
    +'<div class="row"><button class="btn" data-act="saveP">Salvar pressão</button></div>'
    +'<div class="tip"><b>Cuidado:</b> meça sentada e em repouso. Se estiver muito alta antes do treino, ou se você não estiver bem, não treine e fale com seu médico. Leve esses registros nas consultas.</div>'
    +histList(b,'bp',e=>e.s+'/'+e.di));
+  h+=teamBox();
   h+=corpoExtra();
   return h;
+}
+
+
+function teamBox(){
+  const T=S.team||{};
+  const row=(k,label,emo)=>'<h3><span class="emo">'+emo+'</span>'+label+'</h3>'
+    +'<div class="row"><label class="kg" for="tm-'+k+'n">Nome <input id="tm-'+k+'n" data-act="team" data-f="'+k+'n" value="'+esc(T[k+'n']||'')+'" placeholder="ainda não tenho"></label></div>'
+    +'<div class="row"><label class="kg" for="tm-'+k+'t">WhatsApp <input id="tm-'+k+'t" inputmode="tel" data-act="team" data-f="'+k+'t" value="'+esc(T[k+'t']||'')+'" placeholder="11 91234-5678"></label>'
+    +'<button class="btn alt" data-act="teamwa" data-f="'+k+'">Abrir conversa</button></div>';
+  return box('equipe','Minha equipe','· personal e nutri',
+    '<p class="how" style="margin:0 0 4px">Guarde aqui o contato de quem cuida de você. Se ainda não tem, deixe em branco e preencha depois. Fica salvo só no seu celular.</p>'
+    +row('p','Personal trainer','💪')+row('n','Nutricionista','🥗'));
 }
 
 /* ---------- Tela: Cardio ---------- */
@@ -1071,7 +1084,7 @@ function doFinish(){
 document.getElementById('app').addEventListener('click',e=>{
   const b=e.target.closest('[data-act]'); if(!b)return;
   const a=b.dataset.act;
-  if(a==='kg'||a==='rng'||a==='bpm'||a==='age'||a==='photo')return;
+  if(a==='kg'||a==='rng'||a==='bpm'||a==='age'||a==='photo'||a==='team')return;
   if(a==='view'){view=b.dataset.v;openId=FIRSTBOX[view];save();render();window.scrollTo({top:0});}
   else if(a==='box'||a==='info'||a==='agua'){const k=b.dataset.k||a;openId=openId===k?null:k;render();}
   else if(a==='day'){S.cur=+b.dataset.n;openId=null;finished=false;ckPending=false;save();render();window.scrollTo({top:0});}
@@ -1080,6 +1093,8 @@ document.getElementById('app').addEventListener('click',e=>{
     if(S.done[k]){const dy=DAYS.find(d=>d.n===S.cur);if(dy.itens.every((it,i)=>S.done[dy.n+':'+i]))celebrate('Parabéns! Todos os exercícios de hoje 🎉',true);else celebrate(PRAISE[Math.floor(Math.random()*PRAISE.length)],false);}}
   else if(a==='shop'){const k=b.dataset.k;S.shop[k]=!S.shop[k];save();render();
     let all=true;SHOP.forEach((g,gi)=>g[2].forEach((it,ii)=>{if(!S.shop[gi+'-'+ii])all=false;}));if(all)celebrate('Compras completas! 🛒',true);}
+  else if(a==='teamwa'){const f=b.dataset.f,d=((S.team||{})[f+'t']||'').replace(/\D/g,'');
+    if(d.length<10){toast('Digite o WhatsApp com DDD primeiro');}else{window.open('https://wa.me/'+(d.length<=11?'55'+d:d),'_blank','noopener');}}
   else if(a==='rfeita'){celebrate('Parabéns! Você cozinhou: '+b.dataset.n+' 👩‍🍳',true);}
   else if(a==='shopclear'){S.shop={};save();render();}
   else if(a==='shopshare'){const t=shopText();try{if(navigator.share){navigator.share({text:t}).catch(()=>{});}else{navigator.clipboard.writeText(t).then(()=>toast('Lista copiada!'),()=>toast('Não consegui copiar'));}}catch(er){toast('Não consegui enviar');}}
@@ -1133,6 +1148,7 @@ document.getElementById('app').addEventListener('input',e=>{
   const i=e.target.closest('[data-act]'); if(!i)return;
   const a=i.dataset.act;
   if(a==='kg'){S.kg[i.dataset.id]=i.value;save();}
+  else if(a==='team'){S.team=S.team||{};S.team[i.dataset.f]=i.value;save();}
   else if(a==='rng'){const o=document.getElementById(i.id+'-o');if(o)o.textContent=i.value;}
   else if(a==='bpm'){const mx=220-S.age,n=num(i.value);const ok=n>=30&&n<=230;S.lastBpm=ok?Math.round(n):0;
     document.getElementById('gauge').innerHTML=gauge(S.lastBpm,mx);
