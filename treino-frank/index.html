@@ -668,7 +668,10 @@ function renderTreino(){
   const pct=Math.round(doneCount/day.itens.length*100);
   const sug=suggested();
   let h='';
-  h+='<a class="btn alt" style="display:block;text-align:center;margin:0 0 12px;text-decoration:none" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query='+encodeURIComponent('rock para treinar academia playlist')+'">🎸 Rock para treinar</a>';
+  h+=box('rock','<span class="emo">🎸</span>Playlists de rock para treinar','',
+    '<p class="how" style="margin:0 0 8px">Abre no YouTube. Deixe tocando e bora treinar.</p>'
+    +[['Rock e alternativo, alta energia','PL7W9LuUf6bFrxSIjYqny-ac12v6P_2bP8'],['Clássicos do rock (Def Leppard, Guns, Stones)','PL45_r-J4SdAGRN-ZUhOtbBJFrOGuoLSH5'],['Hard rock motivacional','PLAgb4yAxN0mQ-vApXHzLP9AiuBglIMt9c']]
+     .map(p=>'<a class="btn alt" style="display:block;text-align:center;margin:0 0 8px;text-decoration:none" target="_blank" rel="noopener" href="https://www.youtube.com/playlist?list='+p[1]+'">▶ '+p[0]+'</a>').join(''));
   h+='<div class="week"><b>'+wh.length+'</b><span>de '+wkg()+' treinos nesta semana. Qualquer número já é vitória.</span></div>';
   h+=box('info','Antes de começar','',
     '<h3>Como ler o treino</h3><p><b>Série</b> é um grupo de repetições. <b>Repetição</b> é cada vez que você faz o movimento. Entre as séries, descanse.</p>'
@@ -1181,8 +1184,8 @@ function renderMesa(){
 }
 
 /* ---------- Tela principal ---------- */
-const VIEWS=[['treino','Treino'],['corpo','Corpo'],['cardio','Cardio'],['agenda','Agenda'],['prog','Progresso'],['compras','Compras'],['receitas','Receitas'],['mesa','Mesa']];
-const FIRSTBOX={corpo:'peso',cardio:'medidor',prog:'trein',treino:null,agenda:null,compras:null,receitas:null,mesa:null};
+const VIEWS=[['treino','Treino'],['corpo','Corpo'],['cardio','Cardio'],['agenda','Agenda'],['prog','Progresso'],['compras','Compras'],['receitas','Receitas']];
+const FIRSTBOX={corpo:'peso',cardio:'medidor',prog:'trein',treino:null,agenda:null,compras:null,receitas:null};
 let lastView=null;
 function render(){
   let h='<div class="nav" role="tablist">'+VIEWS.map(v=>'<button class="tab" role="tab" data-act="view" data-v="'+v[0]+'" aria-selected="'+(view===v[0])+'">'+v[1]+'</button>').join('')+'</div>';
