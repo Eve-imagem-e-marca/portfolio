@@ -549,6 +549,9 @@ const EX={
   desenv:{nome:'Ombros sentada',onde:'Banco e halteres',
     passos:['Sente no banco com as costas bem apoiadas.','Com halteres leves ao lado dos ombros, empurre para cima.','Desça devagar.'],
     respire:'Solte o ar ao empurrar.',cuidado:'Halteres leves e sem arquear a lombar.'},
+  voador:{nome:'Voador (peito)',onde:'Máquina voador',
+    passos:['Sente com as costas apoiadas e segure as alças na altura do peito.','Junte as mãos à frente do corpo, apertando o peito.','Volte devagar até sentir o peito abrir, sem soltar o peso de uma vez.'],
+    respire:'Solte o ar ao juntar as mãos.',cuidado:'Ombros baixos e carga que permita controlar a volta.'},
   rosca:{nome:'Rosca direta com halteres',onde:'Halteres',
     passos:['Em pé, um halter em cada mão, braços ao lado do corpo e palmas para frente.','Dobre os cotovelos e suba os halteres até a altura dos ombros.','Desça devagar até esticar os braços.'],
     respire:'Solte o ar ao subir.',cuidado:'Cotovelos colados ao corpo. Não balance as costas para subir.'},
@@ -567,17 +570,17 @@ const EX={
 };
 
 const DAYS=[
- {n:1,nome:'Braços',foco:'Bíceps e tríceps',min:35,itens:[
-  {id:'esteira_aq',s:'5 minutos',t:300},{id:'rosca',s:'3 séries de 12',d:60},{id:'martelo',s:'3 séries de 12',d:60},
+ {n:1,nome:'Peito e tríceps',foco:'Peito firme e braços fortes',min:40,itens:[
+  {id:'esteira_aq',s:'5 minutos',t:300},{id:'supino',s:'3 séries de 12',d:60},{id:'voador',s:'3 séries de 12',d:60},
   {id:'triceps',s:'3 séries de 12',d:60},{id:'along',s:'5 minutos',t:300}]},
  {n:2,nome:'Ombros e panturrilha',foco:'Ombros largos e panturrilha firme',min:35,itens:[
   {id:'bike_aq',s:'5 minutos',t:300},{id:'desenv',s:'3 séries de 12',d:60},{id:'lateral',s:'3 séries de 12',d:45},
   {id:'panturrilha',s:'3 séries de 15',d:45},{id:'along',s:'5 minutos',t:300}]},
  {n:3,nome:'Barriga e cardio',foco:'Queimar energia e firmar o abdômen',min:35,itens:[
   {id:'esteira_cardio',s:'15 minutos',t:900},{id:'pallof',s:'3 séries de 10 por lado',d:45},{id:'joelho',s:'3 séries de 12 por perna',d:45},{id:'along',s:'5 minutos',t:300}]},
- {n:4,nome:'Braços e ombros',foco:'Parte de cima forte',min:40,itens:[
-  {id:'esteira_aq',s:'5 minutos',t:300},{id:'rosca',s:'3 séries de 12',d:60},{id:'triceps',s:'3 séries de 12',d:60},
-  {id:'lateral',s:'3 séries de 12',d:45},{id:'desenv',s:'3 séries de 10',d:60},{id:'along',s:'5 minutos',t:300}]},
+ {n:4,nome:'Peito e bíceps',foco:'Peito firme e braços fortes',min:40,itens:[
+  {id:'esteira_aq',s:'5 minutos',t:300},{id:'supino',s:'3 séries de 12',d:60},{id:'voador',s:'3 séries de 12',d:60},
+  {id:'rosca',s:'3 séries de 12',d:60},{id:'martelo',s:'3 séries de 12',d:60},{id:'along',s:'5 minutos',t:300}]},
  {n:5,nome:'Cardio e barriga',foco:'Fechar a semana queimando energia',min:35,itens:[
   {id:'bike_cardio',s:'20 minutos',t:1200},{id:'pallof',s:'3 séries de 10 por lado',d:45},{id:'joelho',s:'3 séries de 12 por perna',d:45},
   {id:'panturrilha',s:'2 séries de 15',d:45},{id:'along',s:'5 minutos',t:300}]}
@@ -714,6 +717,7 @@ function renderTreino(){
    +'<div class="tip"><b>Sem dieta radical</b> e sem pular refeição. Antes do treino, coma algo leve.</div>'
    +'<div class="tip"><b>Treino à noite (20:30):</b> evite café e energético depois das 17h. Nos últimos 5 minutos, baixe o ritmo e alongue. Beba água aos poucos perto da hora de dormir.</div>'
    +'<div class="tip"><b>Barriga:</b> a gordura de lá não sai só com abdominal. Ela diminui com treino, caminhada, sono e boa alimentação juntos.</div>'
+   +'<div class="tip"><b>Peito:</b> o treino firma o músculo, e a gordura do peito diminui com cardio e alimentação, junto com o corpo todo. Se notar um caroço, dor ou o peito crescendo, procure um médico.</div>'
    +'<p class="how" style="margin:12px 0 0">Para um cardápio com quantidades, procure uma nutricionista. Aqui é só um guia.</p>');
   h+='<div class="tabs" role="tablist">'+DAYS.map(d=>{
     const hit=wh.some(x=>x.day===d.n);
