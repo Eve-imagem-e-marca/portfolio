@@ -51,6 +51,23 @@ h2{font-size:27px;color:var(--mars);margin-bottom:14px}
 .links{margin:26px auto 0;max-width:340px;display:grid;gap:10px}
 .links a{color:var(--cre);text-decoration:none;border:2px solid rgba(246,239,230,.7);border-radius:40px;padding:13px 18px;font-size:17px;font-weight:600}
 footer{text-align:center;padding:22px;font-size:15px;color:var(--mar)}
+/* Detalhes de tecnologia (as cores da marca não mudam) */
+header{position:relative;overflow:hidden}
+header>.wrap{position:relative;z-index:1}
+header::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(246,239,230,.16) 1px,transparent 1.4px);background-size:22px 22px;-webkit-mask-image:linear-gradient(180deg,#000,transparent 85%);mask-image:linear-gradient(180deg,#000,transparent 85%);pointer-events:none}
+header::after{content:'';position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,rgba(246,239,230,.6),transparent)}
+.foto{box-shadow:0 0 0 8px rgba(246,239,230,.10),0 0 28px rgba(246,239,230,.18)}
+h2:before{content:'';display:inline-block;width:26px;height:2px;background:var(--pet);margin:0 10px 6px 0;vertical-align:middle;box-shadow:30px 0 0 -0px transparent}
+h2:after{content:'';display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--pet);margin-left:10px;vertical-align:middle;opacity:.7}
+.final h2:before,.final h2:after{background:var(--cre)}
+.caso,.itens li,.sobre{position:relative;border:1px solid rgba(31,74,82,.12);transition:transform .2s,box-shadow .2s,border-color .2s}
+.caso:before{content:'';position:absolute;top:10px;right:10px;width:16px;height:16px;border-top:2px solid rgba(31,74,82,.35);border-right:2px solid rgba(31,74,82,.35);border-radius:0 6px 0 0}
+.caso:hover,.itens li:hover{transform:translateY(-2px);border-color:rgba(31,74,82,.38);box-shadow:0 8px 22px rgba(31,74,82,.12)}
+.tag:before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--pet);margin-right:7px;vertical-align:middle}
+.btn,.links a{transition:transform .15s,box-shadow .2s}
+.btn:hover,.links a:hover{transform:translateY(-1px);box-shadow:0 0 0 3px rgba(246,239,230,.25)}
+.passos li:before{box-shadow:0 0 0 5px rgba(31,74,82,.12)}
+@media (prefers-reduced-motion:reduce){.caso,.itens li,.btn,.links a{transition:none}.caso:hover,.itens li:hover{transform:none}}
 </style>
 </head>
 <body>
