@@ -680,6 +680,10 @@ function renderTreino(){
   const pct=Math.round(doneCount/day.itens.length*100);
   const sug=suggested();
   let h='';
+  h+=box('trilha','Trilha sonora para treinar','',
+    '<p class="how" style="margin:0 0 8px">Abre no YouTube. Deixe tocando e bora treinar.</p>'
+    +[['Anos 80 para treinar','anos 80 playlist para treinar academia'],['Gorillaz, as melhores','Gorillaz playlist melhores musicas'],['Música de treino, alta energia','playlist musica de treino academia motivacional']]
+     .map(p=>'<a class="btn alt" style="display:block;text-align:center;margin:0 0 8px;text-decoration:none" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query='+encodeURIComponent(p[1])+'">▶ '+p[0]+'</a>').join(''));
   h+='<div class="week"><b>'+wh.length+'</b><span>de '+wkg()+' treinos nesta semana. Qualquer número já é vitória.</span></div>';
   h+=box('info','Antes de começar','',
     '<h3>Como ler o treino</h3><p><b>Série</b> é um grupo de repetições. <b>Repetição</b> é cada vez que você faz o movimento. Entre as séries, descanse.</p>'
