@@ -367,6 +367,7 @@ A.prancha={type:'pose',focus:['core'],caps:['Barriga firme, corpo reto','Respire
 A.puxada={type:'pose',focus:['arm','back'],caps:['Puxe a barra até o peito','Volte devagar'],
   frames:[{hx:120,t:182,th:88,sh:0,ua:172,fa:172},{hx:120,t:192,th:88,sh:0,ua:350,fa:150}],
   dyn:(o)=>rect(o.hip[0]-26,o.hip[1]+4,56,172-o.hip[1]-4)+line([o.hip[0]+22,6],o.hand,'cab')+line([o.hand[0]-12,o.hand[1]],[o.hand[0]+12,o.hand[1]],'prop2')+circ([o.hip[0]+22,6],3,'prop2')};
+A.puxada_pe=A.puxada;
 A.remada={type:'pose',focus:['back'],caps:['Puxe até a barriga','Volte devagar'],
   frames:[{hx:80,t:182,th:95,sh:85,ft:170,ua:88,fa:88},{hx:80,t:192,th:95,sh:85,ft:170,ua:-30,fa:75}],
   dyn:(o)=>rect(o.hip[0]-22,o.hip[1]+4,36,12)+line([o.ankle[0]+10,o.ankle[1]-30],[o.ankle[0]+10,o.ankle[1]+8],'prop2')+line(o.hand,[270,160],'cab')+circ([270,160],3,'prop2')};
@@ -497,6 +498,9 @@ const EX={
   prancha:{nome:'Prancha com joelhos',onde:'Colchonete',
     passos:['Apoie os antebraços e os joelhos no chão.','Deixe o corpo reto, do joelho até a cabeça.','Segure firme a barriga durante o tempo.'],
     respire:'Continue respirando. Nunca prenda o ar.',cuidado:'Não deixe a lombar afundar. Se doer, pare.'},
+  puxada_pe:{nome:'Puxada em pé na polia',onde:'Polia alta, sem banco',
+    passos:['Em pé, de frente para a polia, segure a barra com as mãos na largura dos ombros.','Com os braços quase esticados, puxe a barra para baixo até a altura das coxas.','Volte devagar até os braços subirem à frente.'],
+    respire:'Solte o ar ao puxar.',cuidado:'Joelhos levemente dobrados e costas retas. Não balance o corpo.'},
   puxada:{nome:'Puxada alta',onde:'Polia alta',
     passos:['Sente e segure a barra com as mãos mais abertas que os ombros.','Puxe a barra até o peito, levando os cotovelos para baixo.','Volte devagar até os braços esticarem.'],
     respire:'Solte o ar ao puxar.',cuidado:'Não balance o corpo para ajudar.'},
@@ -561,7 +565,7 @@ const DAYS=[
   {id:'bike_aq',s:'5 minutos',t:300},{id:'legpress',s:'3 séries de 12',d:60},{id:'caixa',s:'3 séries de 10',d:60},
   {id:'ponte',s:'3 séries de 15',d:45},{id:'birddog',s:'3 séries de 8 por lado',d:30},{id:'prancha',s:'3 séries de 20 segundos',t:20,d:30},{id:'along',s:'5 minutos',t:300}]},
  {n:2,nome:'Costas, peito e ombros',foco:'Parte de cima leve e barriga firme',min:40,itens:[
-  {id:'esteira_aq',s:'5 minutos',t:300},{id:'puxada',s:'3 séries de 12',d:60},{id:'remada',s:'3 séries de 12',d:60},
+  {id:'esteira_aq',s:'5 minutos',t:300},{id:'puxada_pe',s:'3 séries de 12',d:60},{id:'remada',s:'3 séries de 12',d:60},
   {id:'supino',s:'3 séries de 12',d:60},{id:'lateral',s:'2 séries de 12',d:45},{id:'triceps',s:'2 séries de 12',d:45},{id:'deadbug',s:'3 séries de 8',d:30},{id:'along',s:'5 minutos',t:300}]},
  {n:3,nome:'Pernas e tornozelo',foco:'Equilíbrio e proteção dos pés',min:40,itens:[
   {id:'eliptico_aq',s:'5 minutos',t:300},{id:'afundo',s:'3 séries de 8 por perna',d:60},{id:'panturrilha',s:'3 séries de 15',d:45},
