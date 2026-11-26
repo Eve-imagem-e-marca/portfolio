@@ -438,7 +438,16 @@ var TIPOS=[
 var FORMS=[
 {id:"legenda",n:"Legenda",d:"Texto para acompanhar a foto ou o vídeo",r:"Entregue SOMENTE uma legenda para Instagram, com até 800 caracteres, primeira linha forte e parágrafos curtos. Não escreva roteiro nem carrossel."},
 {id:"carrossel",n:"Carrossel",d:"7 telas com texto curto",r:"Entregue SOMENTE o texto de um carrossel de 7 telas. A tela 1 é uma capa de impacto, em letras maiúsculas. Cada tela tem um título curto e no máximo 25 palavras. A tela 7 é o convite final. Não escreva legenda."},
-{id:"roteiro",n:"Roteiro de vídeo",d:"Para gravar um vídeo de até 1 minuto",r:"Entregue SOMENTE um roteiro de vídeo de 40 a 60 segundos, com gancho, desenvolvimento e fechamento, dizendo o que falar e o que mostrar em cada cena. Não escreva legenda."}];
+{id:"roteiro",n:"Roteiro de vídeo",d:"Para gravar um vídeo de até 1 minuto",r:"Entregue SOMENTE um roteiro de vídeo de 40 a 60 segundos, com gancho, desenvolvimento e fechamento, dizendo o que falar e o que mostrar em cada cena. Não escreva legenda."},
+{id:"status",n:"Texto de status ou stories",d:"Curto, cabe em uma tela",r:"Entregue SOMENTE um texto curto para status ou stories, com até 280 caracteres, que caiba em uma tela. Não escreva legenda nem roteiro."},
+{id:"audio",n:"Áudio curto",d:"Para mandar no WhatsApp ou gravar",r:"Entregue SOMENTE um roteiro de áudio de 30 a 40 segundos, para ela falar de forma natural, com início, meio e fim. Não escreva legenda."}];
+var ESTILOS=[
+{id:"",n:"Deixe o Gemini escolher",r:""},
+{id:"dica",n:"Dica rápida",r:"Estilo: dica rápida. Ensine um segredo prático em poucas frases."},
+{id:"uso",n:"Dica de uso",r:"Estilo: dica de uso. Mostre como usar ou combinar algo do dia a dia do público dela."},
+{id:"erro",n:"Erro comum",r:"Estilo: erro comum. Mostre o erro que as pessoas cometem e como fazer do jeito certo."},
+{id:"check",n:"Checklist",r:"Estilo: checklist. Liste 3 coisas para a pessoa conferir antes de agir."},
+{id:"tuto",n:"Mini tutorial",r:"Estilo: mini tutorial. Explique um passo a passo curto."}];
 var AREAS=["Psicóloga","Terapeuta","Arteterapeuta","Esteticista","Dentista","Nutricionista","Consultora de imagem","Mentora ou coach","Arquiteta","Outra área de cuidado"];
 var TIT=["O que você tem em mãos?","Seu material","Como você quer o texto?","Comando no Gemini","Cole o texto pronto"];
 
@@ -454,7 +463,7 @@ function pronto(a){var t=get(TIPOS,a.tipo);
 function cp(t,msg){var ok=function(){toast(msg||"Copiado.")};
   var fb=function(){var ta=document.createElement("textarea");ta.value=t;ta.style.cssText="position:fixed;left:0;top:0;opacity:0";document.body.appendChild(ta);ta.focus();ta.select();try{document.execCommand("copy");ok()}catch(e){toast("Não consegui copiar. Segure o texto e escolha Copiar.")}document.body.removeChild(ta)};
   try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(ok,fb);return}}catch(e){}fb()}
-function cmd(a){var t=get(TIPOS,a.tipo),f=get(FORMS,a.formato),e=est(),m=e.marca;
+function cmd(a){var t=get(TIPOS,a.tipo),f=get(FORMS,a.formato),es=get(ESTILOS,a.estilo||""),e=est(),m=e.marca;
   var mat=t.txt?String(a.texto).trim():"(o material está no arquivo que vou anexar nesta conversa. Leia ou ouça tudo antes de escrever.)";
   return"Você é uma estrategista de conteúdo para Instagram. Transforme o material abaixo em um conteúdo de AUTORIDADE, na voz de uma profissional.\n\n"
   +"Área de atuação: "+a.area+"\n"
@@ -471,6 +480,7 @@ function cmd(a){var t=get(TIPOS,a.tipo),f=get(FORMS,a.formato),e=est(),m=e.marca
   +"- Não prometa resultado, cura ou ganho. Respeite as regras da profissão dela.\n"
   +"- Não use as palavras nicho, vibe, prompt nem aparecer.\n"
   +"- "+f.r+"\n"
+  +(es&&es.r?"- "+es.r+"\n":"")
   +"- Se houver hashtags, no máximo 5, todas com o símbolo # na frente.\n"
   +"- Termine com um convite simples para a pessoa comentar, salvar ou chamar no direct.\n"
   +"- Responda só com o conteúdo pedido, sem nenhum outro texto.\n\n"
@@ -485,7 +495,7 @@ function draw(){var a=A(),h='<details class="menu-oculto" name="au" style="margi
     else{var ft=t.id==="foto";h+='<div style="padding:12px;border-radius:12px;background:#F3E9D8"><p style="margin:0 0 6px;font-size:16px"><b>'+(ft?"A foto vai direto para o Gemini":"O áudio vai direto para o Gemini")+'</b></p><p style="margin:0;font-size:15.5px;line-height:1.55">Não precisa subir nada aqui. No passo 4 eu mostro onde anexar '+(ft?"a foto da anotação, do print ou da página":"o áudio da cliente ou da palestra")+".</p></div><p class='cap-sub' style='margin:10px 0 0;font-size:14.5px'>"+(ft?"Dica: tire a foto de frente para o papel, com a luz que tiver.":"Dica: áudio com pouco ruído fica melhor.")+"</p>"}
     h+=nav(a,pronto(a))}
   else if(a.passo===3){var e=est();h+=FORMS.map(function(x){return'<button type="button" class="au-op'+(a.formato===x.id?" sel":"")+'" data-au="form" data-v="'+x.id+'">'+x.n+"<small>"+x.d+"</small></button>"}).join("")
-    +'<label class="lab">Qual é a sua área?</label><select id="au-area" class="field-select campo"><option value="">Escolha...</option>'+AREAS.map(function(x){return'<option'+(a.area===x?" selected":"")+">"+x+"</option>"}).join("")+'</select><label class="lab">Para quem você fala?</label><input type="text" id="au-para" class="campo" placeholder="Ex.: mulheres que empreendem sozinhas" value="'+esc(para(a))+'">'+nav(a,pronto(a))}
+    +'<label class="lab">Qual é a sua área?</label><select id="au-area" class="field-select campo"><option value="">Escolha...</option>'+AREAS.map(function(x){return'<option'+(a.area===x?" selected":"")+">"+x+"</option>"}).join("")+'</select><label class="lab">Para quem você fala?</label><input type="text" id="au-para" class="campo" placeholder="Ex.: mulheres que empreendem sozinhas" value="'+esc(para(a))+'"><label class="lab">Estilo do conteúdo (opcional)</label><select id="au-estilo" class="field-select campo">'+ESTILOS.map(function(x){return'<option value="'+x.id+'"'+((a.estilo||"")===x.id?" selected":"")+">"+x.n+"</option>"}).join("")+'</select><p class="cap-sub" style="margin:6px 0 0;font-size:14.5px">Se não souber, deixe o Gemini escolher.</p>'+nav(a,pronto(a))}
   else if(a.passo===4){var ex=!t.txt;h+='<p style="font-size:15px;margin:0 0 6px"><span class="nx-tag" style="margin:0 8px 0 0">1</span><b>Copie o comando e abra o Gemini</b></p><button type="button" class="btn btn-primary au-pulse" style="width:100%;min-height:50px;font-size:16px" data-au="gem">Copiar e abrir o Gemini</button><p class="cap-sub" style="margin:8px 0 12px;font-size:14.5px">Entre com o seu Gmail. É grátis.</p>'
     +(ex?'<p style="font-size:15px;margin:0 0 6px"><span class="nx-tag" style="margin:0 8px 0 0">2</span><b>Anexe '+(t.id==="foto"?"a foto":"o áudio")+'</b></p><p class="cap-sub" style="margin:0 0 12px;font-size:14.5px;line-height:1.5">No Gemini, toque no <b>+</b> e escolha o arquivo.</p>':"")
     +'<p style="font-size:15px;margin:0 0 6px"><span class="nx-tag" style="margin:0 8px 0 0">'+(ex?3:2)+'</span><b>Cole o comando e envie</b></p><p class="cap-sub" style="margin:0 0 12px;font-size:14.5px">Quando o texto ficar pronto, volte aqui.</p><details class="menu-oculto" name="au-dica" style="margin:0"><summary>Ver o comando</summary><div class="menu-oculto-corpo"><p style="margin:0;font-size:14.5px;line-height:1.5;white-space:pre-wrap">'+esc(cmd(a))+"</p></div></details>"+nav(a,true,"Já tenho o texto →")}
@@ -493,12 +503,12 @@ function draw(){var a=A(),h='<details class="menu-oculto" name="au" style="margi
     if(a.feito){h+='<div style="margin:12px 0 0;padding:12px;border-radius:12px;background:#E4EEEF"><p style="margin:0 0 6px;font-size:16px"><b>Guardado.</b></p><p style="margin:0;font-size:15.5px;line-height:1.55">Ele fica em "Meus conteúdos guardados", neste celular. Próximo passo: copie o texto e cole na hora de postar no Instagram.</p></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button type="button" class="btn btn-primary" style="flex:1" data-au="rcopy">Copiar o texto</button><a class="btn btn-ghost" style="flex:1;text-decoration:none" href="https://www.instagram.com/" target="_blank" rel="noopener">Abrir o Instagram</a></div><button type="button" class="btn btn-ghost" style="width:100%;margin-top:10px" data-au="novo">Criar outro conteúdo</button>'}
     else{h+='<div style="display:flex;gap:10px;margin-top:18px"><button type="button" class="btn btn-ghost" style="min-height:48px;font-size:16px" data-au="volta">← Voltar</button><button type="button" class="btn btn-primary" id="au-guardar" style="min-height:48px;font-size:16px;flex:1" data-au="guardar"'+(String(a.res).trim().length>20?"":" disabled")+'>Guardar no app</button></div><p class="cap-sub" style="margin:8px 0 0;font-size:14.5px">Guardar no app salva o texto neste celular, para você achar depois.</p><p style="margin:10px 0 0;text-align:center"><button type="button" class="btn btn-ghost btn-sm" data-au="fim">Encerrar</button></p>'}}
   h+="</div>"+salvosHTML(a);root.innerHTML=h}
-function zerar(){var a=A();a.passo=1;a.tipo="";a.texto="";a.fonte="";a.formato="";a.res="";a.feito=false}
+function zerar(){var a=A();a.passo=1;a.tipo="";a.texto="";a.fonte="";a.formato="";a.estilo="";a.res="";a.feito=false}
 function top(){try{window.scrollTo({top:0,behavior:"smooth"})}catch(e){}}
 root.addEventListener("input",function(ev){var t=ev.target,a=A();
   if(t.id==="au-txt")a.texto=t.value;else if(t.id==="au-fonte")a.fonte=t.value;else if(t.id==="au-para")a.para=t.value;else if(t.id==="au-res"){a.res=t.value;var g=document.getElementById("au-guardar");if(g)g.disabled=!(String(t.value).trim().length>20);persist();return}else return;
   persist();var b=root.querySelector('[data-au="prox"]');if(b)b.disabled=!pronto(a)});
-root.addEventListener("change",function(ev){var t=ev.target,a=A();if(t.id==="au-area"){a.area=t.value;persist();var b=root.querySelector('[data-au="prox"]');if(b)b.disabled=!pronto(a)}});
+root.addEventListener("change",function(ev){var t=ev.target,a=A();if(t.id==="au-estilo"){a.estilo=t.value;persist();return}if(t.id==="au-area"){a.area=t.value;persist();var b=root.querySelector('[data-au="prox"]');if(b)b.disabled=!pronto(a)}});
 root.addEventListener("click",function(ev){var b=ev.target.closest&&ev.target.closest("[data-au]");if(!b)return;var k=b.getAttribute("data-au"),a=A();
   if(k==="tipo"){a.tipo=b.getAttribute("data-v");persist();draw()}
   else if(k==="form"){a.formato=b.getAttribute("data-v");persist();draw()}
