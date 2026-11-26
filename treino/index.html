@@ -265,6 +265,25 @@ button,[data-act]{touch-action:manipulation}
 .cup.on{animation:pop .4s ease}
 .cup span{font-size:12px;color:var(--ink-soft,#7a6a60);margin-top:2px}
 #som{position:fixed;bottom:16px;right:14px;z-index:50;width:42px;height:42px;border-radius:50%;border:1px solid rgba(184,147,90,.6);background:rgba(255,255,255,.8);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);font-size:19px;cursor:pointer;display:grid;place-items:center;padding:0}
+/* ---------- Ciclo ---------- */
+.phn{font-family:var(--display);font-weight:600;font-size:24px;color:var(--marsala);margin:0}
+.cd.mn{background:color-mix(in srgb,var(--marsala) 26%,var(--card));border-color:var(--marsala)}
+.cd.mn.pr{background:color-mix(in srgb,var(--marsala) 9%,var(--card));border-style:dashed}
+.cd.fe{background:color-mix(in srgb,var(--petrol) 16%,var(--card))}
+.cd.ov{background:color-mix(in srgb,var(--petrol) 36%,var(--card));font-weight:700}
+.cd.tp{background:color-mix(in srgb,var(--gold) 28%,var(--card))}
+.dots i.sad,.legend i.sad{background:#6F7FA6}
+.legend i.sq{width:14px;height:14px;border-radius:4px;border:1px solid transparent}
+.legend i.s-mn{background:color-mix(in srgb,var(--marsala) 26%,var(--card));border-color:var(--marsala)}
+.legend i.s-pr{background:color-mix(in srgb,var(--marsala) 9%,var(--card));border:1px dashed var(--marsala)}
+.legend i.s-fe{background:color-mix(in srgb,var(--petrol) 16%,var(--card))}
+.legend i.s-ov{background:color-mix(in srgb,var(--petrol) 36%,var(--card))}
+.legend i.s-tp{background:color-mix(in srgb,var(--gold) 28%,var(--card))}
+.ob{display:flex;gap:6px;flex-wrap:wrap}
+.ob .wd{flex:1 1 0;min-width:58px;padding:6px 4px;font-size:14px;min-height:46px}
+.ob .wd .e{display:block;font-size:22px;line-height:1.1}
+.nav{grid-template-columns:repeat(5,1fr)!important}
+.nav .tab{font-size:12px}
 </style>
 </head>
 <body>
@@ -610,7 +629,7 @@ function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 function pad(n){return String(n).padStart(2,'0')}
 function ymd(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
 const today=ymd(new Date());
-S.shop=S.shop||{};S.team=S.team||{};S.prof=S.prof||{};S.yas=S.yas||{list:[]};
+S.shop=S.shop||{};S.team=S.team||{};S.prof=S.prof||{};S.yas=S.yas||{list:[]};S.cyc=S.cyc||{p:[],log:{}};S.cyc.p=S.cyc.p||[];S.cyc.log=S.cyc.log||{};
 if(S.doneDate!==today){if(S.doneDate)S.wh[S.doneDate]=S.water||0;S.done={};S.water=0;S.meals={};S.doneDate=today;}
 if(!S.weights.length)S.weights.push({d:today,kg:60,seed:1});
 function wsOf(ds){const d=new Date(ds+'T12:00:00');const k=(d.getDay()+6)%7;d.setDate(d.getDate()-k);return ymd(d)}
@@ -709,6 +728,7 @@ function renderTreino(){
     +[['Anos 80 para treinar','anos 80 playlist para treinar academia'],['Gorillaz, as melhores','Gorillaz playlist melhores musicas'],['Música de treino, alta energia','playlist musica de treino academia motivacional']]
      .map(p=>'<a class="btn alt" style="display:block;text-align:center;margin:0 0 8px;text-decoration:none" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query='+encodeURIComponent(p[1])+'">▶ '+p[0]+'</a>').join(''));
   h+='<div class="week"><b>'+wh.length+'</b><span>de '+wkg()+' treinos nesta semana. Qualquer número já é vitória.</span></div>';
+  h+=cyTip();
   h+=box('info','Antes de começar','',
     '<h3>Como ler o treino</h3><p><b>Série</b> é um grupo de repetições. <b>Repetição</b> é cada vez que você faz o movimento. Entre as séries, descanse.</p>'
    +'<h3>Qual peso usar</h3><p>Comece leve. Ao final de cada série, você deve sentir que ainda dava para fazer mais 3 repetições. Se ficou fácil por duas vezes seguidas, suba meio quilo.</p>'
@@ -1136,20 +1156,21 @@ const RECEITAS=[
  ['Escorra o feijão do molho e ponha na panela.','Junte água, alho e louro.','Cozinhe 25 minutos na pressão.','Deixe sair a pressão sozinha. Guarde em potes na geladeira por até 4 dias.']]
 ];
 
-const YQ=['','Montar meu cardápio de hoje','Ideia de lanche leve','Trocar um alimento por outro','O que cozinhar com o que tenho em casa','Mercado: o que comprar esta semana','Como comer antes e depois do treino','Treino: montar um treino de 20 minutos','Treino: trocar um exercício do meu dia','Treino: tirar dúvida de postura','Treino: como subir a carga com segurança','Treino: motivação para hoje'];
+const YQ=['','Montar meu cardápio de hoje','Ideia de lanche leve','Trocar um alimento por outro','O que cozinhar com o que tenho em casa','Mercado: o que comprar esta semana','Como comer antes e depois do treino','Treino: montar um treino de 20 minutos','Treino: trocar um exercício do meu dia','Treino: tirar dúvida de postura','Treino: como subir a carga com segurança','Treino: motivação para hoje','Ciclo: lanche para a vontade de doce','Ciclo: treino para a minha fase'];
 function yasPrompt(){
   const Y=S.yas,P=S.prof||{};
-  const co=(Y.q||'').indexOf('Treino:')===0;
+  const co=(Y.q||'').indexOf('Treino:')===0||Y.q==='Ciclo: treino para a minha fase';
   const dy=DAYS.find(d=>d.n===S.cur),ex=dy?dy.itens.map(it=>EX[it.id].nome).join(', '):'';
   if(co)return 'Você é a IAsmin, uma coach esportiva e personal trainer virtual, simpática e leve. Responda em português, com frases curtas e simples, sem termos difíceis.\n'
    +'Sobre mim: mulher, '+(S.age||46)+' anos, treino na academia do meu prédio '+wkg()+' vezes por semana, com halteres leves, elástico, bike, esteira, elíptico e máquinas.'
    +(P.g?' Meu objetivo: '+P.g+'.':'')+(P.t?' Gosto de treinar: '+P.t+'.':'')+(ex?' Meu treino de hoje tem: '+ex+'.':'')+'\n'
-   +'Meu pedido: '+Y.q.replace('Treino: ','')+'.\n'
+   +cyLine()+'\n'
+   +'Meu pedido: '+Y.q.replace('Treino: ','').replace('Ciclo: ','')+'.\n'
    +'Dê no máximo 5 linhas. Priorize segurança: carga leve, respiração solta e parar se doer. Não faça diagnóstico. Se você não tiver certeza de algo, diga que não sabe. Não invente dados, doses, remédios, suplementos ou estudos. Sobre hormônios, remédios, doenças ou dor, diga para eu procurar um médico. No fim, lembre que isso é uma orientação e que devo falar com minha personal trainer.';
   return 'Você é a IAsmin, uma nutricionista virtual simpática e leve. Responda em português, com frases curtas e simples, sem termos difíceis. Use medidas em colheres, palma da mão ou copos, nunca frações.\n'
    +'Sobre mim: mulher, '+(S.age||46)+' anos. Treino na academia '+wkg()+' vezes por semana.'
    +(P.g?' Meu objetivo: '+P.g+'.':'')+(P.c?' Gosto de comer: '+P.c+'.':'')+(P.a?' Não posso comer: '+P.a+'.':'')
-   +(Y.h?' Tenho em casa: '+Y.h+'.':'')+' Tenho air fryer e panela de pressão elétrica. Evito sal em excesso.\n'
+   +(Y.h?' Tenho em casa: '+Y.h+'.':'')+' Tenho air fryer e panela de pressão elétrica. Evito sal em excesso.'+cyLine()+'\n'
    +'Meu pedido: '+Y.q+'.\n'
    +'Dê no máximo 5 linhas. Não faça diagnóstico nem dieta radical. Se você não tiver certeza de algo, diga que não sabe. Não invente dados, doses, remédios, suplementos ou estudos. Sobre hormônios, remédios, doenças ou dor, diga para eu procurar um médico. No fim, lembre que isso é uma orientação e que devo falar com minha nutricionista.';
 }
@@ -1230,13 +1251,161 @@ function renderMesa(){
 }
 
 /* ---------- Tela principal ---------- */
-const VIEWS=[['treino','Treino'],['corpo','Corpo'],['cardio','Cardio'],['agenda','Agenda'],['prog','Progresso'],['compras','Compras'],['receitas','Receitas'],['mesa','Mesa']];
-const FIRSTBOX={corpo:'peso',cardio:'medidor',prog:'trein',treino:null,agenda:null,compras:null,receitas:null,mesa:null};
+/* ---------- Ciclo menstrual (dados só neste celular) ---------- */
+let cyY=new Date().getFullYear(), cyMo=new Date().getMonth(), cySel=today;
+function cyAdd(ds,n){const d=new Date(ds+'T12:00:00');d.setDate(d.getDate()+n);return ymd(d)}
+function cyDiff(a,b){return Math.round((new Date(b+'T12:00:00')-new Date(a+'T12:00:00'))/864e5)}
+function cyStats(){
+  const P=(S.cyc.p||[]).slice().sort((a,b)=>a.s<b.s?-1:1);
+  const ls=[];for(let i=1;i<P.length;i++){const n=cyDiff(P[i-1].s,P[i].s);if(n>=18&&n<=60)ls.push(n);}
+  const l6=ls.slice(-6);
+  const avg=l6.length?Math.round(l6.reduce((a,b)=>a+b,0)/l6.length):28;
+  const pl=P.filter(p=>p.e).map(p=>cyDiff(p.s,p.e)+1).filter(n=>n>=2&&n<=10).slice(-6);
+  const per=pl.length?Math.round(pl.reduce((a,b)=>a+b,0)/pl.length):5;
+  const varia=l6.length>=2?Math.max.apply(null,l6)-Math.min.apply(null,l6):0;
+  return {P:P,avg:avg,per:per,varia:varia,n:l6.length};
+}
+function cyCycles(st){
+  const P=st.P,cs=[];
+  for(let i=0;i<P.length;i++){
+    let n=i+1<P.length?P[i+1].s:cyAdd(P[i].s,st.avg);
+    const len=cyDiff(P[i].s,n);
+    if(len>60||len<10)n=cyAdd(P[i].s,st.avg);
+    cs.push({s:P[i].s,e:P[i].e||null,n:n,pred:false,open:i+1>=P.length});
+  }
+  if(cs.length){
+    let s=cs[cs.length-1].n;
+    for(let k=0;k<4;k++){const n=cyAdd(s,st.avg);cs.push({s:s,e:null,n:n,pred:true,open:false});s=n;}
+  }
+  return cs;
+}
+function cyClass(ds,cs,st){
+  for(let i=0;i<cs.length;i++){const c=cs[i];
+    if(ds<c.s||ds>=c.n)continue;
+    const day=cyDiff(c.s,ds)+1;
+    const pe=(c.e&&!c.pred)?c.e:cyAdd(c.s,st.per-1);
+    const ov=cyAdd(c.n,-14),fs=cyAdd(ov,-5),fe=cyAdd(ov,1);
+    let ph;
+    if(ds<=pe)ph='m';
+    else if(ds===ov)ph='o';
+    else if(ds>=fs&&ds<=fe)ph='f';
+    else if(ds>=cyAdd(c.n,-7))ph='t';
+    else if(ds<fs)ph='p';
+    else ph='l';
+    return {ph:ph,day:day,pred:!!c.pred||ds>today,ov:ov,next:c.n};
+  }
+  return null;
+}
+const CYP={
+ m:['Menstruação','Pode ser uma fase de mais cansaço. Faça o treino do seu jeito: se estiver sem energia ou com cólica, aquecimento, caminhada e alongamento já contam.','Beba bastante água e coma bem: feijão, folhas verdes e proteína ajudam a manter a energia.','Treine do seu jeito. Em dia cansado, aquecimento e caminhada já contam.'],
+ p:['Energia subindo','Costuma ser uma boa fase para treinar com mais ânimo. Se você se sentir bem, pode subir a carga aos poucos.','Siga o cardápio normal, com proteína em todas as refeições.','Boa hora para treinar com mais ânimo, se você se sentir bem.'],
+ f:['Janela fértil','Muita gente sente mais disposição nesta fase. Aproveite para o treino mais puxado, sempre com aquecimento.','Siga o cardápio normal e beba bastante água.','Muita gente sente mais disposição agora. Aproveite, com aquecimento.'],
+ o:['Ovulação prevista','Muita gente sente mais disposição nesta fase. Aproveite para o treino mais puxado, sempre com aquecimento.','Siga o cardápio normal e beba bastante água.','Muita gente sente mais disposição agora. Aproveite, com aquecimento.'],
+ l:['Segunda metade do ciclo','A energia pode ir caindo aos poucos. Mantenha o treino e, se precisar, diminua a carga em vez de faltar.','Coma de 3 em 3 horas para a fome não bater forte à noite.','A energia pode cair aos poucos. Se precisar, diminua a carga em vez de faltar.'],
+ t:['TPM','Treino mais leve é uma boa pedida: caminhada, bike tranquila, elíptico e alongamento. Se o corpo pedir descanso, sem culpa.','Vontade de doce é comum. Troque por fruta com pasta de amendoim, iogurte com fruta ou 1 ou 2 quadradinhos de chocolate amargo. Pouco sal ajuda no inchaço.','Treino mais leve é uma boa: caminhada, bike tranquila e alongamento. Sem culpa.']
+};
+const CYHUM={5:'ótimo',4:'bem',3:'normal',2:'triste',1:'muito triste'},CYEN={1:'baixa',2:'média',3:'alta'},CYSW={1:'nenhuma',2:'um pouco',3:'muita'},CYCR={1:'sem',2:'leve',3:'forte'};
+function cyInfo(ds){
+  if(!S.cyc||!S.cyc.p||!S.cyc.p.length)return null;
+  const st=cyStats(),cs=cyCycles(st),c=cyClass(ds,cs,st);
+  return c?{ph:c.ph,nome:CYP[c.ph][0],day:c.day,pred:c.pred,ov:c.ov,next:c.next,st:st,cs:cs}:null;
+}
+function cyLine(){
+  const i=cyInfo(today);if(!i)return '';
+  const g=(S.cyc.log||{})[today]||{},p=[];
+  if(g.m)p.push('humor '+CYHUM[g.m]);if(g.en)p.push('energia '+CYEN[g.en]);if(g.sw)p.push('vontade de doce '+CYSW[g.sw]);if(g.cr)p.push('cólica '+CYCR[g.cr]);
+  return ' Hoje estou na fase "'+i.nome+'" do ciclo menstrual (dia '+i.day+' do ciclo)'+(p.length?', e me sinto assim: '+p.join(', '):'')+'.';
+}
+function cyTip(){
+  const i=cyInfo(today);if(!i)return '';
+  return '<div class="tip"><b>Seu ciclo hoje: '+i.nome+'.</b> '+CYP[i.ph][3]+' <button class="lnk" data-act="view" data-v="ciclo">Ver meu ciclo</button></div>';
+}
+function cyOpts(f,lab,opts,cur){
+  return '<h3>'+lab+'</h3><div class="ob">'+opts.map(o=>'<button class="wd'+(cur===o[0]?' on':'')+'" data-act="cyL" data-f="'+f+'" data-v="'+o[0]+'" aria-pressed="'+(cur===o[0])+'">'+(o[2]?'<span class="e">'+o[2]+'</span>':'')+o[1]+'</button>').join('')+'</div>';
+}
+function renderCiclo(){
+  const st=cyStats(),cs=cyCycles(st),L=S.cyc.log||{};
+  let h='<h2>Meu ciclo</h2><p class="sub" style="margin:4px 0 12px">Marque os dias e veja a previsão. Os dados ficam só neste celular.</p>';
+  // resumo de hoje
+  const ti=cyInfo(today);
+  let sh;
+  if(!st.P.length){
+    sh='<p class="phn">Vamos começar?</p><p style="margin:6px 0 0">Se sua menstruação começou hoje, toque em <b>Menstruação começou neste dia</b>, logo abaixo do calendário. Se foi outro dia, toque nele antes. Com 2 ou 3 ciclos marcados, a previsão fica mais certeira.</p>';
+  }else{
+    const last=cs.filter(c=>!c.pred).pop();
+    const late=last&&last.open&&last.n<=today;
+    const nx=cs.find(c=>c.s>today&&c.pred);
+    const ovs=cs.map(c=>cyAdd(c.n,-14)).find(d=>d>=today);
+    sh='<p class="phn">'+(ti?ti.nome:'Sem previsão')+'</p>';
+    if(ti)sh+='<p style="margin:2px 0 0">Dia '+ti.day+' do ciclo'+(ti.pred?' (previsão)':'')+'</p>';
+    if(late)sh+='<p class="how" style="margin:8px 0 0">Sua menstruação estava prevista para '+dm(last.n)+'. Se já começou, marque o dia no calendário.</p>';
+    else if(nx)sh+='<p style="margin:8px 0 0">Próxima menstruação prevista: <b>'+dm(nx.s)+'</b> (em '+cyDiff(today,nx.s)+' dias)</p>';
+    if(ovs)sh+='<p style="margin:4px 0 0">Ovulação prevista: <b>'+dm(ovs)+'</b></p>';
+  }
+  h+='<div class="panel" style="margin-top:0">'+sh+'</div>';
+  // calendário
+  const first=new Date(cyY,cyMo,1),off=(first.getDay()+6)%7,dim=new Date(cyY,cyMo+1,0).getDate();
+  h+='<div class="calh" style="margin-top:14px"><button class="btn alt small" data-act="cyp" aria-label="Mês anterior">‹</button><b>'+MESES[cyMo][0].toUpperCase()+MESES[cyMo].slice(1)+' de '+cyY+'</b><button class="btn alt small" data-act="cyn" aria-label="Próximo mês">›</button></div>';
+  h+='<div class="cal">'+['S','T','Q','Q','S','S','D'].map(x=>'<span class="cw">'+x+'</span>').join('');
+  for(let i=0;i<off;i++)h+='<span></span>';
+  for(let d=1;d<=dim;d++){
+    const ds=cyY+'-'+pad(cyMo+1)+'-'+pad(d),c=cyClass(ds,cs,st),g=L[ds]||{};
+    const k=c?({m:'mn',f:'fe',o:'ov',t:'tp'}[c.ph]||''):'';
+    h+='<button class="cd'+(ds===today?' hoje':'')+(ds===cySel?' sel':'')+(k?' '+k:'')+(k==='mn'&&c.pred?' pr':'')+'" data-act="cyd" data-d="'+ds+'" aria-label="Dia '+d+'"><span>'+d+'</span><span class="dots">'
+      +(g.m&&g.m<=2?'<i class="sad"></i>':'')+(g.sw===3?'<i class="p2"></i>':'')+'</span></button>';
+  }
+  h+='</div>';
+  h+='<div class="legend"><span><i class="sq s-mn"></i>Menstruação</span><span><i class="sq s-pr"></i>Prevista</span><span><i class="sq s-fe"></i>Fértil</span><span><i class="sq s-ov"></i>Ovulação</span><span><i class="sq s-tp"></i>TPM</span><span><i class="sad"></i>Dia triste</span><span><i class="p2"></i>Muita vontade de doce</span></div>';
+  // dia selecionado
+  const sel=cySel,sc=cyInfo(sel),g=L[sel]||{};
+  const wd=DSEM[wdOf(sel)-1];
+  let det='<h3 style="margin-top:0">'+wd+', '+(+sel.slice(8,10))+'/'+sel.slice(5,7)+'</h3>';
+  if(sc)det+='<p style="margin:0 0 6px"><b>'+sc.nome+'</b> · dia '+sc.day+' do ciclo'+(sc.pred?' (previsão)':'')+'</p>';
+  if(sel>today){det+='<p class="how" style="margin:0">Esse dia ainda não chegou. Você marca quando ele passar.</p>';}
+  else{
+    const isS=st.P.some(p=>p.s===sel),isE=st.P.some(p=>p.e===sel);
+    const own=st.P.filter(p=>p.s<sel).pop();
+    const canEnd=own&&!own.e&&cyDiff(own.s,sel)<=14;
+    let bt='';
+    if(isS||isE)bt='<button class="btn alt small" data-act="cyDel">Apagar esta marcação</button>';
+    else if(canEnd)bt='<button class="btn small" data-act="cyE">Menstruação terminou neste dia</button><button class="btn alt small" data-act="cyS">Começou neste dia</button>';
+    else bt='<button class="btn small" data-act="cyS">Menstruação começou neste dia</button>';
+    det+='<div class="row" style="margin:0 0 4px">'+bt+'</div>';
+    det+=cyOpts('m','Como você está?',[[5,'Ótimo','😄'],[4,'Bem','🙂'],[3,'Normal','😐'],[2,'Triste','😔'],[1,'Muito triste','😢']],g.m)
+      +cyOpts('en','Energia',[[1,'Baixa'],[2,'Média'],[3,'Alta']],g.en)
+      +cyOpts('sw','Vontade de doce',[[1,'Nenhuma'],[2,'Um pouco'],[3,'Muita']],g.sw)
+      +cyOpts('cr','Cólica ou dor',[[1,'Sem'],[2,'Leve'],[3,'Forte']],g.cr)
+      +'<p class="how" style="margin:10px 0 0">Toque de novo na opção para desmarcar.</p>';
+  }
+  h+='<div class="panel" style="margin:12px 0 16px">'+det+'</div>';
+  // treino e comida
+  if(sc){
+    const p=CYP[sc.ph];
+    h+=box('cyfase','Treino e comida nesta fase','· '+sc.nome,'<h3 style="margin-top:0">Treino</h3><p style="margin:0">'+p[1]+'</p><h3>Comida</h3><p style="margin:0">'+p[2]+'</p>'
+      +'<div class="tip"><b>Cada corpo é diferente.</b> Use como sugestão e escute o seu. Se um dia pedir descanso, descanse.</div>');
+  }
+  // IAsmin
+  h+=box('cyia','Pedir para a IAsmin','','<p style="margin:0 0 8px">A IAsmin usa a sua fase de hoje e como você marcou que está. O pedido abre na aba <b>Receitas</b>, pronto para copiar.</p>'
+    +'<div class="row" style="margin-top:0"><button class="btn small" data-act="cyAsk" data-q="Ciclo: lanche para a vontade de doce">Lanche para a vontade de doce</button><button class="btn alt small" data-act="cyAsk" data-q="Ciclo: treino para a minha fase">Treino para a minha fase</button></div>');
+  // meus ciclos
+  let mc='';
+  if(st.P.length){
+    mc+='<p style="margin:0 0 6px">Ciclo médio: <b>'+st.avg+' dias</b>'+(st.n?'':' (ainda é um chute, marque mais ciclos)')+'. Menstruação: <b>'+st.per+' dias</b>.</p>';
+    if(st.varia>7)mc+='<div class="tip"><b>Seu ciclo varia bastante</b> (de '+(st.avg-Math.round(st.varia/2))+' a '+(st.avg+Math.round(st.varia/2))+' dias, mais ou menos). A previsão é aproximada. Vale comentar isso na sua consulta.</div>';
+    mc+='<h3>Últimos inícios</h3>'+st.P.slice(-6).reverse().map(p=>'<div class="li"><span>'+dm(p.s)+(p.e?' até '+dm(p.e):'')+'</span><b>'+(p.e?(cyDiff(p.s,p.e)+1)+' dias':'')+'</b></div>').join('');
+  }else mc='<p style="margin:0">Quando você marcar a primeira menstruação, o resumo aparece aqui.</p>';
+  h+=box('cymeus','Meus ciclos','',mc);
+  h+='<div class="tip"><b>Importante:</b> a previsão é uma estimativa e não serve para evitar nem para planejar gravidez. Cólica muito forte, sangramento muito intenso ou ciclo que muda muito: converse com sua médica.</div>';
+  return h;
+}
+
+const VIEWS=[['treino','Treino'],['corpo','Corpo'],['cardio','Cardio'],['agenda','Agenda'],['ciclo','Ciclo'],['prog','Progresso'],['compras','Compras'],['receitas','Receitas'],['mesa','Mesa']];
+const FIRSTBOX={corpo:'peso',cardio:'medidor',prog:'trein',treino:null,agenda:null,ciclo:null,compras:null,receitas:null,mesa:null};
 let lastView=null;
 function render(){
   let h='<div class="nav" role="tablist">'+VIEWS.map(v=>'<button class="tab" role="tab" data-act="view" data-v="'+v[0]+'" aria-selected="'+(view===v[0])+'">'+v[1]+'</button>').join('')+'</div>';
   h=heroHtml()+h;
-  h+=view==='treino'?renderTreino():view==='corpo'?renderCorpo():view==='cardio'?renderCardio():view==='agenda'?renderAgenda():view==='compras'?renderCompras():view==='receitas'?renderReceitas():view==='mesa'?renderMesa():renderProgresso();
+  h+=view==='treino'?renderTreino():view==='corpo'?renderCorpo():view==='cardio'?renderCardio():view==='agenda'?renderAgenda():view==='ciclo'?renderCiclo():view==='compras'?renderCompras():view==='receitas'?renderReceitas():view==='mesa'?renderMesa():renderProgresso();
   const ap=document.getElementById('app');ap.innerHTML=h;
   if(lastView!==view){lastView=view;ap.classList.add('go');setTimeout(()=>ap.classList.remove('go'),700);}
   startAnim();
@@ -1314,6 +1483,16 @@ document.getElementById('app').addEventListener('click',e=>{
   else if(a==='yassave'){const t=(S.yas.r||'').trim();if(!t){toast('Cole a resposta primeiro');return;}
     S.yas.list=S.yas.list||[];S.yas.list.unshift({d:today,q:S.yas.q||'',t:t});S.yas.list=S.yas.list.slice(0,10);S.yas.r='';save();render();celebrate('Guardado! Boa escolha 🥗',false);}
   else if(a==='yasdel'){S.yas.list.splice(+b.dataset.i,1);save();render();}
+  else if(a==='cyp'){cyMo--;if(cyMo<0){cyMo=11;cyY--;}render();}
+  else if(a==='cyn'){cyMo++;if(cyMo>11){cyMo=0;cyY++;}render();}
+  else if(a==='cyd'){cySel=b.dataset.d;render();}
+  else if(a==='cyS'){if(cySel>today){toast('Esse dia ainda não chegou');return;}
+    const P=S.cyc.p;if(!P.some(x=>x.s===cySel)){P.push({s:cySel,e:null});P.sort((x,y)=>x.s<y.s?-1:1);S.cyc.p=P.slice(-24);}
+    save();render();celebrate('Marcado!',false);}
+  else if(a==='cyE'){const o=S.cyc.p.filter(x=>x.s<cySel).pop();if(o&&cyDiff(o.s,cySel)<=14){o.e=cySel;save();render();celebrate('Marcado!',false);}}
+  else if(a==='cyDel'){S.cyc.p=S.cyc.p.filter(x=>x.s!==cySel);S.cyc.p.forEach(x=>{if(x.e===cySel)x.e=null;});save();render();}
+  else if(a==='cyL'){const f=b.dataset.f,v=+b.dataset.v;S.cyc.log[cySel]=S.cyc.log[cySel]||{};const g=S.cyc.log[cySel];if(g[f]===v)delete g[f];else g[f]=v;if(!Object.keys(g).length)delete S.cyc.log[cySel];save();render();}
+  else if(a==='cyAsk'){S.yas=S.yas||{list:[]};S.yas.q=b.dataset.q;view='receitas';openId='yas';save();render();window.scrollTo({top:0});}
   else if(a==='goperfil'){view='corpo';openId='perfil';render();window.scrollTo({top:0});}
   else if(a==='goagua'){view='treino';openId='agua';render();window.scrollTo({top:0});}
   else if(a==='resumo'){
@@ -1369,6 +1548,7 @@ document.getElementById('app').addEventListener('click',e=>{
       ['hist','weights','waist','bp','cardio','checks','plan','sleep'].forEach(k=>{if(Array.isArray(o[k]))S[k]=o[k];});
       ['kg','kgHist','wh'].forEach(k=>{if(o[k]&&typeof o[k]==='object')S[k]=o[k];});
       if(typeof o.age==='number')S.age=o.age;
+      if(o.cyc&&typeof o.cyc==='object'&&Array.isArray(o.cyc.p))S.cyc={p:o.cyc.p,log:(o.cyc.log&&typeof o.cyc.log==='object')?o.cyc.log:{}};
       if(typeof o.waterGoal==='number')S.waterGoal=o.waterGoal;
       if(typeof o.cardioGoal==='number')S.cardioGoal=o.cardioGoal;
       if(!S.plan.length)S.plan=[1,2,3,4,5];
