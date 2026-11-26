@@ -593,6 +593,9 @@ const EX={
   desenv:{nome:'Ombros sentada',onde:'Banco e halteres',
     passos:['Sente no banco com as costas bem apoiadas.','Com halteres leves ao lado dos ombros, empurre para cima.','Desça devagar.'],
     respire:'Solte o ar ao empurrar.',cuidado:'Halteres leves e sem arquear a lombar.'},
+  esteira_leve:{nome:'Caminhar leve na esteira',onde:'Esteira',
+    passos:['Comece devagar, sem inclinação.','Fique no passo mais confortável para você hoje, mesmo que seja bem lento.','Solte os braços e olhe para frente.'],
+    respire:'Normal. Deve dar para conversar com facilidade.',cuidado:'Com cólica, tontura ou muito cansaço, pare quando quiser. Qualquer minuto conta.'},
   along:{nome:'Alongar para finalizar',onde:'Colchonete',
     passos:['Alongue a frente e a parte de trás das coxas, 20 segundos cada.','Abra o peito com os braços para trás.','Termine na posição da criança, sentada sobre os calcanhares.'],
     respire:'Lenta e profunda.',cuidado:'Alongue sem dor.'}
@@ -614,8 +617,17 @@ const DAYS=[
   {id:'ponte',s:'3 séries de 12',d:45},{id:'prancha',s:'3 séries de 20 segundos',t:20,d:30},{id:'rolo',s:'5 minutos',t:300}]},
  {n:5,nome:'Corpo todo leve',foco:'Dia mais tranquilo para manter o ritmo',min:35,itens:[
   {id:'esteira_cardio',s:'15 minutos',t:900},{id:'caixa',s:'2 séries de 12',d:45},{id:'remada',s:'2 séries de 12',d:45},
-  {id:'desenv',s:'2 séries de 10',d:45},{id:'ponte',s:'2 séries de 15',d:30},{id:'along',s:'5 minutos',t:300}]}
+  {id:'desenv',s:'2 séries de 10',d:45},{id:'ponte',s:'2 séries de 15',d:30},{id:'along',s:'5 minutos',t:300}]},
+ {n:6,nome:'Treino leve do ciclo',foco:'Para menstruação, TPM ou dias de cansaço',min:25,itens:[
+  {id:'esteira_leve',s:'10 minutos',t:600},{id:'gatovaca',s:'8 vezes',d:20},{id:'ponte',s:'2 séries de 10',d:30},{id:'along',s:'5 minutos',t:300}]}
 ];
+const WU=[['bike_aq','Bike'],['esteira_aq','Esteira'],['eliptico_aq','Elíptico']];
+function dayItems(day){return day.itens.map((it,i)=>{const w=S.swap&&S.swap[day.n+':'+i];return (w&&EX[w])?Object.assign({},it,{id:w}):it;});}
+function swapUi(day,i,it){
+  const base=day.itens[i].id;if(!WU.some(w=>w[0]===base))return '';
+  return '<h3>Trocar o aparelho</h3><p class="how" style="margin:0 0 6px">Sem condição de usar este hoje? Troque. Fica salvo.</p><div class="ob">'
+   +WU.map(w=>'<button class="wd'+(it.id===w[0]?' on':'')+'" data-act="swap" data-k="'+day.n+':'+i+'" data-v="'+w[0]+'" aria-pressed="'+(it.id===w[0])+'">'+w[1]+'</button>').join('')+'</div>';
+}
 
 /* ---------- Estado salvo no celular (se o navegador permitir) ---------- */
 const KEY='treino-leve-v1';
@@ -629,20 +641,20 @@ function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 function pad(n){return String(n).padStart(2,'0')}
 function ymd(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
 const today=ymd(new Date());
-S.shop=S.shop||{};S.team=S.team||{};S.prof=S.prof||{};S.yas=S.yas||{list:[]};S.cyc=S.cyc||{p:[],log:{}};S.cyc.p=S.cyc.p||[];S.cyc.log=S.cyc.log||{};
+S.shop=S.shop||{};S.team=S.team||{};S.prof=S.prof||{};S.yas=S.yas||{list:[]};S.cyc=S.cyc||{p:[],log:{}};S.swap=S.swap||{};S.cyc.p=S.cyc.p||[];S.cyc.log=S.cyc.log||{};
 if(S.doneDate!==today){if(S.doneDate)S.wh[S.doneDate]=S.water||0;S.done={};S.water=0;S.meals={};S.doneDate=today;}
 if(!S.weights.length)S.weights.push({d:today,kg:60,seed:1});
 function wsOf(ds){const d=new Date(ds+'T12:00:00');const k=(d.getDay()+6)%7;d.setDate(d.getDate()-k);return ymd(d)}
 function weekStart(){return wsOf(today)}
 function weekHist(){const w=weekStart();return S.hist.filter(h=>h.d>=w)}
-function suggested(){const l=S.hist[S.hist.length-1];return l?(l.day%5)+1:1}
+function suggested(){const l=S.hist.filter(h=>h.day<=5).pop();return l?(l.day%5)+1:1}
 if(!S.cur)S.cur=suggested();
 
 let view='treino', openId=null, finished=false, ckPending=false;
 const wg=()=>S.waterGoal||8; // copos de 250 ml (8 = 2 litros, cerca de 35 ml por kg)
 const wkg=()=>(S.plan&&S.plan.length)||5, cg=()=>S.cardioGoal||150;
 const MEALS=[['cafe','Café da manhã','2 ovos, ou 6 colheres de sopa de iogurte, ou 2 fatias de queijo branco. E 1 fruta.'],['lm','Lanche da manhã','1 fruta ou 4 a 5 castanhas.'],['almoco','Almoço','Salada e legumes à vontade. Proteína: 1 filé do tamanho da palma da mão. Arroz: 3 colheres de sopa. Feijão: 2 colheres de sopa.'],['lt','Lanche da tarde','6 colheres de sopa de iogurte, ou 1 fruta, ou 1 fatia de pão integral com 1 ovo.'],['jantar','Jantar','Leve, no mesmo estilo do almoço.']];
-const CARDIO_IDS=['bike_aq','bike_cardio','esteira_aq','esteira_cardio','eliptico_aq'];
+const CARDIO_IDS=['bike_aq','bike_cardio','esteira_aq','esteira_cardio','eliptico_aq','esteira_leve'];
 
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 function fmt(sec){return Math.floor(sec/60)+':'+pad(sec%60)}
@@ -749,21 +761,24 @@ function renderTreino(){
    +'<div class="tip"><b>Sem dieta radical</b> e sem pular refeição. Antes do treino, coma algo leve.</div>'
    +'<div class="tip"><b>Barriga:</b> a gordura de lá não sai só com abdominal. Ela diminui com treino, caminhada, sono e boa alimentação juntos.</div>'
    +'<p class="how" style="margin:12px 0 0">Para um cardápio com quantidades, procure uma nutricionista. Aqui é só um guia.</p>');
-  h+='<div class="tabs" role="tablist">'+DAYS.map(d=>{
+  h+='<div class="tabs" role="tablist">'+DAYS.filter(d=>d.n<=5).map(d=>{
     const hit=wh.some(x=>x.day===d.n);
     return '<button class="tab" role="tab" data-act="day" data-n="'+d.n+'" aria-selected="'+(d.n===S.cur)+'">Dia '+d.n+(hit?'<span class="dot" title="Feito nesta semana"></span>':'')+'</button>';
   }).join('')+'</div>';
-  if(day.n===sug)h+='<p class="sug">Sugestão de hoje</p>';
+  const cph=(cyInfo(today)||{}).ph,leve=(cph==='m'||cph==='t');
+  h+='<div class="row" style="margin:-4px 0 14px"><button class="btn'+(S.cur===6?'':' alt')+' small" data-act="day" data-n="6" aria-pressed="'+(S.cur===6)+'">Treino leve do ciclo</button>'+(leve&&S.cur!==6?'<span class="how">Boa pedida para hoje</span>':'')+'</div>';
+  if(day.n===6&&leve)h+='<p class="sug">Sugestão de hoje, pela sua fase</p>';
+  else if(day.n===sug)h+='<p class="sug">Sugestão de hoje</p>';
   h+='<h2>'+esc(day.nome)+'</h2><p class="sub" style="margin:4px 0 0">'+esc(day.foco)+'</p>';
   h+='<div class="meta"><span class="chip">cerca de '+day.min+' min</span><span class="chip">'+day.itens.length+' exercícios</span></div>';
   h+='<div class="bar"><i style="width:'+pct+'%"></i></div><p class="cnt">'+doneCount+' de '+day.itens.length+' feitos</p>';
-  day.itens.forEach((it,i)=>{
+  dayItems(day).forEach((it,i)=>{
     const e=EX[it.id], key=day.n+':'+i, isDone=!!S.done[key], isOpen=openId===key;
     h+='<div class="card'+(isDone?' done':'')+(isOpen?' open':'')+'">'
      +'<div class="head"><button class="chk" data-act="done" data-k="'+key+'" role="checkbox" aria-checked="'+isDone+'" aria-label="Marcar '+esc(e.nome)+' como feito">'+ICON_CHK+'</button>'
      +'<button class="toggle" data-act="open" data-k="'+key+'" aria-expanded="'+isOpen+'"><span class="name">'+esc(e.nome)+'</span><span class="how">'+esc(it.s)+'</span></button>'+ICON_CHEV+'</div>'
      +'<div class="body"><div class="anim" data-id="'+it.id+'"><svg viewBox="0 0 300 190" role="img" aria-label="Animação: '+esc(e.nome)+'"><g class="ag"></g></svg><div class="acap" aria-live="off"></div><button class="btn alt small" data-act="pause">Pausar</button></div>'
-     +'<h3>Onde</h3><p style="margin:0">'+esc(e.onde)+'</p>'
+     +swapUi(day,i,it)+'<h3>Onde</h3><p style="margin:0">'+esc(e.onde)+'</p>'
      +'<h3>Como fazer</h3><ol>'+e.passos.map(p=>'<li>'+esc(p)+'</li>').join('')+'</ol>'
      +'<div class="tip"><b>Respire:</b> '+esc(e.respire)+'</div>'
      +'<div class="tip"><b>Cuidado:</b> '+esc(e.cuidado)+'</div>'
@@ -998,7 +1013,7 @@ function renderAgenda(){
   const wd=DSEM[wdOf(selD)-1];
   let det='<h3 style="margin-top:0">'+wd+', '+dn+'/'+selD.slice(5,7)+'</h3>';
   const li=(a,b)=>'<div class="li"><span>'+a+'</span><b>'+b+'</b></div>';
-  if(x.tr.length)det+=li('Treino','feito: '+x.tr.map(t=>'Dia '+t.day).join(' e '));
+  if(x.tr.length)det+=li('Treino','feito: '+x.tr.map(t=>t.day===6?'Treino leve':'Dia '+t.day).join(' e '));
   else{const pd=plannedDay(selD);
     if(selD>=today&&pd)det+=li('Treino planejado','Dia '+pd+' · '+DAYS[pd-1].nome);
     else det+=li('Treino',selD<today?'não registrado':'dia de descanso');}
@@ -1160,7 +1175,7 @@ const YQ=['','Montar meu cardápio de hoje','Ideia de lanche leve','Trocar um al
 function yasPrompt(){
   const Y=S.yas,P=S.prof||{};
   const co=(Y.q||'').indexOf('Treino:')===0||Y.q==='Ciclo: treino para a minha fase';
-  const dy=DAYS.find(d=>d.n===S.cur),ex=dy?dy.itens.map(it=>EX[it.id].nome).join(', '):'';
+  const dy=DAYS.find(d=>d.n===S.cur),ex=dy?dayItems(dy).map(it=>EX[it.id].nome).join(', '):'';
   if(co)return 'Você é a IAsmin, uma coach esportiva e personal trainer virtual, simpática e leve. Responda em português, com frases curtas e simples, sem termos difíceis.\n'
    +'Sobre mim: mulher, '+(S.age||46)+' anos, treino na academia do meu prédio '+wkg()+' vezes por semana, com halteres leves, elástico, bike, esteira, elíptico e máquinas.'
    +(P.g?' Meu objetivo: '+P.g+'.':'')+(P.t?' Gosto de treinar: '+P.t+'.':'')+(ex?' Meu treino de hoje tem: '+ex+'.':'')+'\n'
@@ -1297,12 +1312,12 @@ function cyClass(ds,cs,st){
   return null;
 }
 const CYP={
- m:['Menstruação','Pode ser uma fase de mais cansaço. Faça o treino do seu jeito: se estiver sem energia ou com cólica, aquecimento, caminhada e alongamento já contam.','Beba bastante água e coma bem: feijão, folhas verdes e proteína ajudam a manter a energia.','Treine do seu jeito. Em dia cansado, aquecimento e caminhada já contam.'],
+ m:['Menstruação','Pode ser uma fase de mais cansaço. Faça o treino do seu jeito: se estiver sem energia ou com cólica, aquecimento, caminhada e alongamento já contam.','Beba bastante água e coma bem: feijão, folhas verdes e proteína ajudam a manter a energia.','Treine do seu jeito. Em dia cansado, aquecimento e caminhada já contam. Veja o "Treino leve do ciclo" logo abaixo.'],
  p:['Energia subindo','Costuma ser uma boa fase para treinar com mais ânimo. Se você se sentir bem, pode subir a carga aos poucos.','Siga o cardápio normal, com proteína em todas as refeições.','Boa hora para treinar com mais ânimo, se você se sentir bem.'],
  f:['Janela fértil','Muita gente sente mais disposição nesta fase. Aproveite para o treino mais puxado, sempre com aquecimento.','Siga o cardápio normal e beba bastante água.','Muita gente sente mais disposição agora. Aproveite, com aquecimento.'],
  o:['Ovulação prevista','Muita gente sente mais disposição nesta fase. Aproveite para o treino mais puxado, sempre com aquecimento.','Siga o cardápio normal e beba bastante água.','Muita gente sente mais disposição agora. Aproveite, com aquecimento.'],
  l:['Segunda metade do ciclo','A energia pode ir caindo aos poucos. Mantenha o treino e, se precisar, diminua a carga em vez de faltar.','Coma de 3 em 3 horas para a fome não bater forte à noite.','A energia pode cair aos poucos. Se precisar, diminua a carga em vez de faltar.'],
- t:['TPM','Treino mais leve é uma boa pedida: caminhada, bike tranquila, elíptico e alongamento. Se o corpo pedir descanso, sem culpa.','Vontade de doce é comum. Troque por fruta com pasta de amendoim, iogurte com fruta ou 1 ou 2 quadradinhos de chocolate amargo. Pouco sal ajuda no inchaço.','Treino mais leve é uma boa: caminhada, bike tranquila e alongamento. Sem culpa.']
+ t:['TPM','Treino mais leve é uma boa pedida: caminhada, bike tranquila, elíptico e alongamento. Se o corpo pedir descanso, sem culpa.','Vontade de doce é comum. Troque por fruta com pasta de amendoim, iogurte com fruta ou 1 ou 2 quadradinhos de chocolate amargo. Pouco sal ajuda no inchaço.','Treino mais leve é uma boa: caminhada, bike tranquila e alongamento. Sem culpa. Veja o "Treino leve do ciclo" logo abaixo.']
 };
 const CYHUM={5:'ótimo',4:'bem',3:'normal',2:'triste',1:'muito triste'},CYEN={1:'baixa',2:'média',3:'alta'},CYSW={1:'nenhuma',2:'um pouco',3:'muita'},CYCR={1:'sem',2:'leve',3:'forte'};
 function cyInfo(ds){
@@ -1431,7 +1446,7 @@ function tick(){
 document.getElementById('tx').addEventListener('click',()=>{clearInterval(tm);tBox.classList.remove('on')});
 
 /* ---------- Animação do exercício aberto ---------- */
-const ANIMMAP={bike_aq:'bike',bike_cardio:'bike',esteira_aq:'walk',esteira_cardio:'walk',eliptico_aq:'elip'};
+const ANIMMAP={bike_aq:'bike',bike_cardio:'bike',esteira_aq:'walk',esteira_cardio:'walk',esteira_leve:'walk',eliptico_aq:'elip'};
 let raf=0,lastTs=0,animClock=0;
 let animPaused=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches);
 function startAnim(){
@@ -1452,7 +1467,7 @@ function val(id){const e=document.getElementById(id);return e?e.value:''}
 function upsert(arr,rec){const i=arr.findIndex(x=>x.d===rec.d);if(i>=0)arr[i]=rec;else arr.push(rec);arr.sort((a,b)=>a.d<b.d?-1:1);}
 function doFinish(){
   const day=DAYS.find(d=>d.n===S.cur);let cm=0;
-  day.itens.forEach((it,i)=>{
+  dayItems(day).forEach((it,i)=>{
     const raw=S.kg[it.id],n=num(raw);
     if(raw&&isFinite(n)){const a=S.kgHist[it.id]=S.kgHist[it.id]||[];const l=a[a.length-1];if(!l||l.d!==today||l.kg!==n)a.push({d:today,kg:n});}
     if(S.done[S.cur+':'+i]&&CARDIO_IDS.includes(it.id)&&it.t)cm+=Math.round(it.t/60);
@@ -1492,6 +1507,7 @@ document.getElementById('app').addEventListener('click',e=>{
   else if(a==='cyE'){const o=S.cyc.p.filter(x=>x.s<cySel).pop();if(o&&cyDiff(o.s,cySel)<=14){o.e=cySel;save();render();celebrate('Marcado!',false);}}
   else if(a==='cyDel'){S.cyc.p=S.cyc.p.filter(x=>x.s!==cySel);S.cyc.p.forEach(x=>{if(x.e===cySel)x.e=null;});save();render();}
   else if(a==='cyL'){const f=b.dataset.f,v=+b.dataset.v;S.cyc.log[cySel]=S.cyc.log[cySel]||{};const g=S.cyc.log[cySel];if(g[f]===v)delete g[f];else g[f]=v;if(!Object.keys(g).length)delete S.cyc.log[cySel];save();render();}
+  else if(a==='swap'){const k=b.dataset.k,pr=k.split(':'),base=DAYS.find(d=>d.n===+pr[0]).itens[+pr[1]].id;S.swap=S.swap||{};if(b.dataset.v===base)delete S.swap[k];else S.swap[k]=b.dataset.v;save();render();}
   else if(a==='cyAsk'){S.yas=S.yas||{list:[]};S.yas.q=b.dataset.q;view='receitas';openId='yas';save();render();window.scrollTo({top:0});}
   else if(a==='goperfil'){view='corpo';openId='perfil';render();window.scrollTo({top:0});}
   else if(a==='goagua'){view='treino';openId='agua';render();window.scrollTo({top:0});}
@@ -1549,6 +1565,7 @@ document.getElementById('app').addEventListener('click',e=>{
       ['kg','kgHist','wh'].forEach(k=>{if(o[k]&&typeof o[k]==='object')S[k]=o[k];});
       if(typeof o.age==='number')S.age=o.age;
       if(o.cyc&&typeof o.cyc==='object'&&Array.isArray(o.cyc.p))S.cyc={p:o.cyc.p,log:(o.cyc.log&&typeof o.cyc.log==='object')?o.cyc.log:{}};
+      if(o.swap&&typeof o.swap==='object')S.swap=o.swap;
       if(typeof o.waterGoal==='number')S.waterGoal=o.waterGoal;
       if(typeof o.cardioGoal==='number')S.cardioGoal=o.cardioGoal;
       if(!S.plan.length)S.plan=[1,2,3,4,5];
