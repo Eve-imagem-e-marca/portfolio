@@ -31,7 +31,7 @@ details.marca label{display:block;font-size:14.5px;font-weight:600;margin:10px 0
 details.marca input[type=text]{width:100%;min-height:44px;padding:0 12px;font-size:16px}
 .cores{display:flex;gap:10px}.cores input{width:54px;height:44px;border:1.5px solid var(--line);border-radius:12px;padding:2px;background:#fff}
 
-.tabs{display:flex;gap:8px;margin:0 0 16px}.tabs .pill{flex:1;font-weight:600;font-size:16px}
+.tabs{display:flex;gap:8px;margin:0 0 16px}.tabs .pill{flex:1;font-weight:600;font-size:14.5px;padding:0 4px}
 .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;margin:0 0 12px}
 .card h3{margin:0 0 4px;font-size:17px}
 .lab{display:block;font-size:14.5px;font-weight:600;margin:12px 0 4px}
@@ -40,6 +40,11 @@ details.marca input[type=text]{width:100%;min-height:44px;padding:0 12px;font-si
 .bar{height:10px;border-radius:99px;background:#efe3d2;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--marsala),var(--verde));border-radius:99px}
 .num{display:flex;align-items:center;gap:10px}.num b{font-size:22px;min-width:64px;text-align:center}
 .mini{min-height:40px;min-width:44px;padding:0 14px;font-size:20px}
+.au-op{display:block;width:100%;text-align:left;border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:12px 14px;margin:0 0 10px;font:inherit;font-size:16px;cursor:pointer;color:var(--ink)}
+.au-op.sel{border-color:var(--marsala);background:#f6e9e9}
+.au-op small{display:block;color:var(--ink-soft);font-size:14px;font-weight:400}
+@keyframes aup{0%{box-shadow:0 0 0 0 rgba(122,46,59,.5)}100%{box-shadow:0 0 0 14px rgba(122,46,59,0)}}
+.au-pulse{animation:aup 1.4s infinite}
 </style></head><body><main>
 <h1>CorAge Conteúdo</h1><p class="sub">Seu vídeo pronto, com legenda, telas e final para seguir.</p>
 <details class="marca" id="cc-marca"><summary>Sua marca (preencha uma vez)</summary><div class="corpo">
@@ -47,8 +52,8 @@ details.marca input[type=text]{width:100%;min-height:44px;padding:0 12px;font-si
 <label>Suas 3 cores</label><div class="cores"><input type="color" id="cc-c1"><input type="color" id="cc-c2"><input type="color" id="cc-c3"></div>
 <label for="cc-fonte">Letra da marca</label><select id="cc-fonte" class="field-select" style="width:100%;font-size:16px;padding:12px"></select>
 </div></details>
-<div class="tabs"><button type="button" class="pill active" data-tab="video">Vídeo</button><button type="button" class="pill" data-tab="est">Estratégia</button><button type="button" class="pill" data-tab="vend">Vendas</button></div>
-<div id="vf-root"></div><div id="est-root" style="display:none"></div><div id="vd-root" style="display:none"></div></main>
+<div class="tabs"><button type="button" class="pill active" data-tab="video">Vídeo</button><button type="button" class="pill" data-tab="aut">Autoridade</button><button type="button" class="pill" data-tab="est">Estratégia</button><button type="button" class="pill" data-tab="vend">Vendas</button></div>
+<div id="vf-root"></div><div id="est-root" style="display:none"></div><div id="vd-root" style="display:none"></div><div id="au-root" style="display:none"></div></main>
 <script>
 var state=(function(){try{return JSON.parse(localStorage.getItem("cc_state")||"{}")}catch(e){return{}}})();
 var ui={};
@@ -420,4 +425,92 @@ else if(b.id==="vd-cam-limpar"){v.cam=null;persist();draw()}});
 document.querySelector(".tabs").addEventListener("click",function(ev){var b=ev.target.closest("button");if(!b)return;var n=b.getAttribute("data-tab");root.style.display=n==="vend"?"":"none";if(n==="vend")draw()});
 })();
 
+
+(function(){
+var root=document.getElementById("au-root");
+if(!root)return;
+var TIPOS=[
+{id:"rascunho",n:"Um rascunho meu",d:"Ideia solta ou texto que você escreveu",txt:true},
+{id:"palestra",n:"Trecho de palestra ou aula",d:"Que você deu ou assistiu",txt:true},
+{id:"livro",n:"Trecho de livro ou dos seus estudos",d:"Você digita o trecho e o autor",txt:true,fonte:true},
+{id:"foto",n:"Foto de anotação ou print",d:"Caderno, página de livro, tela",txt:false},
+{id:"audio",n:"Áudio de cliente ou de palestra",d:"Gravação que está no seu celular",txt:false}];
+var FORMS=[
+{id:"legenda",n:"Legenda",d:"Texto para acompanhar a foto ou o vídeo",r:"Entregue SOMENTE uma legenda para Instagram, com até 800 caracteres, primeira linha forte e parágrafos curtos. Não escreva roteiro nem carrossel."},
+{id:"carrossel",n:"Carrossel",d:"7 telas com texto curto",r:"Entregue SOMENTE o texto de um carrossel de 7 telas. A tela 1 é uma capa de impacto, em letras maiúsculas. Cada tela tem um título curto e no máximo 25 palavras. A tela 7 é o convite final. Não escreva legenda."},
+{id:"roteiro",n:"Roteiro de vídeo",d:"Para gravar um vídeo de até 1 minuto",r:"Entregue SOMENTE um roteiro de vídeo de 40 a 60 segundos, com gancho, desenvolvimento e fechamento, dizendo o que falar e o que mostrar em cada cena. Não escreva legenda."}];
+var AREAS=["Psicóloga","Terapeuta","Arteterapeuta","Esteticista","Dentista","Nutricionista","Consultora de imagem","Mentora ou coach","Arquiteta","Outra área de cuidado"];
+var TIT=["O que você tem em mãos?","Seu material","Como você quer o texto?","Comando no Gemini","Cole o texto pronto"];
+
+function A(){var a=state.aut||(state.aut={});if(!a.passo)a.passo=1;if(!a.salvos)a.salvos=[];["texto","fonte","res","tipo","formato","area"].forEach(function(k){if(a[k]==null)a[k]=""});return a}
+function est(){return state.est||{}}
+function get(arr,id){for(var i=0;i<arr.length;i++)if(arr[i].id===id)return arr[i];return null}
+function para(a){return a.para!=null?a.para:(est().para||"")}
+function pronto(a){var t=get(TIPOS,a.tipo);
+  if(a.passo===1)return!!t;
+  if(a.passo===2)return!!t&&(!t.txt||String(a.texto).trim().length>20);
+  if(a.passo===3)return!!a.formato&&!!a.area&&String(para(a)).trim().length>2;
+  return true}
+function cp(t,msg){var ok=function(){toast(msg||"Copiado.")};
+  var fb=function(){var ta=document.createElement("textarea");ta.value=t;ta.style.cssText="position:fixed;left:0;top:0;opacity:0";document.body.appendChild(ta);ta.focus();ta.select();try{document.execCommand("copy");ok()}catch(e){toast("Não consegui copiar. Segure o texto e escolha Copiar.")}document.body.removeChild(ta)};
+  try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(ok,fb);return}}catch(e){}fb()}
+function cmd(a){var t=get(TIPOS,a.tipo),f=get(FORMS,a.formato),e=est(),m=e.marca;
+  var mat=t.txt?String(a.texto).trim():"(o material está no arquivo que vou anexar nesta conversa. Leia ou ouça tudo antes de escrever.)";
+  return"Você é uma estrategista de conteúdo para Instagram. Transforme o material abaixo em um conteúdo de AUTORIDADE, na voz de uma profissional.\n\n"
+  +"Área de atuação: "+a.area+"\n"
+  +"Para quem ela fala: "+String(para(a)).trim()+"\n"
+  +(e.vende?"O que ela oferece: "+e.vende+"\n":"")
+  +"Tipo de material: "+t.n+"\n"
+  +(t.fonte&&String(a.fonte).trim()?"Autor e fonte: "+String(a.fonte).trim()+"\n":"")
+  +(m?"Marca: "+m.pos+" Tom de voz: "+m.tom+".\n":"")
+  +"\nRegras:\n"
+  +"- Use SÓ as ideias do material. Não invente frases, dados, estudos, nomes nem autores.\n"
+  +"- Só cite autor ou fonte se estiver informado acima. Se não estiver, não cite ninguém.\n"
+  +"- Mostre o que ela sabe e defende, com um exemplo ou uma mini história curta.\n"
+  +"- Escreva em português do Brasil, com frases curtas e palavras simples, no jeito de falar dela.\n"
+  +"- Não prometa resultado, cura ou ganho. Respeite as regras da profissão dela.\n"
+  +"- Não use as palavras nicho, vibe, prompt nem aparecer.\n"
+  +"- "+f.r+"\n"
+  +"- Se houver hashtags, no máximo 5, todas com o símbolo # na frente.\n"
+  +"- Termine com um convite simples para a pessoa comentar, salvar ou chamar no direct.\n"
+  +"- Responda só com o conteúdo pedido, sem nenhum outro texto.\n\n"
+  +"Material:\n"+mat}
+function topo(a){return'<div style="display:flex;align-items:center;gap:6px;margin:0 0 10px">'+TIT.map(function(x,i){return'<span class="nx-tag" style="margin:0;'+(i+1===a.passo?"":"opacity:.4")+'">'+(i+1)+"</span>"}).join('<span style="flex:1;height:2px;background:var(--line)"></span>')+'</div><p style="font-size:17px;margin:0 0 10px"><b>Passo '+a.passo+" de "+TIT.length+": "+TIT[a.passo-1]+"</b></p>"}
+function nav(a,ok,rotulo){return'<div style="display:flex;gap:10px;margin-top:18px">'+(a.passo>1?'<button type="button" class="btn btn-ghost" style="min-height:48px;font-size:16px" data-au="volta">← Voltar</button>':"")+(rotulo===null?"":'<button type="button" class="btn btn-primary" style="min-height:48px;font-size:16px;flex:1" data-au="prox"'+(ok?"":" disabled")+">"+(rotulo||"Próximo →")+"</button>")+'</div><p style="margin:10px 0 0;text-align:center"><button type="button" class="btn btn-ghost btn-sm" data-au="fim">Encerrar</button></p>'}
+function salvosHTML(a){if(!a.salvos.length)return"";return'<details class="menu-oculto" name="au" style="margin:12px 0 0"><summary>Meus conteúdos guardados ('+a.salvos.length+')</summary><div class="menu-oculto-corpo">'+a.salvos.map(function(s,i){return'<div style="padding:10px 0;border-top:1px solid var(--line)"><p class="cap-sub" style="margin:0 0 4px;font-size:13.5px"><b>'+esc(s.f)+"</b> · "+esc(s.d)+'</p><p style="margin:0 0 8px;font-size:15.5px;line-height:1.5;white-space:pre-wrap">'+esc(s.t)+'</p><button type="button" class="btn btn-ghost btn-sm" data-au="scopy" data-i="'+i+'">Copiar</button> <button type="button" class="btn btn-ghost btn-sm" data-au="sdel" data-i="'+i+'">Apagar</button></div>'}).join("")+"</div></details>"}
+function draw(){var a=A(),h='<details class="menu-oculto" name="au" style="margin:0 0 12px"><summary>O que é conteúdo de autoridade?</summary><div class="menu-oculto-corpo"><p style="margin:0;font-size:15.5px;line-height:1.6">É o post que mostra que você sabe do que fala. Você traz o que já tem (um rascunho, um trecho de palestra, uma anotação) e ele vira um texto pronto, no seu jeito.</p></div></details><div class="card">'+topo(a),t=get(TIPOS,a.tipo);
+  if(a.passo===1){h+='<p class="cap-sub" style="margin:0 0 10px;font-size:14.5px">Escolha uma opção.</p>'+TIPOS.map(function(x){return'<button type="button" class="au-op'+(a.tipo===x.id?" sel":"")+'" data-au="tipo" data-v="'+x.id+'">'+x.n+"<small>"+x.d+"</small></button>"}).join("")+nav(a,pronto(a))}
+  else if(a.passo===2){
+    if(t.txt){h+='<p class="cap-sub" style="margin:0 0 8px;font-size:14.5px">Pode ser bagunçado. O que importa é a ideia.</p><textarea id="au-txt" rows="9" class="campo" placeholder="Cole ou escreva aqui">'+esc(a.texto)+'</textarea><details class="menu-oculto" name="au-dica" style="margin:10px 0 0"><summary>Prefere falar em vez de digitar?</summary><div class="menu-oculto-corpo"><p style="margin:0;font-size:15.5px;line-height:1.55">No teclado do celular, toque no microfone e fale. O texto aparece sozinho na caixa.</p></div></details>'+(t.fonte?'<label class="lab">Nome do autor e do livro</label><input type="text" id="au-fonte" class="campo" placeholder="Ex.: Nome do autor, título do livro" value="'+esc(a.fonte)+'"><p class="cap-sub" style="margin:6px 0 0;font-size:14.5px">Escreva igual está no livro, para não sair autor errado.</p>':"")}
+    else{var ft=t.id==="foto";h+='<div style="padding:12px;border-radius:12px;background:#F3E9D8"><p style="margin:0 0 6px;font-size:16px"><b>'+(ft?"A foto vai direto para o Gemini":"O áudio vai direto para o Gemini")+'</b></p><p style="margin:0;font-size:15.5px;line-height:1.55">Não precisa subir nada aqui. No passo 4 eu mostro onde anexar '+(ft?"a foto da anotação, do print ou da página":"o áudio da cliente ou da palestra")+".</p></div><p class='cap-sub' style='margin:10px 0 0;font-size:14.5px'>"+(ft?"Dica: tire a foto de frente para o papel, com a luz que tiver.":"Dica: áudio com pouco ruído fica melhor.")+"</p>"}
+    h+=nav(a,pronto(a))}
+  else if(a.passo===3){var e=est();h+=FORMS.map(function(x){return'<button type="button" class="au-op'+(a.formato===x.id?" sel":"")+'" data-au="form" data-v="'+x.id+'">'+x.n+"<small>"+x.d+"</small></button>"}).join("")
+    +'<label class="lab">Qual é a sua área?</label><select id="au-area" class="field-select campo"><option value="">Escolha...</option>'+AREAS.map(function(x){return'<option'+(a.area===x?" selected":"")+">"+x+"</option>"}).join("")+'</select><label class="lab">Para quem você fala?</label><input type="text" id="au-para" class="campo" placeholder="Ex.: mulheres que empreendem sozinhas" value="'+esc(para(a))+'">'+nav(a,pronto(a))}
+  else if(a.passo===4){var ex=!t.txt;h+='<p style="font-size:15px;margin:0 0 6px"><span class="nx-tag" style="margin:0 8px 0 0">1</span><b>Copie o comando e abra o Gemini</b></p><button type="button" class="btn btn-primary au-pulse" style="width:100%;min-height:50px;font-size:16px" data-au="gem">Copiar e abrir o Gemini</button><p class="cap-sub" style="margin:8px 0 12px;font-size:14.5px">Entre com o seu Gmail. É grátis.</p>'
+    +(ex?'<p style="font-size:15px;margin:0 0 6px"><span class="nx-tag" style="margin:0 8px 0 0">2</span><b>Anexe '+(t.id==="foto"?"a foto":"o áudio")+'</b></p><p class="cap-sub" style="margin:0 0 12px;font-size:14.5px;line-height:1.5">No Gemini, toque no <b>+</b> e escolha o arquivo.</p>':"")
+    +'<p style="font-size:15px;margin:0 0 6px"><span class="nx-tag" style="margin:0 8px 0 0">'+(ex?3:2)+'</span><b>Cole o comando e envie</b></p><p class="cap-sub" style="margin:0 0 12px;font-size:14.5px">Quando o texto ficar pronto, volte aqui.</p><details class="menu-oculto" name="au-dica" style="margin:0"><summary>Ver o comando</summary><div class="menu-oculto-corpo"><p style="margin:0;font-size:14.5px;line-height:1.5;white-space:pre-wrap">'+esc(cmd(a))+"</p></div></details>"+nav(a,true,"Já tenho o texto →")}
+  else{h+='<p class="cap-sub" style="margin:0 0 8px;font-size:14.5px">Cole aqui o que o Gemini criou. Assim fica guardado no app.</p><textarea id="au-res" rows="9" class="campo" placeholder="Cole aqui o texto pronto">'+esc(a.res)+'</textarea>';
+    if(a.feito){h+='<div style="margin:12px 0 0;padding:12px;border-radius:12px;background:#E4EEEF"><p style="margin:0 0 6px;font-size:16px"><b>Guardado.</b></p><p style="margin:0;font-size:15.5px;line-height:1.55">Ele fica em "Meus conteúdos guardados", neste celular. Próximo passo: copie o texto e cole na hora de postar no Instagram.</p></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button type="button" class="btn btn-primary" style="flex:1" data-au="rcopy">Copiar o texto</button><a class="btn btn-ghost" style="flex:1;text-decoration:none" href="https://www.instagram.com/" target="_blank" rel="noopener">Abrir o Instagram</a></div><button type="button" class="btn btn-ghost" style="width:100%;margin-top:10px" data-au="novo">Criar outro conteúdo</button>'}
+    else{h+='<div style="display:flex;gap:10px;margin-top:18px"><button type="button" class="btn btn-ghost" style="min-height:48px;font-size:16px" data-au="volta">← Voltar</button><button type="button" class="btn btn-primary" id="au-guardar" style="min-height:48px;font-size:16px;flex:1" data-au="guardar"'+(String(a.res).trim().length>20?"":" disabled")+'>Guardar no app</button></div><p class="cap-sub" style="margin:8px 0 0;font-size:14.5px">Guardar no app salva o texto neste celular, para você achar depois.</p><p style="margin:10px 0 0;text-align:center"><button type="button" class="btn btn-ghost btn-sm" data-au="fim">Encerrar</button></p>'}}
+  h+="</div>"+salvosHTML(a);root.innerHTML=h}
+function zerar(){var a=A();a.passo=1;a.tipo="";a.texto="";a.fonte="";a.formato="";a.res="";a.feito=false}
+function top(){try{window.scrollTo({top:0,behavior:"smooth"})}catch(e){}}
+root.addEventListener("input",function(ev){var t=ev.target,a=A();
+  if(t.id==="au-txt")a.texto=t.value;else if(t.id==="au-fonte")a.fonte=t.value;else if(t.id==="au-para")a.para=t.value;else if(t.id==="au-res"){a.res=t.value;var g=document.getElementById("au-guardar");if(g)g.disabled=!(String(t.value).trim().length>20);persist();return}else return;
+  persist();var b=root.querySelector('[data-au="prox"]');if(b)b.disabled=!pronto(a)});
+root.addEventListener("change",function(ev){var t=ev.target,a=A();if(t.id==="au-area"){a.area=t.value;persist();var b=root.querySelector('[data-au="prox"]');if(b)b.disabled=!pronto(a)}});
+root.addEventListener("click",function(ev){var b=ev.target.closest&&ev.target.closest("[data-au]");if(!b)return;var k=b.getAttribute("data-au"),a=A();
+  if(k==="tipo"){a.tipo=b.getAttribute("data-v");persist();draw()}
+  else if(k==="form"){a.formato=b.getAttribute("data-v");persist();draw()}
+  else if(k==="prox"){if(!pronto(a))return;a.passo=Math.min(5,a.passo+1);persist();draw();top()}
+  else if(k==="volta"){a.passo=Math.max(1,a.passo-1);a.feito=false;persist();draw();top()}
+  else if(k==="gem"){if(!pronto(a))return;cp(cmd(a),"Comando copiado. Cole no Gemini.");window.open(IA_LINKS.gemini.url,"_blank","noopener")}
+  else if(k==="guardar"){var tx=String(a.res).trim();if(tx.length<=20)return;var f=get(FORMS,a.formato);a.salvos.unshift({t:tx,f:f?f.n:"",d:new Date().toLocaleDateString("pt-BR")});a.salvos=a.salvos.slice(0,30);a.feito=true;persist();draw();toast("Guardado no app.")}
+  else if(k==="rcopy"){cp(String(a.res).trim(),"Texto copiado.")}
+  else if(k==="novo"){zerar();persist();draw();top()}
+  else if(k==="fim"){zerar();persist();draw();top();toast("Encerrado.")}
+  else if(k==="scopy"){var s=a.salvos[+b.getAttribute("data-i")];if(s)cp(s.t,"Texto copiado.")}
+  else if(k==="sdel"){a.salvos.splice(+b.getAttribute("data-i"),1);persist();draw()}});
+document.querySelector(".tabs").addEventListener("click",function(ev){var b=ev.target.closest("button");if(!b)return;var n=b.getAttribute("data-tab");root.style.display=n==="aut"?"":"none";if(n==="aut")draw()});
+})();
 </script></body></html>
