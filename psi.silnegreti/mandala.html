@@ -1,0 +1,75 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mandala · Silvana Negreti</title><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-180.png"><meta name="theme-color" content="#1B2A44"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Silvana Negreti"><meta name="apple-mobile-web-app-status-bar-style" content="default"><style>:root{--c:#AD5220;--c2:#F1E4D3;--bg:#FBF6EE;--ink:#3A2A22;--soft:#7A6A60;--line:#E8DAC8;--deep:#1B2A44}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:560px;margin:0 auto;padding:22px 18px 40px;min-height:100vh;display:flex;flex-direction:column}
+h1{font:italic 400 30px/1.2 Georgia,serif;margin:10px 0 12px;color:var(--deep)}
+h2{font:400 21px/1.3 Georgia,serif;margin:18px 0 10px;color:var(--deep)}
+p{margin:0 0 14px}.sub{color:var(--soft)}
+.top{font:italic 17px Georgia,serif;color:var(--deep);text-align:center;margin:0 0 6px}
+.btn{display:block;width:100%;min-height:58px;border-radius:16px;border:0;background:var(--c);color:#fff;font-weight:500;font-size:18px;font-family:inherit;cursor:pointer;margin-top:10px;text-align:center;text-decoration:none;padding:16px}
+.btn.sec{background:#fff;color:var(--c);border:1.5px solid var(--c)}
+.btn.ghost{background:transparent;color:var(--soft);border:0;min-height:44px;font-weight:600;font-size:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;margin:0 0 16px}
+.card b{color:var(--deep)}b,strong{font-weight:500}
+input,select,textarea{width:100%;font:inherit;font-size:19px;padding:14px;border:2px solid var(--line);border-radius:14px;background:#fff;color:var(--ink);margin:0 0 12px}
+label{display:block;font-weight:500;margin:0 0 6px}
+.aviso{font-size:15px;color:var(--soft);margin-top:14px}
+.back{display:inline-block;color:var(--soft);font-size:17px;padding:8px 0;text-decoration:none}
+footer{margin-top:auto;padding-top:24px;text-align:center;font-size:15px;color:var(--soft)}
+.opt{display:block;width:100%;text-align:left;min-height:60px;padding:14px 16px;margin:0 0 12px;border-radius:16px;border:2px solid var(--line);background:#fff;font:inherit;color:inherit;cursor:pointer}
+.opt.on{border-color:var(--c);background:var(--c2)}
+.bar{height:8px;background:var(--line);border-radius:8px;overflow:hidden;margin:0 0 20px}.bar i{display:block;height:100%;background:var(--c);transition:width .25s}
+details{margin:0 0 10px}summary{font-weight:500;color:var(--deep);cursor:pointer;padding:10px 0;font-size:19px}ol{margin:6px 0 4px;padding-left:24px}li{margin:0 0 8px}
+.foto{display:block;width:120px;height:120px;border-radius:50%;object-fit:cover;margin:6px auto 12px;border:4px solid #fff;box-shadow:0 2px 10px rgba(27,42,68,.18)}.mono{width:104px;height:104px;border-radius:50%;background:var(--c);color:#FBF1E2;font:italic 400 56px/104px Georgia,serif;text-align:center;margin:6px auto 12px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}.chip{padding:10px 16px;border-radius:99px;border:2px solid var(--line);background:#fff;font:inherit;font-size:17px;cursor:pointer}.chip.on{border-color:var(--c);background:var(--c2)}
+.circ{width:190px;height:190px;border-radius:50%;background:var(--c2);border:2px solid var(--c);margin:26px auto;display:flex;align-items:center;justify-content:center;text-align:center;font:italic 400 24px Georgia,serif;color:var(--deep);transition:transform 4s ease-in-out}
+.entry{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin:0 0 10px}.entry small{color:var(--soft)}</style><script defer src="contador.js"></script></head><body><main><a class="back" href="index.html">← Voltar</a><p class="top">Silvana Negreti · Psicóloga clínica</p><h1>Mandala</h1><p class="sub">Colorir ou desenhar uma mandala acalma a mente e ajuda a se concentrar no agora. Não existe certo ou errado.</p>
+<div class="chips" id="md"><button class="chip on" data-m="c">Colorir</button><button class="chip" data-m="d">Desenhar</button></div>
+<canvas id="cv" width="640" height="640" style="width:100%;max-width:420px;display:block;margin:0 auto 12px;border:1px solid var(--line);border-radius:20px;background:#fff;touch-action:none"></canvas>
+<div id="pal" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:0 0 12px"></div>
+<div id="bs" style="display:none;margin:0 0 12px"><label for="sz" style="margin-top:0">Espessura do traço</label><input id="sz" type="range" min="2" max="24" value="6" style="width:100%"></div>
+<button class="btn" id="nv" type="button">Novo modelo para colorir</button>
+<button class="btn sec" id="un" type="button">Desfazer</button>
+<button class="btn sec" id="sa" type="button">Salvar ou compartilhar a imagem</button>
+<button class="btn ghost" id="lp" type="button">Limpar</button>
+<details name="d" style="margin-top:10px"><summary>Como usar</summary><ol><li><b>Colorir:</b> escolha uma cor e toque dentro de um espaço para pintar.</li><li><b>Desenhar:</b> passe o dedo na tela. O desenho se repete em 8 partes, formando a mandala.</li><li>Vá sem pressa. Escolha as cores pelo que você sente hoje.</li></ol></details>
+<p class="aviso">Conteúdo de orientação geral. Não é diagnóstico e não substitui atendimento psicológico. Se você estiver em sofrimento intenso, procure ajuda agora: CVV, ligue 188 (24 horas, gratuito).</p><footer>Corage produtos digitais, direitos reservados.<br>Desenvolvido por @eve.imagememarca<br>Silvana Negreti · Psicóloga clínica</footer></main><script>var N=640,cv=document.getElementById("cv"),vx=cv.getContext("2d");
+function mk(){var c=document.createElement("canvas");c.width=c.height=N;return c}
+var col=mk(),lin=mk(),cx=col.getContext("2d",{willReadFrequently:true}),lx=lin.getContext("2d",{willReadFrequently:true});
+var P=["#1B2A44","#AD5220","#C9772F","#C8A27A","#EADBC4","#3B5B8C","#8A4A1E","#6B8F71","#B5546B","#E2B23C","#7E6AA8","#FFFFFF"],cor=P[1],mode="c",H=[],drawing=false,last=null;
+function esc(){}
+var pe=document.getElementById("pal");pe.innerHTML=P.map(function(c,i){return'<button type="button" aria-label="cor '+(i+1)+'" data-c="'+c+'" style="width:40px;height:40px;border-radius:50%;border:3px solid '+(i==1?"#1B2A44":"#E8DAC8")+';background:'+c+';cursor:pointer;padding:0"></button>'}).join("");
+pe.onclick=function(e){var b=e.target.closest("button");if(!b)return;cor=b.getAttribute("data-c");[].forEach.call(pe.children,function(x){x.style.borderColor="#E8DAC8"});b.style.borderColor="#1B2A44"};
+function view(){vx.fillStyle="#fff";vx.fillRect(0,0,N,N);vx.drawImage(col,0,0);vx.drawImage(lin,0,0)}
+function snap(){H.push(cx.getImageData(0,0,N,N));if(H.length>12)H.shift()}
+function rnd(a,b){return a+Math.floor(Math.random()*(b-a+1))}
+function modelo(){lx.clearRect(0,0,N,N);var c=N/2,n=[6,8,10,12][rnd(0,3)];lx.strokeStyle="#1B2A44";lx.lineWidth=3;lx.lineJoin=lx.lineCap="round";
+function circ(r){lx.beginPath();lx.arc(c,c,r,0,7);lx.stroke()}
+function petals(r0,r1,k,w){for(var i=0;i<k;i++){lx.save();lx.translate(c,c);lx.rotate(i*2*Math.PI/k);lx.beginPath();lx.moveTo(0,-r0);lx.quadraticCurveTo(w,-(r0+r1)/2,0,-r1);lx.quadraticCurveTo(-w,-(r0+r1)/2,0,-r0);lx.stroke();lx.restore()}}
+function dots(r,k,rr){for(var i=0;i<k;i++){var a=i*2*Math.PI/k;lx.beginPath();lx.arc(c+Math.cos(a)*r,c+Math.sin(a)*r,rr,0,7);lx.stroke()}}
+function star(r0,r1,k){lx.beginPath();for(var i=0;i<k*2;i++){var a=i*Math.PI/k-Math.PI/2,r=i%2?r0:r1;lx[i?"lineTo":"moveTo"](c+Math.cos(a)*r,c+Math.sin(a)*r)}lx.closePath();lx.stroke()}
+circ(300);circ(286);dots(262,n*2,16);circ(238);petals(120,236,n,rnd(50,90));petals(120,200,n,rnd(30,60));star(70,120,n);circ(120);petals(30,100,n,rnd(20,34));dots(150,n,rnd(10,16));circ(30);
+cx.clearRect(0,0,N,N);H=[];view()}
+function fill(x,y,color){var a=lx.getImageData(0,0,N,N).data,im=cx.getImageData(0,0,N,N),d=im.data,i0=(y*N+x)*4;if(a[i0+3]>140)return;
+var r=parseInt(color.substr(1,2),16),g=parseInt(color.substr(3,2),16),b=parseInt(color.substr(5,2),16),sr=d[i0],sg=d[i0+1],sb=d[i0+2],sa=d[i0+3];if(sa===255&&sr===r&&sg===g&&sb===b)return;
+function same(i){return a[i+3]<=140&&d[i]===sr&&d[i+1]===sg&&d[i+2]===sb&&d[i+3]===sa}
+var st=[[x,y]];while(st.length){var p=st.pop(),px=p[0],py=p[1],i=(py*N+px)*4;while(px>0&&same(((py*N)+px-1)*4))px--;var up=false,dn=false;
+while(px<N&&same((py*N+px)*4)){var j=(py*N+px)*4;d[j]=r;d[j+1]=g;d[j+2]=b;d[j+3]=255;
+if(py>0){var u=((py-1)*N+px)*4;if(same(u)){if(!up){st.push([px,py-1]);up=true}}else up=false}
+if(py<N-1){var w=((py+1)*N+px)*4;if(same(w)){if(!dn){st.push([px,py+1]);dn=true}}else dn=false}px++}}
+cx.putImageData(im,0,0)}
+function pos(e){var r=cv.getBoundingClientRect();return[(e.clientX-r.left)*N/r.width,(e.clientY-r.top)*N/r.height]}
+function seg(a,b){var c=N/2,sz=+document.getElementById("sz").value;cx.strokeStyle=cor;cx.lineWidth=sz;cx.lineCap="round";
+for(var i=0;i<8;i++){for(var m=0;m<2;m++){cx.save();cx.translate(c,c);cx.rotate(i*Math.PI/4);if(m)cx.scale(1,-1);cx.beginPath();cx.moveTo(a[0]-c,a[1]-c);cx.lineTo(b[0]-c,b[1]-c);cx.stroke();cx.restore()}}}
+cv.onpointerdown=function(e){e.preventDefault();var p=pos(e);snap();if(mode==="c"){fill(Math.max(0,Math.min(N-1,Math.round(p[0]))),Math.max(0,Math.min(N-1,Math.round(p[1]))),cor);view()}else{drawing=true;last=p;seg(p,[p[0]+.1,p[1]+.1]);view();try{cv.setPointerCapture(e.pointerId)}catch(x){}}};
+cv.onpointermove=function(e){if(!drawing)return;e.preventDefault();var p=pos(e);seg(last,p);last=p;view()};
+cv.onpointerup=cv.onpointercancel=function(){drawing=false};
+document.getElementById("md").onclick=function(e){var b=e.target.closest(".chip");if(!b)return;mode=b.getAttribute("data-m");[].forEach.call(this.children,function(x){x.classList.toggle("on",x===b)});
+document.getElementById("bs").style.display=mode==="d"?"block":"none";document.getElementById("nv").style.display=mode==="c"?"block":"none";
+if(mode==="d"){lx.clearRect(0,0,N,N);cx.clearRect(0,0,N,N);H=[];view()}else modelo()};
+document.getElementById("nv").onclick=modelo;
+document.getElementById("un").onclick=function(){if(!H.length)return;cx.putImageData(H.pop(),0,0);view()};
+document.getElementById("lp").onclick=function(){snap();cx.clearRect(0,0,N,N);view()};
+document.getElementById("sa").onclick=function(){view();cv.toBlob(function(b){var f=new File([b],"minha-mandala.png",{type:"image/png"});
+if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:"Minha mandala"}).catch(function(){})}else{var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="minha-mandala.png";document.body.appendChild(a);a.click();a.remove()}})};
+modelo();</script></body></html>
