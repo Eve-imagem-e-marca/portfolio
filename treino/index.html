@@ -284,6 +284,8 @@ button,[data-act]{touch-action:manipulation}
 .ob .wd .e{display:block;font-size:22px;line-height:1.1}
 .nav{grid-template-columns:repeat(5,1fr)!important}
 .nav .tab{font-size:12px}
+.lk select,.lk input{width:100%;font:inherit;font-size:16px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);min-height:44px}
+.lk label,.panel.lk label{display:block;font-size:14px;color:var(--muted);margin:10px 0 4px}
 </style>
 </head>
 <body>
@@ -641,7 +643,7 @@ function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 function pad(n){return String(n).padStart(2,'0')}
 function ymd(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
 const today=ymd(new Date());
-S.shop=S.shop||{};S.team=S.team||{};S.prof=S.prof||{};S.yas=S.yas||{list:[]};S.cyc=S.cyc||{p:[],log:{}};S.swap=S.swap||{};S.cyc.p=S.cyc.p||[];S.cyc.log=S.cyc.log||{};
+S.shop=S.shop||{};S.team=S.team||{};S.prof=S.prof||{};S.yas=S.yas||{list:[]};S.cyc=S.cyc||{p:[],log:{}};S.swap=S.swap||{};S.cyc.p=S.cyc.p||[];S.cyc.log=S.cyc.log||{};S.vibe=S.vibe||{};S.look=S.look||{};S.look.p=S.look.p||[];S.look.t=S.look.t||{};
 if(S.doneDate!==today){if(S.doneDate)S.wh[S.doneDate]=S.water||0;S.done={};S.water=0;S.meals={};S.doneDate=today;}
 if(!S.weights.length)S.weights.push({d:today,kg:60,seed:1});
 function wsOf(ds){const d=new Date(ds+'T12:00:00');const k=(d.getDay()+6)%7;d.setDate(d.getDate()-k);return ymd(d)}
@@ -740,6 +742,8 @@ function renderTreino(){
     +[['Anos 80 para treinar','anos 80 playlist para treinar academia'],['Gorillaz, as melhores','Gorillaz playlist melhores musicas'],['Música de treino, alta energia','playlist musica de treino academia motivacional']]
      .map(p=>'<a class="btn alt" style="display:block;text-align:center;margin:0 0 8px;text-decoration:none" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query='+encodeURIComponent(p[1])+'">▶ '+p[0]+'</a>').join(''));
   h+='<div class="week"><b>'+wh.length+'</b><span>de '+wkg()+' treinos nesta semana. Qualquer número já é vitória.</span></div>';
+  h+=vibeBox();
+  h+=lkLine();
   h+=cyTip();
   h+=box('info','Antes de começar','',
     '<h3>Como ler o treino</h3><p><b>Série</b> é um grupo de repetições. <b>Repetição</b> é cada vez que você faz o movimento. Entre as séries, descanse.</p>'
@@ -765,9 +769,9 @@ function renderTreino(){
     const hit=wh.some(x=>x.day===d.n);
     return '<button class="tab" role="tab" data-act="day" data-n="'+d.n+'" aria-selected="'+(d.n===S.cur)+'">Dia '+d.n+(hit?'<span class="dot" title="Feito nesta semana"></span>':'')+'</button>';
   }).join('')+'</div>';
-  const cph=(cyInfo(today)||{}).ph,leve=(cph==='m'||cph==='t');
+  const cph=(S.showCyc===false?{}:cyInfo(today)||{}).ph,leve=(cph==='m'||cph==='t'||vibeOf(today)===1);
   h+='<div class="row" style="margin:-4px 0 14px"><button class="btn'+(S.cur===6?'':' alt')+' small" data-act="day" data-n="6" aria-pressed="'+(S.cur===6)+'">Treino leve do ciclo</button>'+(leve&&S.cur!==6?'<span class="how">Boa pedida para hoje</span>':'')+'</div>';
-  if(day.n===6&&leve)h+='<p class="sug">Sugestão de hoje, pela sua fase</p>';
+  if(day.n===6&&leve)h+='<p class="sug">Sugestão de hoje, pelo seu dia</p>';
   else if(day.n===sug)h+='<p class="sug">Sugestão de hoje</p>';
   h+='<h2>'+esc(day.nome)+'</h2><p class="sub" style="margin:4px 0 0">'+esc(day.foco)+'</p>';
   h+='<div class="meta"><span class="chip">cerca de '+day.min+' min</span><span class="chip">'+day.itens.length+' exercícios</span></div>';
@@ -889,6 +893,7 @@ function profBox(){
    +'<label>Meu objetivo principal</label>'+sel('g',['','Emagrecer','Ficar fortinha','Ter mais disposição','Cuidar das costas e dos pés','Tudo isso'])
    +'<label>O que gosto de treinar</label>'+inp('t','ex.: pernas, esteira, alongar')
    +'<label>O que gosto de comer</label>'+inp('c','ex.: frutas, ovo, feijão')
+   +'<label>Mostrar a aba Ciclo menstrual</label><select data-act="opt" data-f="showCyc">'+['Sim','Não'].map(o=>'<option'+((o==='Sim')===(S.showCyc!==false)?' selected':'')+'>'+o+'</option>').join('')+'</select>'
    +'<label>Tipo sanguíneo</label>'+sel('b',['','A+','A-','B+','B-','AB+','AB-','O+','O-','Não sei'])
    +'<label>Alergias ou o que não posso comer</label>'+inp('a','ex.: lactose, camarão')
    +'<label>Contato de emergência (nome)</label>'+inp('en','Quem avisar se precisar')
@@ -1171,11 +1176,16 @@ const RECEITAS=[
  ['Escorra o feijão do molho e ponha na panela.','Junte água, alho e louro.','Cozinhe 25 minutos na pressão.','Deixe sair a pressão sozinha. Guarde em potes na geladeira por até 4 dias.']]
 ];
 
-const YQ=['','Montar meu cardápio de hoje','Ideia de lanche leve','Trocar um alimento por outro','O que cozinhar com o que tenho em casa','Mercado: o que comprar esta semana','Como comer antes e depois do treino','Treino: montar um treino de 20 minutos','Treino: trocar um exercício do meu dia','Treino: tirar dúvida de postura','Treino: como subir a carga com segurança','Treino: motivação para hoje','Ciclo: lanche para a vontade de doce','Ciclo: treino para a minha fase'];
+const YQ=['','Montar meu cardápio de hoje','Ideia de lanche leve','Trocar um alimento por outro','O que cozinhar com o que tenho em casa','Mercado: o que comprar esta semana','Como comer antes e depois do treino','Treino: montar um treino de 20 minutos','Treino: trocar um exercício do meu dia','Treino: tirar dúvida de postura','Treino: como subir a carga com segurança','Treino: motivação para hoje','Ciclo: lanche para a vontade de doce','Ciclo: treino para a minha fase','Look: montar looks de treino da semana'];
 function yasPrompt(){
   const Y=S.yas,P=S.prof||{};
   const co=(Y.q||'').indexOf('Treino:')===0||Y.q==='Ciclo: treino para a minha fase';
   const dy=DAYS.find(d=>d.n===S.cur),ex=dy?dayItems(dy).map(it=>EX[it.id].nome).join(', '):'';
+  if((Y.q||'').indexOf('Look:')===0){const pc=LKC.map(c=>lkBy(c[0]).length?c[1]+': '+lkBy(c[0]).join(', '):'').filter(Boolean).join('. ');
+    return 'Você é a IAsmin, uma consultora de imagem e estilo virtual, simpática e leve. Responda em português, com frases curtas e simples, sem termos difíceis.\n'
+     +'Sobre mim: mulher, '+(S.age||46)+' anos, treino na academia '+wkg()+' vezes por semana.'+(pc?' Minhas peças de treino: '+pc+'.':' Ainda não cadastrei minhas peças.')+cyLine()+'\n'
+     +'Meu pedido: montar 3 looks de treino para esta semana, confortáveis e que eu goste de usar. Nunca repita a mesma combinação. Use só as minhas peças e sugira no máximo 1 peça nova.\n'
+     +'Dê no máximo 6 linhas. Não faça comentários sobre o meu corpo. No fim, lembre que é só uma sugestão.';}
   if(co)return 'Você é a IAsmin, uma coach esportiva e personal trainer virtual, simpática e leve. Responda em português, com frases curtas e simples, sem termos difíceis.\n'
    +'Sobre mim: mulher, '+(S.age||46)+' anos, treino na academia do meu prédio '+wkg()+' vezes por semana, com halteres leves, elástico, bike, esteira, elíptico e máquinas.'
    +(P.g?' Meu objetivo: '+P.g+'.':'')+(P.t?' Gosto de treinar: '+P.t+'.':'')+(ex?' Meu treino de hoje tem: '+ex+'.':'')+'\n'
@@ -1326,13 +1336,15 @@ function cyInfo(ds){
   return c?{ph:c.ph,nome:CYP[c.ph][0],day:c.day,pred:c.pred,ov:c.ov,next:c.next,st:st,cs:cs}:null;
 }
 function cyLine(){
-  const i=cyInfo(today);if(!i)return '';
-  const g=(S.cyc.log||{})[today]||{},p=[];
-  if(g.m)p.push('humor '+CYHUM[g.m]);if(g.en)p.push('energia '+CYEN[g.en]);if(g.sw)p.push('vontade de doce '+CYSW[g.sw]);if(g.cr)p.push('cólica '+CYCR[g.cr]);
-  return ' Hoje estou na fase "'+i.nome+'" do ciclo menstrual (dia '+i.day+' do ciclo)'+(p.length?', e me sinto assim: '+p.join(', '):'')+'.';
+  const i=(S.showCyc===false)?null:cyInfo(today);
+  const g=(S.cyc.log||{})[today]||{},p=[],e=vibeOf(today);
+  if(e)p.push('energia '+CYEN[e]);
+  if(i){if(g.m)p.push('humor '+CYHUM[g.m]);if(g.sw)p.push('vontade de doce '+CYSW[g.sw]);if(g.cr)p.push('cólica '+CYCR[g.cr]);}
+  if(!i&&!p.length)return '';
+  return (i?' Hoje estou na fase "'+i.nome+'" do ciclo menstrual (dia '+i.day+' do ciclo)'+(p.length?', e me sinto assim: ':''):' Hoje me sinto assim: ')+p.join(', ')+'.';
 }
 function cyTip(){
-  const i=cyInfo(today);if(!i)return '';
+  const i=S.showCyc===false?null:cyInfo(today);if(!i)return '';
   return '<div class="tip"><b>Seu ciclo hoje: '+i.nome+'.</b> '+CYP[i.ph][3]+' <button class="lnk" data-act="view" data-v="ciclo">Ver meu ciclo</button></div>';
 }
 function cyOpts(f,lab,opts,cur){
@@ -1387,7 +1399,7 @@ function renderCiclo(){
     else bt='<button class="btn small" data-act="cyS">Menstruação começou neste dia</button>';
     det+='<div class="row" style="margin:0 0 4px">'+bt+'</div>';
     det+=cyOpts('m','Como você está?',[[5,'Ótimo','😄'],[4,'Bem','🙂'],[3,'Normal','😐'],[2,'Triste','😔'],[1,'Muito triste','😢']],g.m)
-      +cyOpts('en','Energia',[[1,'Baixa'],[2,'Média'],[3,'Alta']],g.en)
+      +'<h3>Energia</h3><div class="ob">'+[[1,'Baixa'],[2,'Média'],[3,'Alta']].map(o=>'<button class="wd'+(vibeOf(sel)===o[0]?' on':'')+'" data-act="vb" data-d="'+sel+'" data-v="'+o[0]+'" aria-pressed="'+(vibeOf(sel)===o[0])+'">'+o[1]+'</button>').join('')+'</div>'
       +cyOpts('sw','Vontade de doce',[[1,'Nenhuma'],[2,'Um pouco'],[3,'Muita']],g.sw)
       +cyOpts('cr','Cólica ou dor',[[1,'Sem'],[2,'Leve'],[3,'Forte']],g.cr)
       +'<p class="how" style="margin:10px 0 0">Toque de novo na opção para desmarcar.</p>';
@@ -1414,13 +1426,75 @@ function renderCiclo(){
   return h;
 }
 
-const VIEWS=[['treino','Treino'],['corpo','Corpo'],['cardio','Cardio'],['agenda','Agenda'],['ciclo','Ciclo'],['prog','Progresso'],['compras','Compras'],['receitas','Receitas'],['mesa','Mesa']];
-const FIRSTBOX={corpo:'peso',cardio:'medidor',prog:'trein',treino:null,agenda:null,ciclo:null,compras:null,receitas:null,mesa:null};
+/* ---------- Como estou hoje (energia do dia) ---------- */
+const VB=[[1,'Sem energia','😴'],[2,'Normal','🙂'],[3,'Animada','⚡']];
+function vibeOf(ds){return (S.vibe&&S.vibe[ds])||(((S.cyc&&S.cyc.log)||{})[ds]||{}).en||0}
+function vibeBox(){
+  const v=vibeOf(today);
+  let h='<div class="panel" style="margin-top:12px"><h3 style="margin-top:0">Como você está hoje?</h3><div class="ob">'
+   +VB.map(o=>'<button class="wd'+(v===o[0]?' on':'')+'" data-act="vb" data-d="'+today+'" data-v="'+o[0]+'" aria-pressed="'+(v===o[0])+'"><span class="e">'+o[2]+'</span>'+o[1]+'</button>').join('')+'</div>';
+  if(v===1)h+='<div class="tip"><b>Sem pressão.</b> Faça o treino leve ou só 10 minutos: qualquer movimento conta. Para ganhar energia, coma algo antes de treinar, como banana com aveia, pão integral com ovo ou iogurte com fruta, e beba água.</div>';
+  else if(v===2)h+='<div class="tip"><b>Dia normal.</b> Siga o treino do dia no seu ritmo. Um lanche leve antes ajuda a manter a energia até o fim.</div>';
+  else if(v===3)h+='<div class="tip"><b>Dia bom!</b> Aproveite para o treino completo e, se o corpo deixar, suba a carga com segurança. Depois, coma bem para recuperar.</div>';
+  return h+'</div>';
+}
+/* ---------- Look do treino ---------- */
+const LKC=[['top','Parte de cima'],['bottom','Parte de baixo'],['shoe','Tênis'],['acc','Acessório']];
+const LKS={top:['Top firme','Regata','Camiseta larga','Blusa de manga longa'],bottom:['Legging preta','Calça de moletom','Short de treino','Bermuda ciclista'],shoe:['Tênis de treino','Tênis de caminhada'],acc:['Faixa de cabelo','Viseira','Relógio','Garrafinha']};
+function lkBy(c){return S.look.p.filter(x=>x.c===c).map(x=>x.n)}
+function lkUsed(){return Object.keys(S.look.t).filter(d=>d<today&&cyDiff(d,today)<=7).map(d=>(S.look.t[d].top||'')+'|'+(S.look.t[d].bottom||''))}
+function lkRoll(){
+  const used=lkUsed();let pick={};
+  for(let k=0;k<30;k++){
+    const t={};LKC.forEach(c=>{const a=lkBy(c[0]);if(a.length)t[c[0]]=a[Math.floor(Math.random()*a.length)];});
+    pick=t;if(!used.includes((t.top||'')+'|'+(t.bottom||'')))break;
+  }
+  S.look.t[today]=pick;
+  Object.keys(S.look.t).sort().slice(0,-30).forEach(d=>delete S.look.t[d]);
+}
+function lkLine(){
+  const T=S.look.t[today];if(!T)return '';
+  const a=LKC.map(c=>T[c[0]]).filter(Boolean);if(!a.length)return '';
+  return '<div class="tip"><b>Look de hoje:</b> '+a.map(esc).join(' + ')+'</div>';
+}
+function lkTips(){
+  const ph=(S.showCyc===false?null:cyInfo(today)||{}).ph,e=vibeOf(today),t=[];
+  if(ph==='m'||ph==='t')t.push('Na menstruação e na TPM, vale cor escura e cós confortável, que não aperte a barriga.');
+  if(e===1)t.push('Sem energia? Um look que você ama já ajuda a dar ânimo.');
+  if(e===3)t.push('Dia animado: aproveite para usar uma cor que você ama.');
+  t.push('Tênis firme e confortável cuida do tornozelo.');
+  return t.slice(0,2).map(x=>'<div class="tip">'+x+'</div>').join('');
+}
+function renderLook(){
+  const L=S.look,T=L.t[today]||{},has=L.p.length>0;
+  if(!has&&openId===null)openId='lkpecas';
+  let h='<h2>Look do treino</h2><p class="sub" style="margin:4px 0 12px">Treino também é guarda-roupa. Monte seus looks e varie as combinações.</p>';
+  let pn='<h3 style="margin-top:0">Look de hoje</h3>';
+  if(!has)pn+='<p style="margin:0">Cadastre suas peças logo abaixo, em <b>Minhas peças de treino</b>, para montar o look de hoje.</p>';
+  else{
+    pn+=LKC.filter(c=>lkBy(c[0]).length).map(c=>'<label>'+c[1]+'</label><select data-act="lksel" data-c="'+c[0]+'"><option value="">Escolher</option>'+lkBy(c[0]).map(n=>'<option value="'+esc(n)+'"'+(T[c[0]]===n?' selected':'')+'>'+esc(n)+'</option>').join('')+'</select>').join('')
+      +'<div class="row"><button class="btn" data-act="lkRoll">Sortear um look</button></div>';
+    if(T.top&&T.bottom&&lkUsed().includes(T.top+'|'+T.bottom))pn+='<div class="tip"><b>Combinação repetida:</b> você já usou esta blusa com esta calça nos últimos 7 dias.</div>';
+  }
+  h+='<div class="panel lk" style="margin-top:0">'+pn+'</div>'+lkTips();
+  const cur=L.c||'top';
+  let pc=LKC.map(c=>lkBy(c[0]).length?'<h3>'+c[1]+'</h3>'+L.p.map((x,i)=>x.c===c[0]?'<div class="li"><span>'+esc(x.n)+'</span><button class="lnk" data-act="lkDel" data-i="'+i+'">Apagar</button></div>':'').join(''):'').join('');
+  pc+='<h3>Adicionar peça</h3><div class="lk"><select data-act="lkc">'+LKC.map(c=>'<option value="'+c[0]+'"'+(cur===c[0]?' selected':'')+'>'+c[1]+'</option>').join('')+'</select>'
+    +'<input id="lk-n" list="lk-dl" placeholder="ex.: '+LKS[cur][0]+'" autocomplete="off" style="margin-top:8px"><datalist id="lk-dl">'+LKS[cur].map(n=>'<option value="'+esc(n)+'">').join('')+'</datalist>'
+    +'<div class="row"><button class="btn small" data-act="lkAdd">Adicionar</button></div></div>';
+  h+=box('lkpecas','Minhas peças de treino','· '+L.p.length+(L.p.length===1?' peça':' peças'),pc);
+  h+=box('lkia','Pedir ideias para a IAsmin','','<p style="margin:0 0 8px">A IAsmin monta 3 looks para a semana com as suas peças, sem repetir a combinação. O pedido abre na aba <b>Receitas</b>, pronto para copiar.</p><div class="row" style="margin-top:0"><button class="btn small" data-act="lkAsk">Montar looks da semana</button></div>');
+  return h;
+}
+
+const VIEWS=[['treino','Treino'],['corpo','Corpo'],['cardio','Cardio'],['agenda','Agenda'],['ciclo','Ciclo'],['look','Look'],['prog','Progresso'],['compras','Compras'],['receitas','Receitas'],['mesa','Mesa']];
+const FIRSTBOX={corpo:'peso',cardio:'medidor',prog:'trein',treino:null,agenda:null,ciclo:null,look:null,compras:null,receitas:null,mesa:null};
 let lastView=null;
 function render(){
-  let h='<div class="nav" role="tablist">'+VIEWS.map(v=>'<button class="tab" role="tab" data-act="view" data-v="'+v[0]+'" aria-selected="'+(view===v[0])+'">'+v[1]+'</button>').join('')+'</div>';
+  if(view==='ciclo'&&S.showCyc===false)view='treino';
+  let h='<div class="nav" role="tablist">'+VIEWS.filter(v=>!(v[0]==='ciclo'&&S.showCyc===false)).map(v=>'<button class="tab" role="tab" data-act="view" data-v="'+v[0]+'" aria-selected="'+(view===v[0])+'">'+v[1]+'</button>').join('')+'</div>';
   h=heroHtml()+h;
-  h+=view==='treino'?renderTreino():view==='corpo'?renderCorpo():view==='cardio'?renderCardio():view==='agenda'?renderAgenda():view==='ciclo'?renderCiclo():view==='compras'?renderCompras():view==='receitas'?renderReceitas():view==='mesa'?renderMesa():renderProgresso();
+  h+=view==='treino'?renderTreino():view==='corpo'?renderCorpo():view==='cardio'?renderCardio():view==='agenda'?renderAgenda():view==='ciclo'?renderCiclo():view==='look'?renderLook():view==='compras'?renderCompras():view==='receitas'?renderReceitas():view==='mesa'?renderMesa():renderProgresso();
   const ap=document.getElementById('app');ap.innerHTML=h;
   if(lastView!==view){lastView=view;ap.classList.add('go');setTimeout(()=>ap.classList.remove('go'),700);}
   startAnim();
@@ -1483,7 +1557,7 @@ document.getElementById('app').addEventListener('click',e=>{
   const b=e.target.closest('[data-act]'); if(!b)return;
   const a=b.dataset.act;
   if(a!=='cup'&&a!=='done'&&a!=='meal')SND.tap();
-  if(a==='kg'||a==='rng'||a==='bpm'||a==='age'||a==='photo'||a==='team'||a==='prof'||a==='avatar'||a==='avdel'||a==='yas')return;
+  if(a==='kg'||a==='rng'||a==='bpm'||a==='age'||a==='photo'||a==='team'||a==='prof'||a==='avatar'||a==='avdel'||a==='yas'||a==='opt'||a==='lksel'||a==='lkc')return;
   if(a==='view'){view=b.dataset.v;openId=FIRSTBOX[view];save();render();window.scrollTo({top:0});}
   else if(a==='box'||a==='info'||a==='agua'){const k=b.dataset.k||a;openId=openId===k?null:k;render();}
   else if(a==='day'){S.cur=+b.dataset.n;openId=null;finished=false;ckPending=false;save();render();window.scrollTo({top:0});}
@@ -1507,6 +1581,11 @@ document.getElementById('app').addEventListener('click',e=>{
   else if(a==='cyE'){const o=S.cyc.p.filter(x=>x.s<cySel).pop();if(o&&cyDiff(o.s,cySel)<=14){o.e=cySel;save();render();celebrate('Marcado!',false);}}
   else if(a==='cyDel'){S.cyc.p=S.cyc.p.filter(x=>x.s!==cySel);S.cyc.p.forEach(x=>{if(x.e===cySel)x.e=null;});save();render();}
   else if(a==='cyL'){const f=b.dataset.f,v=+b.dataset.v;S.cyc.log[cySel]=S.cyc.log[cySel]||{};const g=S.cyc.log[cySel];if(g[f]===v)delete g[f];else g[f]=v;if(!Object.keys(g).length)delete S.cyc.log[cySel];save();render();}
+  else if(a==='vb'){const d=b.dataset.d,v=+b.dataset.v;S.vibe=S.vibe||{};if(vibeOf(d)===v){delete S.vibe[d];if(S.cyc.log[d]){delete S.cyc.log[d].en;if(!Object.keys(S.cyc.log[d]).length)delete S.cyc.log[d];}}else S.vibe[d]=v;save();render();}
+  else if(a==='lkRoll'){lkRoll();save();render();celebrate('Look sorteado!',false);}
+  else if(a==='lkAdd'){const n=val('lk-n').trim();if(!n){flash('lk-n');return;}S.look.p.push({c:S.look.c||'top',n:n.slice(0,40)});S.look.p=S.look.p.slice(-60);save();render();celebrate('Peça adicionada!',false);}
+  else if(a==='lkDel'){S.look.p.splice(+b.dataset.i,1);save();render();}
+  else if(a==='lkAsk'){S.yas=S.yas||{list:[]};S.yas.q='Look: montar looks de treino da semana';view='receitas';openId='yas';save();render();window.scrollTo({top:0});}
   else if(a==='swap'){const k=b.dataset.k,pr=k.split(':'),base=DAYS.find(d=>d.n===+pr[0]).itens[+pr[1]].id;S.swap=S.swap||{};if(b.dataset.v===base)delete S.swap[k];else S.swap[k]=b.dataset.v;save();render();}
   else if(a==='cyAsk'){S.yas=S.yas||{list:[]};S.yas.q=b.dataset.q;view='receitas';openId='yas';save();render();window.scrollTo({top:0});}
   else if(a==='goperfil'){view='corpo';openId='perfil';render();window.scrollTo({top:0});}
@@ -1566,6 +1645,9 @@ document.getElementById('app').addEventListener('click',e=>{
       if(typeof o.age==='number')S.age=o.age;
       if(o.cyc&&typeof o.cyc==='object'&&Array.isArray(o.cyc.p))S.cyc={p:o.cyc.p,log:(o.cyc.log&&typeof o.cyc.log==='object')?o.cyc.log:{}};
       if(o.swap&&typeof o.swap==='object')S.swap=o.swap;
+      if(o.vibe&&typeof o.vibe==='object')S.vibe=o.vibe;
+      if(o.look&&typeof o.look==='object'&&Array.isArray(o.look.p))S.look={p:o.look.p,t:(o.look.t&&typeof o.look.t==='object')?o.look.t:{},c:o.look.c};
+      if(typeof o.showCyc==='boolean')S.showCyc=o.showCyc;
       if(typeof o.waterGoal==='number')S.waterGoal=o.waterGoal;
       if(typeof o.cardioGoal==='number')S.cardioGoal=o.cardioGoal;
       if(!S.plan.length)S.plan=[1,2,3,4,5];
@@ -1581,6 +1663,7 @@ document.getElementById('app').addEventListener('input',e=>{
   if(a==='kg'){S.kg[i.dataset.id]=i.value;save();}
   else if(a==='yas'){S.yas=S.yas||{list:[]};S.yas[i.dataset.f]=i.value;save();}
   else if(a==='prof'){S.prof=S.prof||{};S.prof[i.dataset.f]=i.value;save();}
+  else if(a==='opt'){S[i.dataset.f]=(i.value==='Sim');save();render();}
   else if(a==='team'){S.team=S.team||{};S.team[i.dataset.f]=i.value;save();}
   else if(a==='rng'){const o=document.getElementById(i.id+'-o');if(o)o.textContent=i.value;}
   else if(a==='bpm'){const mx=220-S.age,n=num(i.value);const ok=n>=30&&n<=230;S.lastBpm=ok?Math.round(n):0;
@@ -1590,6 +1673,8 @@ document.getElementById('app').addEventListener('input',e=>{
 document.getElementById('app').addEventListener('change',e=>{
   const ph=e.target.closest('[data-act="photo"]');
   if(ph){if(ph.files&&ph.files[0])addPhoto(ph.files[0]);return;}
+  const ls=e.target.closest('[data-act="lksel"]');if(ls){const t=S.look.t[today]=S.look.t[today]||{};if(ls.value)t[ls.dataset.c]=ls.value;else delete t[ls.dataset.c];save();render();return;}
+  const lc=e.target.closest('[data-act="lkc"]');if(lc){S.look.c=lc.value;render();return;}
   const av=e.target.closest('[data-act="avatar"]');if(av){if(av.files&&av.files[0])addAvatar(av.files[0]);return;}
   const i=e.target.closest('[data-act="age"]'); if(!i)return;
   const n=Math.round(num(i.value));if(n>=18&&n<=90){S.age=n;save();render();}
