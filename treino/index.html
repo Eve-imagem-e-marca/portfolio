@@ -286,6 +286,16 @@ button,[data-act]{touch-action:manipulation}
 .nav .tab{font-size:12px}
 .lk select,.lk input{width:100%;font:inherit;font-size:16px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);min-height:44px}
 .lk label,.panel.lk label{display:block;font-size:14px;color:var(--muted);margin:10px 0 4px}
+.lkg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.lkg figure{margin:0;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:8px}
+.lkg img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:10px;display:block;background:var(--soft)}
+.lkg figcaption{font-size:14px;margin-top:6px;line-height:1.35}
+.lkg .row{gap:6px;margin-top:6px;flex-wrap:wrap}
+.btn.on{background:var(--marsala);color:var(--on-marsala)}
+.dot{display:inline-block;width:14px;height:14px;border-radius:50%;border:1px solid var(--line);vertical-align:-2px;margin-right:6px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0}
+.chips span{font-size:15px;padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:var(--card)}
+.li select{width:auto;min-height:40px;font-size:15px;padding:6px 8px}
 </style>
 </head>
 <body>
@@ -1181,10 +1191,10 @@ function yasPrompt(){
   const Y=S.yas,P=S.prof||{};
   const co=(Y.q||'').indexOf('Treino:')===0||Y.q==='Ciclo: treino para a minha fase';
   const dy=DAYS.find(d=>d.n===S.cur),ex=dy?dayItems(dy).map(it=>EX[it.id].nome).join(', '):'';
-  if((Y.q||'').indexOf('Look:')===0){const pc=LKC.map(c=>lkBy(c[0]).length?c[1]+': '+lkBy(c[0]).join(', '):'').filter(Boolean).join('. ');
+  if((Y.q||'').indexOf('Look:')===0){const pc=LKC.map(c=>lkByK(c[0]).length?c[1]+': '+lkByK(c[0]).join(', '):'').filter(Boolean).join('. ');
     return 'Você é a IAsmin, uma consultora de imagem e estilo virtual, simpática e leve. Responda em português, com frases curtas e simples, sem termos difíceis.\n'
      +'Sobre mim: mulher, '+(S.age||46)+' anos, treino na academia '+wkg()+' vezes por semana.'+(pc?' Minhas peças de treino: '+pc+'.':' Ainda não cadastrei minhas peças.')+cyLine()+'\n'
-     +'Meu pedido: montar 3 looks de treino para esta semana, confortáveis e que eu goste de usar. Nunca repita a mesma combinação. Use só as minhas peças e sugira no máximo 1 peça nova.\n'
+     +'Meu pedido: montar 3 looks de treino para esta semana, confortáveis e que eu goste de usar. Nunca repita a mesma combinação. Use só as minhas peças, combine as cores com bom gosto e sugira no máximo 1 peça nova.\n'
      +'Dê no máximo 6 linhas. Não faça comentários sobre o meu corpo. No fim, lembre que é só uma sugestão.';}
   if(co)return 'Você é a IAsmin, uma coach esportiva e personal trainer virtual, simpática e leve. Responda em português, com frases curtas e simples, sem termos difíceis.\n'
    +'Sobre mim: mulher, '+(S.age||46)+' anos, treino na academia do meu prédio '+wkg()+' vezes por semana, com halteres leves, elástico, bike, esteira, elíptico e máquinas.'
@@ -1441,6 +1451,71 @@ function vibeBox(){
 /* ---------- Look do treino ---------- */
 const LKC=[['top','Parte de cima'],['bottom','Parte de baixo'],['shoe','Tênis'],['acc','Acessório']];
 const LKS={top:['Top firme','Regata','Camiseta larga','Blusa de manga longa'],bottom:['Legging preta','Calça de moletom','Short de treino','Bermuda ciclista'],shoe:['Tênis de treino','Tênis de caminhada'],acc:['Faixa de cabelo','Viseira','Relógio','Garrafinha']};
+const COR=[['preto','#2b2b2b'],['branco','#f4f1ec'],['cinza','#9a9a9a'],['bege','#d8c3a5'],['marrom','#6b4a3a'],['marsala','#7a2e3a'],['terracota','#c0623f'],['verde','#4f7a5a'],['azul','#3d6a9e'],['rosa','#e5a1b4'],['vermelho','#c0392b'],['roxo','#7b5ea7'],['amarelo','#e6c24a'],['laranja','#e58a3a']];
+const NEU=['preto','branco','cinza','bege'];
+const CMB={marsala:['rosa','bege','cinza'],terracota:['bege','marrom','verde'],verde:['bege','marrom','rosa'],azul:['laranja','cinza','bege'],rosa:['marsala','cinza','bege'],vermelho:['azul','cinza'],roxo:['rosa','cinza'],amarelo:['azul','cinza'],laranja:['azul','bege'],marrom:['bege','verde','terracota']};
+function corHex(k){const c=COR.find(x=>x[0]===k);return c?c[1]:'transparent'}
+function kMatch(a,b){if(!a||!b)return false;if(a===b)return true;if(NEU.includes(a)||NEU.includes(b))return true;return (CMB[a]||[]).includes(b)||(CMB[b]||[]).includes(a)}
+function kList(k){return COR.map(c=>c[0]).filter(c=>c!==k&&kMatch(k,c))}
+let LKP=[];try{LKP=JSON.parse(localStorage.getItem('treino-leve-looks-v1')||'[]');}catch(e){}
+function saveLkp(){try{localStorage.setItem('treino-leve-looks-v1',JSON.stringify(LKP));return true;}catch(e){return false;}}
+function lkByK(c){return S.look.p.filter(x=>x.c===c).map(x=>x.n+(x.k?' ('+x.k+')':''))}
+function lkPiece(c,n){return S.look.p.find(x=>x.c===c&&x.n===n)}
+function lkCombos(P){
+  const out=[];const tops=S.look.p.filter(x=>x.c==='top'),bots=S.look.p.filter(x=>x.c==='bottom');
+  if(P.c==='top')bots.forEach(b=>{if(kMatch(P.k,b.k))out.push({top:P.n,bottom:b.n})});
+  else if(P.c==='bottom')tops.forEach(t=>{if(kMatch(P.k,t.k))out.push({top:t.n,bottom:P.n})});
+  else tops.forEach(t=>bots.forEach(b=>{if(kMatch(t.k,b.k)&&kMatch(P.k,t.k)&&kMatch(P.k,b.k))out.push({top:t.n,bottom:b.n,x:P})}));
+  return out.slice(0,4);
+}
+function addLookPhoto(file){
+  const note=t=>{const m=document.getElementById('lkmsg');if(m)m.textContent=t;};
+  const fr=new FileReader();
+  fr.onload=()=>{const im=new Image();
+    im.onload=()=>{const k=Math.min(1,480/Math.max(im.width,im.height)),c=document.createElement('canvas');
+      c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+      const T=S.look.t[today]||{};
+      LKP.unshift({id:Date.now(),d:today,img:c.toDataURL('image/jpeg',0.7),pcs:{top:T.top||'',bottom:T.bottom||'',shoe:T.shoe||'',acc:T.acc||''},love:0,good:0});
+      LKP=LKP.slice(0,30);
+      if(!saveLkp()){LKP.shift();note('Sem espaço para mais fotos neste aparelho. Apague uma e tente de novo.');return;}
+      openId='lkgal';render();celebrate('Look salvo!',false);};
+    im.onerror=()=>note('Não consegui abrir essa foto. Tente outra.');
+    im.src=fr.result;};
+  fr.onerror=()=>note('Não consegui ler a foto.');
+  fr.readAsDataURL(file);
+}
+function lkGallery(){
+  const only=S.look.only,L=LKP.filter(x=>!only||x.love);
+  const loves=LKP.filter(x=>x.love).length;
+  let g='<p style="margin:0 0 8px">Tire uma foto do look vestido (no espelho, por exemplo) e marque como se sentiu. A foto fica só neste aparelho.</p>';
+  g+='<label class="btn small filebtn" for="in-lk">Foto do look de hoje<input id="in-lk" type="file" accept="image/*" data-act="lkph" hidden></label>'
+    +'<p class="how" id="lkmsg" style="margin:8px 0 0">As fotos não vão para a internet nem para o backup.</p>';
+  if(LKP.length)g+='<div class="row"><button class="btn small alt'+(only?' on':'')+'" data-act="lkOnly">Só os que amei'+(loves?' · '+loves:'')+'</button></div>';
+  if(!L.length&&LKP.length)g+='<p style="margin:8px 0 0">Nenhum look amado ainda. Toque em <b>Amei</b> nos looks abaixo.</p>';
+  g+='<div class="lkg" style="margin-top:10px">'+L.map(x=>{
+    const pcs=LKC.map(c=>x.pcs[c[0]]).filter(Boolean).map(esc).join(' + ');
+    return '<figure><img src="'+x.img+'" alt="Look de '+dm(x.d)+'"><figcaption>'+dm(x.d)+(pcs?'<br>'+pcs:'')+'</figcaption>'
+     +'<div class="row"><button class="btn small alt'+(x.love?' on':'')+'" data-act="lkLove" data-id="'+x.id+'" aria-pressed="'+(x.love?'true':'false')+'">'+(x.love?'♥':'♡')+' Amei</button>'
+     +'<button class="btn small alt'+(x.good?' on':'')+'" data-act="lkGood" data-id="'+x.id+'" aria-pressed="'+(x.good?'true':'false')+'">Me senti bem</button>'
+     +(pcs?'<button class="btn small alt" data-act="lkAgain" data-id="'+x.id+'">Usar de novo</button>':'')
+     +'<button class="lnk" data-act="lkPdel" data-id="'+x.id+'">Apagar</button></div></figure>';}).join('')+'</div>';
+  return g;
+}
+function lkCombine(){
+  const L=S.look;if(!L.p.length)return '<p style="margin:0">Cadastre suas peças em <b>Minhas peças de treino</b> para ver combinações.</p>';
+  let i=L.cb;if(!(i>=0&&i<L.p.length))i=0;const P=L.p[i];
+  let h='<p style="margin:0 0 8px">Escolha uma peça e veja com que cores e com quais das suas peças ela combina.</p><div class="lk"><label>Peça</label><select data-act="lkcb">'
+   +L.p.map((x,j)=>'<option value="'+j+'"'+(j===i?' selected':'')+'>'+esc(x.n)+(x.k?' ('+x.k+')':'')+'</option>').join('')+'</select>';
+  if(!P.k){h+='<label>Qual a cor dela?</label><select data-act="lkcor" data-i="'+i+'"><option value="">Escolher a cor</option>'+COR.map(c=>'<option value="'+c[0]+'">'+c[0]+'</option>').join('')+'</select></div>';return h;}
+  h+='</div><h3>Cores que combinam com '+P.k+'</h3><div class="chips">'+kList(P.k).map(k=>'<span><i class="dot" style="background:'+corHex(k)+'"></i>'+k+'</span>').join('')+'</div>';
+  if(NEU.includes(P.k))h+='<div class="tip">Cor neutra combina com tudo. Para dar vida, junte com uma cor que você ama.</div>';
+  else h+='<div class="tip">Dica: peça colorida com neutra fica leve. Tom sobre tom (mesma cor, tons diferentes) fica elegante.</div>';
+  const cb=lkCombos(P);
+  h+='<h3>Looks com as suas peças</h3>';
+  if(!cb.length)h+='<p style="margin:0">Ainda não há combinação entre as suas peças (ou faltam cores nelas). Que tal uma peça nova em <b>'+kList(P.k).slice(0,3).join(', ')+'</b>?</p>';
+  else h+=cb.map((x,j)=>'<div class="li"><span>'+esc(x.top)+' + '+esc(x.bottom)+(x.x?' + '+esc(x.x.n):'')+'</span><button class="btn small alt" data-act="lkUse" data-a="'+esc(x.top)+'" data-b="'+esc(x.bottom)+'">Usar hoje</button></div>').join('');
+  return h;
+}
 function lkBy(c){return S.look.p.filter(x=>x.c===c).map(x=>x.n)}
 function lkUsed(){return Object.keys(S.look.t).filter(d=>d<today&&cyDiff(d,today)<=7).map(d=>(S.look.t[d].top||'')+'|'+(S.look.t[d].bottom||''))}
 function lkRoll(){
@@ -1478,10 +1553,13 @@ function renderLook(){
   }
   h+='<div class="panel lk" style="margin-top:0">'+pn+'</div>'+lkTips();
   const cur=L.c||'top';
-  let pc=LKC.map(c=>lkBy(c[0]).length?'<h3>'+c[1]+'</h3>'+L.p.map((x,i)=>x.c===c[0]?'<div class="li"><span>'+esc(x.n)+'</span><button class="lnk" data-act="lkDel" data-i="'+i+'">Apagar</button></div>':'').join(''):'').join('');
+  let pc=LKC.map(c=>lkBy(c[0]).length?'<h3>'+c[1]+'</h3>'+L.p.map((x,i)=>x.c===c[0]?'<div class="li"><span><i class="dot" style="background:'+corHex(x.k)+'"></i>'+esc(x.n)+'</span><select data-act="lkcor" data-i="'+i+'" aria-label="Cor"><option value="">sem cor</option>'+COR.map(c=>'<option value="'+c[0]+'"'+(x.k===c[0]?' selected':'')+'>'+c[0]+'</option>').join('')+'</select><button class="lnk" data-act="lkDel" data-i="'+i+'">Apagar</button></div>':'').join(''):'').join('');
   pc+='<h3>Adicionar peça</h3><div class="lk"><select data-act="lkc">'+LKC.map(c=>'<option value="'+c[0]+'"'+(cur===c[0]?' selected':'')+'>'+c[1]+'</option>').join('')+'</select>'
     +'<input id="lk-n" list="lk-dl" placeholder="ex.: '+LKS[cur][0]+'" autocomplete="off" style="margin-top:8px"><datalist id="lk-dl">'+LKS[cur].map(n=>'<option value="'+esc(n)+'">').join('')+'</datalist>'
+    +'<label>Cor (opcional)</label><select id="lk-k"><option value="">sem cor</option>'+COR.map(c=>'<option value="'+c[0]+'">'+c[0]+'</option>').join('')+'</select>'
     +'<div class="row"><button class="btn small" data-act="lkAdd">Adicionar</button></div></div>';
+  h+=box('lkgal','Meus looks com foto',LKP.length?'· '+LKP.length:'',lkGallery());
+  h+=box('lkcmb','Como combinar uma peça','',lkCombine());
   h+=box('lkpecas','Minhas peças de treino','· '+L.p.length+(L.p.length===1?' peça':' peças'),pc);
   h+=box('lkia','Pedir ideias para a IAsmin','','<p style="margin:0 0 8px">A IAsmin monta 3 looks para a semana com as suas peças, sem repetir a combinação. O pedido abre na aba <b>Receitas</b>, pronto para copiar.</p><div class="row" style="margin-top:0"><button class="btn small" data-act="lkAsk">Montar looks da semana</button></div>');
   return h;
@@ -1557,7 +1635,7 @@ document.getElementById('app').addEventListener('click',e=>{
   const b=e.target.closest('[data-act]'); if(!b)return;
   const a=b.dataset.act;
   if(a!=='cup'&&a!=='done'&&a!=='meal')SND.tap();
-  if(a==='kg'||a==='rng'||a==='bpm'||a==='age'||a==='photo'||a==='team'||a==='prof'||a==='avatar'||a==='avdel'||a==='yas'||a==='opt'||a==='lksel'||a==='lkc')return;
+  if(a==='kg'||a==='rng'||a==='bpm'||a==='age'||a==='photo'||a==='team'||a==='prof'||a==='avatar'||a==='avdel'||a==='yas'||a==='opt'||a==='lksel'||a==='lkc'||a==='lkph'||a==='lkcb'||a==='lkcor')return;
   if(a==='view'){view=b.dataset.v;openId=FIRSTBOX[view];save();render();window.scrollTo({top:0});}
   else if(a==='box'||a==='info'||a==='agua'){const k=b.dataset.k||a;openId=openId===k?null:k;render();}
   else if(a==='day'){S.cur=+b.dataset.n;openId=null;finished=false;ckPending=false;save();render();window.scrollTo({top:0});}
@@ -1583,7 +1661,13 @@ document.getElementById('app').addEventListener('click',e=>{
   else if(a==='cyL'){const f=b.dataset.f,v=+b.dataset.v;S.cyc.log[cySel]=S.cyc.log[cySel]||{};const g=S.cyc.log[cySel];if(g[f]===v)delete g[f];else g[f]=v;if(!Object.keys(g).length)delete S.cyc.log[cySel];save();render();}
   else if(a==='vb'){const d=b.dataset.d,v=+b.dataset.v;S.vibe=S.vibe||{};if(vibeOf(d)===v){delete S.vibe[d];if(S.cyc.log[d]){delete S.cyc.log[d].en;if(!Object.keys(S.cyc.log[d]).length)delete S.cyc.log[d];}}else S.vibe[d]=v;save();render();}
   else if(a==='lkRoll'){lkRoll();save();render();celebrate('Look sorteado!',false);}
-  else if(a==='lkAdd'){const n=val('lk-n').trim();if(!n){flash('lk-n');return;}S.look.p.push({c:S.look.c||'top',n:n.slice(0,40)});S.look.p=S.look.p.slice(-60);save();render();celebrate('Peça adicionada!',false);}
+  else if(a==='lkAdd'){const n=val('lk-n').trim();if(!n){flash('lk-n');return;}S.look.p.push({c:S.look.c||'top',n:n.slice(0,40),k:val('lk-k')||''});S.look.p=S.look.p.slice(-60);save();render();celebrate('Peça adicionada!',false);}
+  else if(a==='lkLove'){const x=LKP.find(y=>String(y.id)===b.dataset.id);if(x){x.love=x.love?0:1;saveLkp();render();if(x.love)celebrate('Que bom que você amou!',false);}}
+  else if(a==='lkGood'){const x=LKP.find(y=>String(y.id)===b.dataset.id);if(x){x.good=x.good?0:1;saveLkp();render();}}
+  else if(a==='lkPdel'){LKP=LKP.filter(y=>String(y.id)!==b.dataset.id);saveLkp();render();}
+  else if(a==='lkOnly'){S.look.only=!S.look.only;save();render();}
+  else if(a==='lkAgain'){const x=LKP.find(y=>String(y.id)===b.dataset.id);if(x){S.look.t[today]=Object.assign({},x.pcs);save();openId=null;render();celebrate('Look de hoje atualizado!',false);window.scrollTo({top:0});}}
+  else if(a==='lkUse'){S.look.t[today]=Object.assign(S.look.t[today]||{},{top:b.dataset.a,bottom:b.dataset.b});save();openId=null;render();celebrate('Look de hoje atualizado!',false);window.scrollTo({top:0});}
   else if(a==='lkDel'){S.look.p.splice(+b.dataset.i,1);save();render();}
   else if(a==='lkAsk'){S.yas=S.yas||{list:[]};S.yas.q='Look: montar looks de treino da semana';view='receitas';openId='yas';save();render();window.scrollTo({top:0});}
   else if(a==='swap'){const k=b.dataset.k,pr=k.split(':'),base=DAYS.find(d=>d.n===+pr[0]).itens[+pr[1]].id;S.swap=S.swap||{};if(b.dataset.v===base)delete S.swap[k];else S.swap[k]=b.dataset.v;save();render();}
@@ -1674,6 +1758,9 @@ document.getElementById('app').addEventListener('change',e=>{
   const ph=e.target.closest('[data-act="photo"]');
   if(ph){if(ph.files&&ph.files[0])addPhoto(ph.files[0]);return;}
   const ls=e.target.closest('[data-act="lksel"]');if(ls){const t=S.look.t[today]=S.look.t[today]||{};if(ls.value)t[ls.dataset.c]=ls.value;else delete t[ls.dataset.c];save();render();return;}
+  const lph=e.target.closest('[data-act="lkph"]');if(lph){if(lph.files&&lph.files[0])addLookPhoto(lph.files[0]);return;}
+  const lcb=e.target.closest('[data-act="lkcb"]');if(lcb){S.look.cb=+lcb.value;save();render();return;}
+  const lco=e.target.closest('[data-act="lkcor"]');if(lco){const q=S.look.p[+lco.dataset.i];if(q){q.k=lco.value;save();render();}return;}
   const lc=e.target.closest('[data-act="lkc"]');if(lc){S.look.c=lc.value;render();return;}
   const av=e.target.closest('[data-act="avatar"]');if(av){if(av.files&&av.files[0])addAvatar(av.files[0]);return;}
   const i=e.target.closest('[data-act="age"]'); if(!i)return;
