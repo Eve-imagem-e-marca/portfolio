@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-192.png"><meta name="theme-color" content="#7A2E3A"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Treino Chiquinha">
-<title>Treino da Chiquinha</title>
+<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-192.png"><meta name="theme-color" content="#7A2E3A"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Treino leve">
+<title>Meu treino leve</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
@@ -300,7 +300,7 @@ button,[data-act]{touch-action:manipulation}
 </head>
 <body>
 <div class="wrap">
-  <h1>Treino da Chiquinha</h1>
+  <h1>Meu treino leve</h1>
   <p class="sub">Um exercício de cada vez. Leve, seguro e no seu ritmo.</p>
   <hr class="rule">
   <button id="som" type="button" aria-label="Som ligado ou desligado"></button>
@@ -642,13 +642,13 @@ function swapUi(day,i,it){
 }
 
 /* ---------- Estado salvo no celular (se o navegador permitir) ---------- */
-const KEY='treino-chiquinha-v1';
+const KEY='treino-flower-v1';
 let S={done:{},doneDate:'',kg:{},hist:[],cur:null,water:0,meals:{},
   weights:[],waist:[],bp:[],age:40,cardio:[],checks:[],kgHist:{},wh:{},plan:[1,2,3,4,5],waterGoal:8,cardioGoal:150,sleep:[]};
 try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(S,JSON.parse(r));}catch(e){}
 S.hist=(function(){const m={};(S.hist||[]).forEach(h=>{m[h.d]=h});return Object.keys(m).sort().map(k=>m[k])})();
-let PH=[];try{PH=JSON.parse(localStorage.getItem('treino-chiquinha-fotos-v1')||'[]');}catch(e){}
-function savePh(){try{localStorage.setItem('treino-chiquinha-fotos-v1',JSON.stringify(PH));return true;}catch(e){return false;}}
+let PH=[];try{PH=JSON.parse(localStorage.getItem('treino-flower-fotos-v1')||'[]');}catch(e){}
+function savePh(){try{localStorage.setItem('treino-flower-fotos-v1',JSON.stringify(PH));return true;}catch(e){return false;}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 function pad(n){return String(n).padStart(2,'0')}
 function ymd(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
@@ -1458,8 +1458,8 @@ const CMB={marsala:['rosa','bege','cinza'],terracota:['bege','marrom','verde'],v
 function corHex(k){const c=COR.find(x=>x[0]===k);return c?c[1]:'transparent'}
 function kMatch(a,b){if(!a||!b)return false;if(a===b)return true;if(NEU.includes(a)||NEU.includes(b))return true;return (CMB[a]||[]).includes(b)||(CMB[b]||[]).includes(a)}
 function kList(k){return COR.map(c=>c[0]).filter(c=>c!==k&&kMatch(k,c))}
-let LKP=[];try{LKP=JSON.parse(localStorage.getItem('treino-chiquinha-looks-v1')||'[]');}catch(e){}
-function saveLkp(){try{localStorage.setItem('treino-chiquinha-looks-v1',JSON.stringify(LKP));return true;}catch(e){return false;}}
+let LKP=[];try{LKP=JSON.parse(localStorage.getItem('treino-flower-looks-v1')||'[]');}catch(e){}
+function saveLkp(){try{localStorage.setItem('treino-flower-looks-v1',JSON.stringify(LKP));return true;}catch(e){return false;}}
 function lkByK(c){return S.look.p.filter(x=>x.c===c).map(x=>x.n+(x.k?' ('+x.k+')':''))}
 function lkPiece(c,n){return S.look.p.find(x=>x.c===c&&x.n===n)}
 function lkCombos(P){
