@@ -594,6 +594,27 @@ const ICON_CHK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strok
 const ICON_CHEV='<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
 /* Exercícios: passos curtos, respiração e cuidado de cada um */
 const EX={
+  bola_aq:{nome:'Aquecer com a bola de pilates',onde:'Bola de pilates',
+    passos:['Sente no meio da bola, pés firmes no chão, na largura do quadril.','Quique bem de leve, como se fosse uma sentadinha pequena.','Depois faça círculos lentos com o quadril, para um lado e para o outro.'],
+    respire:'Normal, sem prender.',cuidado:'Fique perto de uma parede ou do espaldar para se apoiar se precisar.'},
+  circuito_el:{nome:'Circuito leve com elástico e bola',onde:'Elástico e bola de pilates',
+    passos:['Faça cada movimento por 40 segundos e descanse 20: marcha sentada na bola.','Depois passos laterais com o elástico acima dos joelhos.','Depois puxada do elástico (remada em pé). Repita a volta até completar o tempo.'],
+    respire:'Normal e contínua. Num ritmo em que ainda dá para conversar.',cuidado:'Se sentir tontura, dor no peito ou falta de ar, pare e sente.'},
+  ponte_bola:{nome:'Ponte com os pés na bola',onde:'Colchonete e bola de pilates',
+    passos:['Deite de costas e apoie os calcanhares em cima da bola.','Suba o quadril apertando o bumbum.','Desça devagar, sem deixar a bola fugir.'],
+    respire:'Solte o ar ao subir.',cuidado:'Faça devagar. Se a bola balançar muito, apoie a bola na parede.'},
+  agacha_bola:{nome:'Agachamento com a bola na parede',onde:'Bola de pilates e parede',
+    passos:['Posicione a bola entre as suas costas e a parede.','Desça devagar, como se fosse sentar, joelhos na direção dos pés.','Suba apertando o bumbum.'],
+    respire:'Solte o ar ao subir.',cuidado:'Os joelhos não passam da ponta dos pés. Pare se doer o joelho.'},
+  remada_el:{nome:'Remada com elástico',onde:'Elástico',
+    passos:['Sentada no chão, pernas esticadas, com o elástico preso nos pés.','Puxe as pontas até a barriga, juntando as costas.','Volte devagar.'],
+    respire:'Solte o ar ao puxar.',cuidado:'Costas retas e ombros longe das orelhas.'},
+  abertura_el:{nome:'Abertura de pernas com elástico',onde:'Elástico e bola de pilates',
+    passos:['Sente na bola com o elástico acima dos joelhos.','Abra os joelhos contra o elástico, devagar.','Volte sem soltar de uma vez.'],
+    respire:'Solte o ar ao abrir.',cuidado:'Pés firmes no chão e coluna alta.'},
+  abdominal_bola:{nome:'Abdominal leve na bola',onde:'Bola de pilates',
+    passos:['Sente na bola e caminhe os pés para frente até apoiar as costas.','Mãos leves atrás da cabeça, sem puxar o pescoço.','Suba o tronco um pouquinho e desça devagar.'],
+    respire:'Solte o ar ao subir.',cuidado:'Movimento pequeno. Se doer a lombar, volte para o gato e vaca.'},
   bike_aq:{nome:'Aquecer na bike',onde:'Bike vertical',
     passos:['Ajuste o banco: com o pé embaixo, o joelho fica um pouco dobrado.','Pedale leve, num ritmo em que dá para conversar.','Costas retas e mãos soltas no guidão.'],
     respire:'Normal, pelo nariz e pela boca.',cuidado:'Se sentir tontura, pare e sente.'},
@@ -685,25 +706,25 @@ const EX={
 
 const DAYS=[
  {n:1,nome:'Pernas e glúteos',foco:'Força para a parte de baixo',min:40,itens:[
-  {id:'bike_aq',s:'5 minutos',t:300},{id:'legpress',s:'3 séries de 12',d:60},{id:'caixa',s:'3 séries de 10',d:60},
-  {id:'ponte',s:'3 séries de 15',d:45},{id:'birddog',s:'3 séries de 8 por lado',d:30},{id:'prancha',s:'3 séries de 20 segundos',t:20,d:30},{id:'along',s:'5 minutos',t:300}]},
+  {id:'bola_aq',s:'5 minutos',t:300},{id:'legpress',s:'3 séries de 12',d:60},{id:'caixa',s:'3 séries de 10',d:60},
+  {id:'ponte_bola',s:'3 séries de 12',d:45},{id:'birddog',s:'3 séries de 8 por lado',d:30},{id:'prancha',s:'3 séries de 20 segundos',t:20,d:30},{id:'along',s:'5 minutos',t:300}]},
  {n:2,nome:'Costas, peito e ombros',foco:'Parte de cima leve e barriga firme',min:40,itens:[
   {id:'esteira_aq',s:'5 minutos',t:300},{id:'puxada_pe',s:'3 séries de 12',d:60},{id:'remada',s:'3 séries de 12',d:60},
-  {id:'desenv',s:'3 séries de 10',d:60},{id:'lateral',s:'2 séries de 12',d:45},{id:'triceps',s:'2 séries de 12',d:45},{id:'deadbug',s:'3 séries de 8',d:30},{id:'along',s:'5 minutos',t:300}]},
+  {id:'desenv',s:'3 séries de 10',d:60},{id:'lateral',s:'2 séries de 12',d:45},{id:'triceps',s:'2 séries de 12',d:45},{id:'remada_el',s:'3 séries de 12',d:45},{id:'deadbug',s:'3 séries de 8',d:30},{id:'along',s:'5 minutos',t:300}]},
  {n:3,nome:'Pernas e tornozelo',foco:'Equilíbrio e proteção dos pés',min:40,itens:[
   {id:'eliptico_aq',s:'5 minutos',t:300},{id:'afundo',s:'3 séries de 8 por perna',d:60},{id:'panturrilha',s:'3 séries de 15',d:45},
   {id:'equilibrio',s:'3 vezes de 30 segundos por pé',t:30,d:30},{id:'lateral_el',s:'3 séries de 10 passos por lado',d:45},
-  {id:'tornozelo',s:'2 séries de 12 por pé',d:30},{id:'extensora',s:'3 séries de 12',d:60},{id:'along',s:'5 minutos',t:300}]},
+  {id:'tornozelo',s:'2 séries de 12 por pé',d:30},{id:'abertura_el',s:'3 séries de 12',d:45},{id:'extensora',s:'3 séries de 12',d:60},{id:'along',s:'5 minutos',t:300}]},
  {n:4,nome:'Cardio e lombar',foco:'Queimar energia e fortalecer as costas',min:35,itens:[
-  {id:'bike_cardio',s:'20 minutos',t:1200},{id:'gatovaca',s:'8 vezes',d:20},{id:'birddog',s:'3 séries de 8 por lado',d:30},
-  {id:'ponte',s:'3 séries de 12',d:45},{id:'prancha',s:'3 séries de 20 segundos',t:20,d:30},{id:'rolo',s:'5 minutos',t:300}]},
+  {id:'circuito_el',s:'20 minutos',t:1200},{id:'gatovaca',s:'8 vezes',d:20},{id:'birddog',s:'3 séries de 8 por lado',d:30},
+  {id:'abdominal_bola',s:'3 séries de 10',d:30},{id:'prancha',s:'3 séries de 20 segundos',t:20,d:30},{id:'rolo',s:'5 minutos',t:300}]},
  {n:5,nome:'Corpo todo leve',foco:'Dia mais tranquilo para manter o ritmo',min:35,itens:[
-  {id:'esteira_cardio',s:'15 minutos',t:900},{id:'caixa',s:'2 séries de 12',d:45},{id:'remada',s:'2 séries de 12',d:45},
+  {id:'esteira_cardio',s:'15 minutos',t:900},{id:'agacha_bola',s:'2 séries de 12',d:45},{id:'remada',s:'2 séries de 12',d:45},
   {id:'desenv',s:'2 séries de 10',d:45},{id:'ponte',s:'2 séries de 15',d:30},{id:'along',s:'5 minutos',t:300}]},
  {n:6,nome:'Treino leve do ciclo',foco:'Para menstruação, TPM ou dias de cansaço',min:25,itens:[
   {id:'esteira_leve',s:'10 minutos',t:600},{id:'gatovaca',s:'8 vezes',d:20},{id:'ponte',s:'2 séries de 10',d:30},{id:'along',s:'5 minutos',t:300}]}
 ];
-const WU=[['bike_aq','Bike'],['esteira_aq','Esteira'],['eliptico_aq','Elíptico']];
+const WU=[['bola_aq','Bola'],['esteira_aq','Esteira'],['eliptico_aq','Elíptico']];
 function dayItems(day){return day.itens.map((it,i)=>{const w=S.swap&&S.swap[day.n+':'+i];return (w&&EX[w])?Object.assign({},it,{id:w}):it;});}
 function swapUi(day,i,it){
   const base=day.itens[i].id;if(!WU.some(w=>w[0]===base))return '';
@@ -723,7 +744,7 @@ function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 function pad(n){return String(n).padStart(2,'0')}
 function ymd(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
 const today=ymd(new Date());
-S.shop=S.shop||{};S.team=S.team||{};S.prof=S.prof||{};S.yas=S.yas||{list:[]};S.cyc=S.cyc||{p:[],log:{}};S.swap=S.swap||{};S.cyc.p=S.cyc.p||[];S.cyc.log=S.cyc.log||{};S.vibe=S.vibe||{};S.look=S.look||{};S.look.p=S.look.p||[];S.look.t=S.look.t||{};
+S.shop=S.shop||{};S.team=S.team||{};S.prof=S.prof||{};S.yas=S.yas||{list:[]};S.cyc=S.cyc||{p:[],log:{}};S.swap=S.swap||{};Object.keys(S.swap).forEach(k=>{if(S.swap[k]==='bike_aq')S.swap[k]='bola_aq';if(S.swap[k]==='bike_cardio')S.swap[k]='circuito_el';});S.cyc.p=S.cyc.p||[];S.cyc.log=S.cyc.log||{};S.vibe=S.vibe||{};S.look=S.look||{};S.look.p=S.look.p||[];S.look.t=S.look.t||{};
 if(S.doneDate!==today){if(S.doneDate)S.wh[S.doneDate]=S.water||0;S.done={};S.water=0;S.meals={};S.doneDate=today;}
 if(!S.weights.length)S.weights.push({d:today,kg:60,seed:1});
 function wsOf(ds){const d=new Date(ds+'T12:00:00');const k=(d.getDay()+6)%7;d.setDate(d.getDate()-k);return ymd(d)}
@@ -736,7 +757,7 @@ let view='treino', openId=null, finished=false, ckPending=false;
 const wg=()=>S.waterGoal||8; // copos de 250 ml (8 = 2 litros, cerca de 35 ml por kg)
 const wkg=()=>(S.plan&&S.plan.length)||5, cg=()=>S.cardioGoal||150;
 const MEALS=[['cafe','Café da manhã','2 ovos, ou 6 colheres de sopa de iogurte, ou 2 fatias de queijo branco. E 1 fruta.'],['lm','Lanche da manhã','1 fruta ou 4 a 5 castanhas.'],['almoco','Almoço','Salada e legumes à vontade. Proteína: 1 filé do tamanho da palma da mão. Arroz: 3 colheres de sopa. Feijão: 2 colheres de sopa.'],['lt','Lanche da tarde','6 colheres de sopa de iogurte, ou 1 fruta, ou 1 fatia de pão integral com 1 ovo.'],['jantar','Jantar','Leve, no mesmo estilo do almoço.']];
-const CARDIO_IDS=['bike_aq','bike_cardio','esteira_aq','esteira_cardio','eliptico_aq','esteira_leve'];
+const CARDIO_IDS=['bola_aq','circuito_el','bike_aq','bike_cardio','esteira_aq','esteira_cardio','eliptico_aq','esteira_leve'];
 
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 function fmt(sec){return Math.floor(sec/60)+':'+pad(sec%60)}
@@ -861,7 +882,7 @@ function renderTreino(){
     h+='<div class="card'+(isDone?' done':'')+(isOpen?' open':'')+'">'
      +'<div class="head"><button class="chk" data-act="done" data-k="'+key+'" role="checkbox" aria-checked="'+isDone+'" aria-label="Marcar '+esc(e.nome)+' como feito">'+ICON_CHK+'</button>'
      +'<button class="toggle" data-act="open" data-k="'+key+'" aria-expanded="'+isOpen+'"><span class="name">'+esc(e.nome)+'</span><span class="how">'+esc(it.s)+'</span></button>'+ICON_CHEV+'</div>'
-     +'<div class="body"><div class="anim" data-id="'+it.id+'"><svg viewBox="0 0 300 190" role="img" aria-label="Animação: '+esc(e.nome)+'"><g class="ag"></g></svg><div class="acap" aria-live="off"></div><button class="btn alt small" data-act="pause">Pausar</button></div>'
+     +'<div class="body">'+(ANIM.A[ANIMMAP[it.id]||it.id]?'<div class="anim" data-id="'+it.id+'"><svg viewBox="0 0 300 190" role="img" aria-label="Animação: '+esc(e.nome)+'"><g class="ag"></g></svg><div class="acap" aria-live="off"></div><button class="btn alt small" data-act="pause">Pausar</button></div>':'')
      +swapUi(day,i,it)+'<h3>Onde</h3><p style="margin:0">'+esc(e.onde)+'</p>'
      +'<h3>Como fazer</h3><ol>'+e.passos.map(p=>'<li>'+esc(p)+'</li>').join('')+'</ol>'
      +'<div class="tip"><b>Respire:</b> '+esc(e.respire)+'</div>'
@@ -1031,7 +1052,7 @@ function renderCardio(){
    +'<p class="cnt">'+(wm>=cg()?'Meta da semana batida!':'Faltam '+(cg()-wm)+' minutos para a meta.')+'</p>'
    +'<div class="row"><button class="btn alt small" data-act="addc" data-m="10">+ 10 min</button><button class="btn alt small" data-act="addc" data-m="20">+ 20 min</button><button class="btn alt small" data-act="addc" data-m="30">+ 30 min</button></div>'
    +'<div class="row"><label class="kg" for="in-cm">Outro tempo <input id="in-cm" inputmode="numeric" placeholder="ex.: 25"> min</label><button class="btn small" data-act="addc2">Somar</button></div>'
-   +'<div class="tip"><b>Meta:</b> 150 minutos por semana de ritmo moderado é a recomendação geral para a saúde. Ao finalizar um treino, o app soma sozinho o que você marcou como feito (bike, esteira e elíptico).</div>'
+   +'<div class="tip"><b>Meta:</b> 150 minutos por semana de ritmo moderado é a recomendação geral para a saúde. Ao finalizar um treino, o app soma sozinho o que você marcou como feito (esteira, elíptico, bola e circuito com elástico).</div>'
    +(list.length?'<h3>Esta semana</h3>'+list.slice().reverse().map(c=>{const i=S.cardio.indexOf(c);return '<div class="li"><span>'+dm(c.d)+' · <b>'+c.min+' min</b>'+(c.auto?' (treino)':'')+'</span><button class="lnk" data-act="del" data-t="cardio" data-i="'+i+'" aria-label="Apagar registro">Apagar</button></div>';}).join(''):''));
   return h;
 }
@@ -1286,7 +1307,7 @@ function yasPrompt(){
      +'Meu pedido: montar 3 looks de treino para esta semana, confortáveis e que eu goste de usar. Nunca repita a mesma combinação. Use só as minhas peças, combine as cores com bom gosto e sugira no máximo 1 peça nova.\n'
      +'Dê no máximo 6 linhas. Não faça comentários sobre o meu corpo. No fim, lembre que é só uma sugestão.';}
   if(co)return 'Você é a IAsmin, uma coach esportiva e personal trainer virtual, simpática e leve. Responda em português, com frases curtas e simples, sem termos difíceis.\n'
-   +'Sobre mim: mulher, '+(S.age||46)+' anos, treino na academia do meu prédio '+wkg()+' vezes por semana, com halteres leves, elástico, bike, esteira, elíptico e máquinas.'
+   +'Sobre mim: mulher, '+(S.age||46)+' anos, treino na academia do meu prédio '+wkg()+' vezes por semana, com halteres leves, elástico, bola de pilates, esteira, elíptico e máquinas (a bike está quebrada, não usar).'
    +(P.g?' Meu objetivo: '+P.g+'.':'')+(P.t?' Gosto de treinar: '+P.t+'.':'')+(ex?' Meu treino de hoje tem: '+ex+'.':'')+'\n'
    +cyLine()+'\n'
    +'Meu pedido: '+Y.q.replace('Treino: ','').replace('Ciclo: ','')+'.\n'
@@ -1426,7 +1447,7 @@ const CYP={
  f:['Janela fértil','Muita gente sente mais disposição nesta fase. Aproveite para o treino mais puxado, sempre com aquecimento.','Siga o cardápio normal e beba bastante água.','Muita gente sente mais disposição agora. Aproveite, com aquecimento.'],
  o:['Ovulação prevista','Muita gente sente mais disposição nesta fase. Aproveite para o treino mais puxado, sempre com aquecimento.','Siga o cardápio normal e beba bastante água.','Muita gente sente mais disposição agora. Aproveite, com aquecimento.'],
  l:['Segunda metade do ciclo','A energia pode ir caindo aos poucos. Mantenha o treino e, se precisar, diminua a carga em vez de faltar.','Coma de 3 em 3 horas para a fome não bater forte à noite.','A energia pode cair aos poucos. Se precisar, diminua a carga em vez de faltar.'],
- t:['TPM','Treino mais leve é uma boa pedida: caminhada, bike tranquila, elíptico e alongamento. Se o corpo pedir descanso, sem culpa.','Vontade de doce é comum. Troque por fruta com pasta de amendoim, iogurte com fruta ou 1 ou 2 quadradinhos de chocolate amargo. Pouco sal ajuda no inchaço.','Treino mais leve é uma boa: caminhada, bike tranquila e alongamento. Sem culpa. Veja o "Treino leve do ciclo" logo abaixo.']
+ t:['TPM','Treino mais leve é uma boa pedida: caminhada, elíptico, bola de pilates e alongamento. Se o corpo pedir descanso, sem culpa.','Vontade de doce é comum. Troque por fruta com pasta de amendoim, iogurte com fruta ou 1 ou 2 quadradinhos de chocolate amargo. Pouco sal ajuda no inchaço.','Treino mais leve é uma boa: caminhada, bike tranquila e alongamento. Sem culpa. Veja o "Treino leve do ciclo" logo abaixo.']
 };
 const CYHUM={5:'ótimo',4:'bem',3:'normal',2:'triste',1:'muito triste'},CYEN={1:'baixa',2:'média',3:'alta'},CYSW={1:'nenhuma',2:'um pouco',3:'muita'},CYCR={1:'sem',2:'leve',3:'forte'};
 function cyInfo(ds){
@@ -1687,7 +1708,7 @@ function tick(){
 document.getElementById('tx').addEventListener('click',()=>{clearInterval(tm);tBox.classList.remove('on')});
 
 /* ---------- Animação do exercício aberto ---------- */
-const ANIMMAP={bike_aq:'bike',bike_cardio:'bike',esteira_aq:'walk',esteira_cardio:'walk',esteira_leve:'walk',eliptico_aq:'elip'};
+const ANIMMAP={ponte_bola:'ponte',agacha_bola:'caixa',remada_el:'remada',bike_aq:'bike',bike_cardio:'bike',esteira_aq:'walk',esteira_cardio:'walk',esteira_leve:'walk',eliptico_aq:'elip'};
 let raf=0,lastTs=0,animClock=0;
 let animPaused=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches);
 function startAnim(){
