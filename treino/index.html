@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-180.png?v=3"><meta name="theme-color" content="#D63660"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Treino leve">
+<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-180.png?v=4"><meta name="theme-color" content="#D9480F"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Treino leve">
 <title>Meu treino leve</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,22 +11,22 @@
 <style>
 /* Layout: coluna única de celular, cartões recolhíveis com filete dourado, letras grandes */
 :root{
-  --bg:#FBF8F3; --card:#FFFFFF; --ink:#3A2A24; --muted:#7A6A62;
-  --marsala:#7A2E3A; --on-marsala:#FFFFFF; --petrol:#1F5560; --gold:#B8935A;
-  --line:#E8DED2; --soft:#F3EBE1;
+  --bg:#FFF7EE; --card:#FFFFFF; --ink:#3A2418; --muted:#7A5F4F;
+  --marsala:#D9480F; --on-marsala:#FFFFFF; --petrol:#B34100; --gold:#F59F00;
+  --line:#F3DCC6; --soft:#FFEBD6;
   --display:'Cormorant Garamond',Georgia,serif; --body:'DM Sans',system-ui,sans-serif;
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
-    --bg:#1D1715; --card:#2A211E; --ink:#F2E8DE; --muted:#B9A99E;
-    --marsala:#D98794; --on-marsala:#2A1519; --petrol:#7CC1CC; --gold:#D2B27A;
-    --line:#41342F; --soft:#332925; color-scheme:dark;
+    --bg:#1F1510; --card:#2D1F17; --ink:#FFF0E3; --muted:#D2B8A5;
+    --marsala:#FF9A5C; --on-marsala:#2D1204; --petrol:#FFB27D; --gold:#FFC145;
+    --line:#4A3326; --soft:#3A281C; color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
-  --bg:#1D1715; --card:#2A211E; --ink:#F2E8DE; --muted:#B9A99E;
-  --marsala:#D98794; --on-marsala:#2A1519; --petrol:#7CC1CC; --gold:#D2B27A;
-  --line:#41342F; --soft:#332925; color-scheme:dark;
+  --bg:#1F1510; --card:#2D1F17; --ink:#FFF0E3; --muted:#D2B8A5;
+  --marsala:#FF9A5C; --on-marsala:#2D1204; --petrol:#FFB27D; --gold:#FFC145;
+  --line:#4A3326; --soft:#3A281C; color-scheme:dark;
 }
 *{box-sizing:border-box}
 html,body{margin:0}
@@ -1090,7 +1090,7 @@ const PRAISE=['Muito bem!','Isso aí!','Mandou bem!','Que orgulho!','Mais um! �
 let toastT=0;
 function toast(msg){let t=document.getElementById('toast');if(!t){t=document.createElement('div');t.id='toast';t.className='toast';t.setAttribute('role','status');document.body.appendChild(t);}
   t.textContent=msg;void t.offsetWidth;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('on'),3200);}
-function confetti(){const c=document.createElement('div');c.className='conf';const cols=['#7A2E3A','#1F5560','#B8935A','#E8A0AE','#7CC1CC','#F2D49B'];
+function confetti(){const c=document.createElement('div');c.className='conf';const cols=['#D9480F','#F59F00','#FFC145','#FF7A33','#FFB27D','#FFD8A8'];
   for(let i=0;i<46;i++){const e=document.createElement('i');e.style.left=Math.random()*100+'%';e.style.background=cols[i%cols.length];e.style.animationDelay=(Math.random()*.6)+'s';e.style.animationDuration=(1.8+Math.random()*1.2)+'s';c.appendChild(e);}
   document.body.appendChild(c);setTimeout(()=>c.remove(),3600);}
 const SND=(()=>{let ac=null,on=true;try{on=localStorage.getItem('treino-som')!=='0'}catch(e){}
@@ -1110,8 +1110,8 @@ function measureGuide(){
   return '<h3>Como medir sem balança</h3>'
   +'<div class="ill">'
   +'<div><svg viewBox="0 0 90 64" aria-hidden="true"><ellipse cx="22" cy="32" rx="16" ry="11" fill="#B8935A"/><ellipse cx="22" cy="30" rx="12" ry="7" fill="#F2D49B"/><rect x="36" y="29" width="48" height="6" rx="3" fill="#B8935A"/></svg><b>1 colher de sopa</b><br>cheia, sem transbordar</div>'
-  +'<div><svg viewBox="0 0 90 64" aria-hidden="true"><rect x="22" y="22" width="46" height="38" rx="14" fill="#E8B9A0"/><rect x="24" y="4" width="8" height="26" rx="4" fill="#E8B9A0"/><rect x="35" y="2" width="8" height="28" rx="4" fill="#E8B9A0"/><rect x="46" y="3" width="8" height="27" rx="4" fill="#E8B9A0"/><rect x="57" y="8" width="8" height="22" rx="4" fill="#E8B9A0"/><rect x="8" y="30" width="22" height="9" rx="4.5" fill="#E8B9A0" transform="rotate(-25 8 30)"/></svg><b>1 palma da mão</b><br>é 1 filé ou 1 peito de frango</div>'
-  +'<div><svg viewBox="0 0 90 64" aria-hidden="true"><path d="M12 30h66c0 18-14 28-33 28S12 48 12 30z" fill="#E8B9A0"/><circle cx="34" cy="26" r="7" fill="#B8935A"/><circle cx="48" cy="22" r="7" fill="#C9A36B"/><circle cx="60" cy="27" r="7" fill="#B8935A"/></svg><b>1 mão em concha</b><br>é um punhado (castanhas)</div>'
+  +'<div><svg viewBox="0 0 90 64" aria-hidden="true"><rect x="22" y="22" width="46" height="38" rx="14" fill="#FFC9A0"/><rect x="24" y="4" width="8" height="26" rx="4" fill="#FFC9A0"/><rect x="35" y="2" width="8" height="28" rx="4" fill="#FFC9A0"/><rect x="46" y="3" width="8" height="27" rx="4" fill="#FFC9A0"/><rect x="57" y="8" width="8" height="22" rx="4" fill="#FFC9A0"/><rect x="8" y="30" width="22" height="9" rx="4.5" fill="#FFC9A0" transform="rotate(-25 8 30)"/></svg><b>1 palma da mão</b><br>é 1 filé ou 1 peito de frango</div>'
+  +'<div><svg viewBox="0 0 90 64" aria-hidden="true"><path d="M12 30h66c0 18-14 28-33 28S12 48 12 30z" fill="#FFC9A0"/><circle cx="34" cy="26" r="7" fill="#B8935A"/><circle cx="48" cy="22" r="7" fill="#C9A36B"/><circle cx="60" cy="27" r="7" fill="#B8935A"/></svg><b>1 mão em concha</b><br>é um punhado (castanhas)</div>'
   +'</div>'
   +'<h3>Seu prato no almoço e no jantar</h3>'
   +'<div class="plate"><svg viewBox="0 0 120 120" role="img" aria-label="Prato dividido: metade salada e legumes, um pedaço proteína, um pedaço arroz e feijão"><circle cx="60" cy="60" r="56" fill="#fff" stroke="#E8DED2" stroke-width="3"/><path d="M60 60 L60 8 A52 52 0 0 0 60 112 Z" fill="#7BAF6A"/><path d="M60 60 L60 8 A52 52 0 0 1 112 60 Z" fill="#D98794"/><path d="M60 60 L112 60 A52 52 0 0 1 60 112 Z" fill="#E0B96A"/><path d="M60 8V112M60 60H112" stroke="#fff" stroke-width="3"/></svg>'
