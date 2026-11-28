@@ -615,6 +615,12 @@ const EX={
   abdominal_bola:{nome:'Abdominal leve na bola',onde:'Bola de pilates',
     passos:['Sente na bola e caminhe os pés para frente até apoiar as costas.','Mãos leves atrás da cabeça, sem puxar o pescoço.','Suba o tronco um pouquinho e desça devagar.'],
     respire:'Solte o ar ao subir.',cuidado:'Movimento pequeno. Se doer a lombar, volte para o gato e vaca.'},
+  agacha_corda:{nome:'Agachamento com apoio na corda',onde:'Corda ou faixa fixa na parede',
+    passos:['Antes, puxe a corda com força para ter certeza de que está bem presa. Na dúvida, peça para um instrutor conferir.','Segure com as duas mãos, braços quase esticados, pés na largura do quadril.','Desça devagar, como se fosse sentar, joelhos na direção dos pés. A corda ajuda você a se equilibrar.','Suba apertando o bumbum, sem puxar com os braços.'],
+    respire:'Solte o ar ao subir.',cuidado:'Use a corda só de apoio, não para se pendurar. Se doer o joelho, desça menos.'},
+  along_espaldar:{nome:'Alongar no espaldar',onde:'Espaldar (parede de madeira)',
+    passos:['Peitoral e costas: segure num degrau na altura do peito, afaste os pés para trás e leve o peito para baixo. Fique 20 segundos.','Panturrilha: apoie a ponta do pé num degrau baixo, calcanhar no chão, e incline o corpo para frente. 20 segundos em cada perna.','Lateral do corpo: segure num degrau e incline o tronco para o lado oposto. 20 segundos de cada lado.'],
+    respire:'Lenta e profunda, soltando o ar devagar.',cuidado:'Alongamento não deve doer. Pare no ponto em que sente só um esticar leve.'},
   bike_aq:{nome:'Aquecer na bike',onde:'Bike vertical',
     passos:['Ajuste o banco: com o pé embaixo, o joelho fica um pouco dobrado.','Pedale leve, num ritmo em que dá para conversar.','Costas retas e mãos soltas no guidão.'],
     respire:'Normal, pelo nariz e pela boca.',cuidado:'Se sentir tontura, pare e sente.'},
@@ -710,9 +716,9 @@ const DAYS=[
   {id:'ponte_bola',s:'3 séries de 12',d:45},{id:'birddog',s:'3 séries de 8 por lado',d:30},{id:'prancha',s:'3 séries de 20 segundos',t:20,d:30},{id:'along',s:'5 minutos',t:300}]},
  {n:2,nome:'Costas, peito e ombros',foco:'Parte de cima leve e barriga firme',min:40,itens:[
   {id:'esteira_aq',s:'5 minutos',t:300},{id:'puxada_pe',s:'3 séries de 12',d:60},{id:'remada',s:'3 séries de 12',d:60},
-  {id:'desenv',s:'3 séries de 10',d:60},{id:'lateral',s:'2 séries de 12',d:45},{id:'triceps',s:'2 séries de 12',d:45},{id:'remada_el',s:'3 séries de 12',d:45},{id:'deadbug',s:'3 séries de 8',d:30},{id:'along',s:'5 minutos',t:300}]},
+  {id:'desenv',s:'3 séries de 10',d:60},{id:'lateral',s:'2 séries de 12',d:45},{id:'triceps',s:'2 séries de 12',d:45},{id:'remada_el',s:'3 séries de 12',d:45},{id:'deadbug',s:'3 séries de 8',d:30},{id:'along_espaldar',s:'3 alongamentos de 20 segundos',t:20,d:15},{id:'along',s:'5 minutos',t:300}]},
  {n:3,nome:'Pernas e tornozelo',foco:'Equilíbrio e proteção dos pés',min:40,itens:[
-  {id:'eliptico_aq',s:'5 minutos',t:300},{id:'afundo',s:'3 séries de 8 por perna',d:60},{id:'panturrilha',s:'3 séries de 15',d:45},
+  {id:'eliptico_aq',s:'5 minutos',t:300},{id:'afundo',s:'3 séries de 8 por perna',d:60},{id:'agacha_corda',s:'3 séries de 10',d:45},{id:'panturrilha',s:'3 séries de 15',d:45},
   {id:'equilibrio',s:'3 vezes de 30 segundos por pé',t:30,d:30},{id:'lateral_el',s:'3 séries de 10 passos por lado',d:45},
   {id:'tornozelo',s:'2 séries de 12 por pé',d:30},{id:'abertura_el',s:'3 séries de 12',d:45},{id:'extensora',s:'3 séries de 12',d:60},{id:'along',s:'5 minutos',t:300}]},
  {n:4,nome:'Cardio e lombar',foco:'Queimar energia e fortalecer as costas',min:35,itens:[
@@ -720,7 +726,7 @@ const DAYS=[
   {id:'abdominal_bola',s:'3 séries de 10',d:30},{id:'prancha',s:'3 séries de 20 segundos',t:20,d:30},{id:'rolo',s:'5 minutos',t:300}]},
  {n:5,nome:'Corpo todo leve',foco:'Dia mais tranquilo para manter o ritmo',min:35,itens:[
   {id:'esteira_cardio',s:'15 minutos',t:900},{id:'agacha_bola',s:'2 séries de 12',d:45},{id:'remada',s:'2 séries de 12',d:45},
-  {id:'desenv',s:'2 séries de 10',d:45},{id:'ponte',s:'2 séries de 15',d:30},{id:'along',s:'5 minutos',t:300}]},
+  {id:'desenv',s:'2 séries de 10',d:45},{id:'ponte',s:'2 séries de 15',d:30},{id:'along_espaldar',s:'3 alongamentos de 20 segundos',t:20,d:15},{id:'along',s:'5 minutos',t:300}]},
  {n:6,nome:'Treino leve do ciclo',foco:'Para menstruação, TPM ou dias de cansaço',min:25,itens:[
   {id:'esteira_leve',s:'10 minutos',t:600},{id:'gatovaca',s:'8 vezes',d:20},{id:'ponte',s:'2 séries de 10',d:30},{id:'along',s:'5 minutos',t:300}]}
 ];
@@ -1708,7 +1714,7 @@ function tick(){
 document.getElementById('tx').addEventListener('click',()=>{clearInterval(tm);tBox.classList.remove('on')});
 
 /* ---------- Animação do exercício aberto ---------- */
-const ANIMMAP={ponte_bola:'ponte',agacha_bola:'caixa',remada_el:'remada',bike_aq:'bike',bike_cardio:'bike',esteira_aq:'walk',esteira_cardio:'walk',esteira_leve:'walk',eliptico_aq:'elip'};
+const ANIMMAP={agacha_corda:'caixa',ponte_bola:'ponte',agacha_bola:'caixa',remada_el:'remada',bike_aq:'bike',bike_cardio:'bike',esteira_aq:'walk',esteira_cardio:'walk',esteira_leve:'walk',eliptico_aq:'elip'};
 let raf=0,lastTs=0,animClock=0;
 let animPaused=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches);
 function startAnim(){
