@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-180.png?v=9"><meta name="theme-color" content="#6B4426"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Treino leve">
+<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-180.png?v=10"><meta name="theme-color" content="#6B4426"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Treino leve">
 <title>Meu treino leve</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -433,6 +433,12 @@ body{background-image:linear-gradient(160deg,rgba(255,255,255,.35),rgba(255,255,
 .tabs .tab:not([aria-selected="true"]){background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(205,205,215,.55))!important;border:1px solid rgba(255,255,255,.9)!important;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);box-shadow:0 3px 10px rgba(50,50,65,.15),inset 0 1.5px 0 #fff}
 .tabs .tab[aria-selected="true"]{box-shadow:0 6px 18px rgba(242,92,5,.5),inset 0 1.5px 0 rgba(255,255,255,.6)!important}
 #bnav{box-shadow:0 4px 18px rgba(255,170,80,.55),0 10px 26px rgba(60,35,15,.35),inset 0 1.5px 0 rgba(255,255,255,.25)}
+.trilha{margin:0 0 14px;padding:12px;border-radius:18px;background-image:linear-gradient(160deg,rgba(255,255,255,.7),rgba(255,255,255,.25));border:1px solid rgba(255,255,255,.8);box-shadow:0 8px 22px rgba(50,50,65,.16),inset 0 1.5px 0 #fff;-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
+.trilha b{display:block;font-size:15px;margin:0 0 8px;color:#C44A06}
+.trl{display:flex;gap:8px;flex-wrap:wrap}
+.trl a{flex:1;min-width:92px;text-align:center;text-decoration:none;font-weight:700;font-size:14px;color:#23211F;padding:11px 8px;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(205,205,215,.55));border:1px solid rgba(255,255,255,.9);box-shadow:0 3px 10px rgba(50,50,65,.16),inset 0 1.5px 0 #fff;min-height:44px;display:flex;align-items:center;justify-content:center}
+.trl a:active{transform:scale(.95)}
+.trilha small{display:block;margin-top:8px;color:var(--muted);font-size:12.5px}
 </style>
 </head>
 <body>
@@ -915,10 +921,6 @@ function renderTreino(){
   const sug=suggested();
   let h='';
   let p='';
-  p+=box('trilha','Trilha sonora para treinar','',
-    '<p class="how" style="margin:0 0 8px">Abre no YouTube. Deixe tocando e bora treinar.</p>'
-    +[['Anos 80 para treinar','anos 80 playlist para treinar academia'],['Gorillaz, as melhores','Gorillaz playlist melhores musicas'],['Música de treino, alta energia','playlist musica de treino academia motivacional']]
-     .map(p=>'<a class="btn alt" style="display:block;text-align:center;margin:0 0 8px;text-decoration:none" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query='+encodeURIComponent(p[1])+'">▶ '+p[0]+'</a>').join(''));
   p+='<div class="week"><b>'+wh.length+'</b><span>de '+wkg()+' treinos nesta semana. Qualquer número já é vitória.</span></div>';
   p+=vibeBox();
   p+=lkLine();
@@ -955,6 +957,7 @@ function renderTreino(){
   h+='<div class="meta"><span class="chip">cerca de '+day.min+' min</span><span class="chip">'+day.itens.length+' exercícios</span></div>';
   h+='<div class="bar"><i style="width:'+pct+'%"></i></div><p class="cnt">'+doneCount+' de '+day.itens.length+' feitos</p>';
   h+='<button class="btn go" data-act="start">'+(doneCount>0&&doneCount<day.itens.length?'Continuar treino':doneCount>=day.itens.length?'Treino completo':'Começar treino')+'</button>';
+  h+='<div class="trilha"><b>▶ Trilha sonora</b><div class="trl">'+[['Anos 80','anos 80 playlist para treinar academia'],['Gorillaz','Gorillaz playlist melhores musicas'],['Alta energia','playlist musica de treino academia motivacional']].map(t=>'<a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query='+encodeURIComponent(t[1])+'">'+t[0]+'</a>').join('')+'</div><small>Abre no YouTube. Deixe tocando e bora.</small></div>';
   dayItems(day).forEach((it,i)=>{
     const e=EX[it.id], key=day.n+':'+i, isDone=!!S.done[key], isOpen=openId===key;
     h+='<div class="card'+(isDone?' done':'')+(isOpen?' open':'')+'">'
