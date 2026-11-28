@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-180.png?v=4"><meta name="theme-color" content="#D9480F"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Treino leve">
+<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-180.png?v=5"><meta name="theme-color" content="#0B0B0F"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Treino leve">
 <title>Meu treino leve</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
 /* Layout: coluna única de celular, cartões recolhíveis com filete dourado, letras grandes */
 :root{
@@ -296,6 +296,76 @@ button,[data-act]{touch-action:manipulation}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0}
 .chips span{font-size:15px;padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:var(--card)}
 .li select{width:auto;min-height:40px;font-size:15px;padding:6px 8px}
+</style>
+
+<style id="tech">
+/* ===== Pele tech: grafite + laranja néon ===== */
+:root,:root:not([data-theme="light"]),:root[data-theme="dark"],:root[data-theme="light"]{
+  --bg:#0B0B0F; --card:#15151B; --ink:#F3F3F6; --muted:#9B9BA8;
+  --marsala:#FF6B1A; --on-marsala:#150800; --petrol:#FF8F3F; --gold:#FF9A4D;
+  --line:#26262F; --soft:#1C1C24; --cyan:#27D3F5;
+  --display:'Sora',system-ui,sans-serif; --body:'Sora',system-ui,sans-serif; --mono:'JetBrains Mono',ui-monospace,monospace;
+  color-scheme:dark;
+}
+html{background:#0B0B0F}
+body{background:radial-gradient(900px 420px at 85% -80px,rgba(255,107,26,.20),transparent 60%),radial-gradient(700px 380px at -10% 20%,rgba(39,211,245,.07),transparent 60%),#0B0B0F;font-size:16px;letter-spacing:.005em}
+.wrap{padding-top:22px}
+h1{font-weight:800;font-size:30px;letter-spacing:-.02em;text-transform:none}
+h1::after{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--marsala);margin-left:10px;box-shadow:0 0 0 0 rgba(255,107,26,.7);animation:ping 1.8s infinite;vertical-align:middle}
+@keyframes ping{70%{box-shadow:0 0 0 12px rgba(255,107,26,0)}100%{box-shadow:0 0 0 0 rgba(255,107,26,0)}}
+.sub{font-size:14px;color:var(--muted)}
+.rule{background:linear-gradient(90deg,var(--marsala),transparent)}
+.card,.info,.week,.box{background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.01)),var(--card);border:1px solid var(--line);border-top:1px solid rgba(255,107,26,.45);border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.card{transition:transform .18s,border-color .2s,box-shadow .2s}
+.card:active{transform:scale(.99)}
+.card.open{border-color:rgba(255,107,26,.6);box-shadow:0 0 0 1px rgba(255,107,26,.25),0 10px 30px rgba(255,107,26,.12)}
+.name{font-weight:700;font-size:16px}
+.how,.cnt,.subt{color:var(--muted)}
+.body h3,.sug{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan)}
+.tip{background:var(--soft);border-left:3px solid var(--marsala);border-radius:10px}
+.chip{background:var(--soft);border-color:var(--line);font-family:var(--mono);font-size:12px}
+.big,.week b,.timer .t,.hinfo .nm,.done-msg b{font-family:var(--mono);font-weight:700}
+.big{font-size:40px;color:var(--marsala);text-shadow:0 0 22px rgba(255,107,26,.45)}
+.btn{background:linear-gradient(135deg,#FF8A3D,#FF5A0A);color:#150800;border-radius:12px;font-weight:800;letter-spacing:.02em;box-shadow:0 6px 18px rgba(255,107,26,.35)}
+.btn.alt{background:transparent;color:var(--marsala);border:1.5px solid rgba(255,107,26,.7);box-shadow:none}
+.btn:active{transform:scale(.96)}
+.tab{border-radius:12px;background:var(--soft);border-color:var(--line);color:var(--muted);font-weight:700;font-size:13px}
+.tab[aria-selected="true"]{background:linear-gradient(135deg,#FF8A3D,#FF5A0A);color:#150800;border-color:transparent;box-shadow:0 0 18px rgba(255,107,26,.45)}
+.nav{background:rgba(11,11,15,.82)}
+.chk{border-color:var(--marsala);border-radius:10px}
+.card.done .chk{background:var(--marsala);border-color:var(--marsala);box-shadow:0 0 14px rgba(255,107,26,.6)}
+.bar{background:var(--soft);height:10px}
+.bar i{background:linear-gradient(90deg,#FF5A0A,#FFB347,#FF5A0A);background-size:200% 100%;animation:flow 2.4s linear infinite}
+@keyframes flow{to{background-position:-200% 0}}
+.kg input,input,select,textarea{background:var(--soft)!important;color:var(--ink)!important;border-color:var(--line)!important;border-radius:10px}
+.hero{background:linear-gradient(135deg,rgba(255,107,26,.18),rgba(39,211,245,.06)),var(--card);border:1px solid rgba(255,107,26,.35);border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+.ring svg circle:nth-child(2){filter:drop-shadow(0 0 6px rgba(255,107,26,.9));stroke:var(--marsala)}
+.ring .pc{font-family:var(--mono)}
+.mini{display:none}
+.timer{background:#15151B;border-top:1px solid var(--marsala);box-shadow:0 -8px 30px rgba(255,107,26,.25)}
+.timer.end{background:var(--marsala);color:#150800}
+.toast{border-radius:12px}
+.anim{background:var(--soft)}
+.anim .bd{stroke:var(--cyan)}.anim .hd{stroke:var(--cyan);fill:var(--card)}
+.cup .glass{fill:rgba(255,255,255,.06);stroke:var(--cyan)}.cup .wat{fill:var(--cyan)}
+a{color:var(--marsala)}
+.brand,.brand a{color:var(--muted)}
+#som{background:var(--card)!important;border:1px solid rgba(255,107,26,.5)!important;color:var(--ink)!important;box-shadow:0 0 14px rgba(255,107,26,.3)}
+.qtile .v.t{font-size:16px}
+/* ===== Atalhos clicáveis ===== */
+.qa{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0 4px}
+.qtile{position:relative;overflow:hidden;font:inherit;text-align:left;color:var(--ink);background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.01)),var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 12px 10px;cursor:pointer;min-height:92px;display:flex;flex-direction:column;justify-content:space-between;transition:transform .15s,border-color .2s,box-shadow .2s;animation:rise .5s both}
+.qtile:nth-child(2){animation-delay:.05s}.qtile:nth-child(3){animation-delay:.1s}.qtile:nth-child(4){animation-delay:.15s}.qtile:nth-child(5){animation-delay:.2s}.qtile:nth-child(6){animation-delay:.25s}
+.qtile::after{content:"";position:absolute;right:-18px;top:-18px;width:60px;height:60px;border-radius:50%;background:radial-gradient(circle,rgba(255,107,26,.35),transparent 70%);transition:transform .3s}
+.qtile:active{transform:scale(.95);border-color:var(--marsala);box-shadow:0 0 20px rgba(255,107,26,.4)}
+.qtile:active::after{transform:scale(2.2)}
+.qtile svg{width:24px;height:24px;stroke:var(--marsala);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.qtile .v{font-family:var(--mono);font-weight:700;font-size:20px;line-height:1;margin-top:8px}
+.qtile .v small{font-size:11px;color:var(--muted);font-weight:500}
+.qtile .l{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.qtile.hot{border-color:rgba(255,107,26,.6);background:linear-gradient(135deg,rgba(255,107,26,.22),rgba(255,107,26,.04)),var(--card);animation:rise .5s both,glow 2.6s 1s ease-in-out infinite}
+@keyframes glow{50%{box-shadow:0 0 22px rgba(255,107,26,.45)}}
+@media (prefers-reduced-motion:reduce){.qtile,.qtile.hot,h1::after,.bar i{animation:none}}
 </style>
 </head>
 <body>
@@ -876,6 +946,25 @@ function teamBox(){
 
 function avatarHtml(){return S.avatar?'<img class="av" alt="Sua foto" src="'+S.avatar+'">':'<div class="av" aria-hidden="true">🙂</div>';}
 
+
+function quickTiles(wp,wtp,mp){
+  const ic={t:'<svg viewBox="0 0 24 24"><path d="M6 8v8M3 10v4M18 8v8M21 10v4M6 12h12"/></svg>',
+   c:'<svg viewBox="0 0 24 24"><path d="M3 12h4l2-6 4 12 2-6h6"/></svg>',
+   p:'<svg viewBox="0 0 24 24"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg>',
+   a:'<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>',
+   w:'<svg viewBox="0 0 24 24"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg>',
+   s:'<svg viewBox="0 0 24 24"><path d="M6 6h15l-2 9H8zM6 6 5 3H2M9 20a1 1 0 1 0 0 .01M18 20a1 1 0 1 0 0 .01"/></svg>'};
+  const T=(act,v,i,val,lab,hot)=>'<button class="qtile'+(hot?' hot':'')+'" data-act="'+act+'"'+(v?' data-v="'+v+'"':'')+'>'+ic[i]+'<div><div class="v">'+val+'</div><div class="l">'+lab+'</div></div></button>';
+  const st=streak();
+  return '<div class="qa">'
+   +T('view','treino','t',wp+'<small>%</small>','Treino de hoje',true)
+   +T('view','cardio','c',cardioWeekMin()+'<small>/'+cg()+'min</small>','Cardio')
+   +T('view','prog','p',st+'<small> dias</small>','Sequência')
+   +T('goagua','','w',(S.water||0)+'<small>/'+wg()+'</small>','Água')
+   +T('view','agenda','a',weekHist().length+'<small>/'+wkg()+'</small>','Agenda')
+   +T('view','compras','s','<span style="font-size:15px">Lista</span>','Compras')
+   +'</div>';
+}
 function heroHtml(){
   const P=S.prof||{},n=P.n||'';
   const wp=Math.min(100,Math.round(weekHist().length/wkg()*100));
@@ -887,7 +976,7 @@ function heroHtml(){
    +'<svg viewBox="0 0 84 84" aria-hidden="true"><circle cx="42" cy="42" r="38" fill="none" stroke="var(--line)" stroke-width="5"/><circle cx="42" cy="42" r="38" fill="none" stroke="var(--gold)" stroke-width="5" stroke-linecap="round" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'" style="transition:stroke-dashoffset .8s"/></svg>'
    +avatarHtml()+'<span class="pc">'+wp+'%</span></button>'
    +'<div class="hinfo"><div class="nm">Oi, '+esc(n||'linda')+'!</div><div class="msg">'+msg+' '+weekHist().length+' de '+wkg()+' treinos na semana.</div>'
-   +'<div class="mini"><button data-act="view" data-v="treino">🏋️ '+wp+'%</button><button data-act="goagua">💧 '+wtp+'%</button><button data-act="goagua">🥗 '+mp+'%</button></div></div></div>';
+   +'</div></div>'+quickTiles(wp,wtp,mp);
 }
 function meHeader(){const n=(S.prof&&S.prof.n)||'';if(!n&&!S.avatar)return '';
   return '<div class="me">'+avatarHtml()+'<div><div class="name" style="font-size:20px">Oi, '+esc(n||'você')+'!</div>'+(S.prof.g?'<div class="how">Meu objetivo: '+esc(S.prof.g)+'</div>':'')+'</div></div>';}
