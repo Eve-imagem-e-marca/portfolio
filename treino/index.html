@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-180.png?v=10"><meta name="theme-color" content="#6B4426"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Treino leve">
+<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-180.png?v=11"><meta name="theme-color" content="#6B4426"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Treino leve">
 <title>Meu treino leve</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1286,7 +1286,9 @@ const SND=(()=>{let ac=null,on=true;try{on=localStorage.getItem('treino-som')!==
 function ctx(){if(!ac){try{ac=new(window.AudioContext||window.webkitAudioContext)()}catch(e){return null}}if(ac.state==='suspended'){try{ac.resume()}catch(e){}}return ac}
 function note(f,t0,d,type,vol,slide){const c=ctx();if(!c||!on)return;const o=c.createOscillator(),g=c.createGain();o.type=type||'sine';const t=c.currentTime+t0;o.frequency.setValueAtTime(f,t);if(slide)o.frequency.exponentialRampToValueAtTime(slide,t+d);g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(vol||0.12,t+0.01);g.gain.exponentialRampToValueAtTime(0.0001,t+d);o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+d+0.02)}
 return{get on(){return on},toggle(){on=!on;try{localStorage.setItem('treino-som',on?'1':'0')}catch(e){}if(on)this.tap();return on},
-tap(){note(520,0,.05,'triangle',.07)},
+tap(){note(1500,0,.045,'sine',.2,2300);note(750,0,.06,'triangle',.1);try{navigator.vibrate&&navigator.vibrate(8)}catch(e){}},
+nav(){note(620,0,.08,'sine',.18,1250);note(1600,.055,.1,'sine',.14);try{navigator.vibrate&&navigator.vibrate(10)}catch(e){}},
+sweep(){note(260,0,.28,'triangle',.16,1400);note(1760,.22,.22,'sine',.14);note(2093,.3,.3,'sine',.1);try{navigator.vibrate&&navigator.vibrate([20,40,20])}catch(e){}},
 check(){note(660,0,.09,'sine',.13);note(990,.07,.14,'sine',.13)},
 uncheck(){note(420,0,.1,'triangle',.08,300)},
 cup(){note(900,0,.12,'sine',.12,1500);note(1300,.06,.1,'sine',.08,700)},
@@ -1836,7 +1838,7 @@ function doFinish(){
 function onAct(e){
   const b=e.target.closest('[data-act]'); if(!b)return;
   const a=b.dataset.act;
-  if(a!=='cup'&&a!=='done'&&a!=='meal')SND.tap();
+  if(a==='view')SND.nav();else if(a==='start')SND.sweep();else if(a!=='cup'&&a!=='done'&&a!=='meal')SND.tap();
   if(a==='kg'||a==='rng'||a==='bpm'||a==='age'||a==='photo'||a==='team'||a==='prof'||a==='avatar'||a==='avdel'||a==='yas'||a==='opt'||a==='lksel'||a==='lkc'||a==='lkph'||a==='lkcb'||a==='lkcor')return;
   if(a==='view'){view=b.dataset.v;openId=FIRSTBOX[view];save();render();window.scrollTo({top:0});}
   else if(a==='box'||a==='info'||a==='agua'){const k=b.dataset.k||a;openId=openId===k?null:k;render();}
@@ -1973,6 +1975,7 @@ document.getElementById('app').addEventListener('change',e=>{
 render();
 
 </script>
-<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});}</script>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});}document.addEventListener('click',function(e){var b=e.target.closest('a,button');if(!b||b.closest('[data-act]')||b.id==='som')return;SND.tap()},true);
+</script>
 </body>
 </html>
