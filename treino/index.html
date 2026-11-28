@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-180.png?v=6"><meta name="theme-color" content="#F25C05"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Treino leve">
+<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-180.png?v=7"><meta name="theme-color" content="#F25C05"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Treino leve">
 <title>Meu treino leve</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -366,6 +366,32 @@ a{color:var(--marsala)}
 .qtile.hot{border-color:rgba(242,92,5,.55);background:linear-gradient(135deg,rgba(242,92,5,.16),rgba(242,92,5,.03)),var(--card);animation:rise .5s both,glow 2.6s 1s ease-in-out infinite}
 @keyframes glow{50%{box-shadow:0 0 18px rgba(242,92,5,.40)}}
 @media (prefers-reduced-motion:reduce){.qtile,.qtile.hot,h1::after,.bar i{animation:none}}
+
+/* ===== UX: menu inferior, treino em primeiro ===== */
+body{padding-bottom:150px}
+#bnav{position:fixed;left:0;right:0;bottom:0;z-index:40;display:grid;grid-template-columns:repeat(5,1fr);background:rgba(255,255,255,.94);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom));box-shadow:0 -6px 20px rgba(20,20,40,.06)}
+#bnav button{font:inherit;border:0;background:none;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;min-height:52px;cursor:pointer;border-radius:12px;transition:transform .12s,color .2s}
+#bnav button:active{transform:scale(.92)}
+#bnav svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+#bnav span{font-size:11px;font-weight:700;letter-spacing:.02em}
+#bnav button[aria-current="true"]{color:var(--marsala)}
+#bnav button[aria-current="true"] svg{filter:drop-shadow(0 2px 6px rgba(242,92,5,.45))}
+.timer{bottom:calc(64px + env(safe-area-inset-bottom))!important;border-radius:16px 16px 0 0}
+.btn.go{width:100%;font-size:17px;min-height:54px;margin:2px 0 14px;animation:glow 2.6s ease-in-out infinite}
+.more-h{margin:26px 0 10px;font-size:20px}
+.more{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mt{font:inherit;text-align:left;color:var(--ink);background:var(--card);border:1px solid var(--line);box-shadow:0 4px 14px rgba(20,20,40,.06);border-radius:16px;padding:16px 14px;cursor:pointer;display:flex;flex-direction:column;gap:4px;min-height:92px;transition:transform .15s,border-color .2s}
+.mt:active{transform:scale(.96);border-color:var(--marsala)}
+.mt b{font-size:17px}.mt span{font-size:13px;color:var(--muted)}
+.hero{padding:10px 12px;margin-bottom:0}
+.qtile{min-height:76px;padding:10px}
+.qtile .v{font-size:18px;margin-top:4px}
+.qtile svg{width:20px;height:20px}
+.qtile .l{font-size:10px}
+.tabs .tab{min-height:42px}
+.sub{margin-bottom:10px}
+#som{bottom:calc(76px + env(safe-area-inset-bottom))!important;width:36px;height:36px;font-size:16px;right:10px;opacity:.9}
+.qa{margin:8px 0 6px}
 </style>
 </head>
 <body>
@@ -375,6 +401,9 @@ a{color:var(--marsala)}
   <hr class="rule">
   <button id="som" type="button" aria-label="Som ligado ou desligado"></button>
   <div id="app"></div>
+</div>
+<nav id="bnav" aria-label="Menu principal"></nav>
+<div style="display:none">
   <p class="brand"><a href="https://instagram.com/corage.produtosdigitais" target="_blank" rel="noopener"><b>CorAge</b> · Produtos Digitais</a><br><a href="https://instagram.com/eve.imagememarca" target="_blank" rel="noopener">@eve.imagememarca</a><br>© 2026 · Todos os direitos reservados</p>
 </div>
 <div class="timer" id="timer" role="timer" aria-live="polite">
@@ -844,22 +873,23 @@ function renderTreino(){
   const pct=Math.round(doneCount/day.itens.length*100);
   const sug=suggested();
   let h='';
-  h+=box('trilha','Trilha sonora para treinar','',
+  let p='';
+  p+=box('trilha','Trilha sonora para treinar','',
     '<p class="how" style="margin:0 0 8px">Abre no YouTube. Deixe tocando e bora treinar.</p>'
     +[['Anos 80 para treinar','anos 80 playlist para treinar academia'],['Gorillaz, as melhores','Gorillaz playlist melhores musicas'],['Música de treino, alta energia','playlist musica de treino academia motivacional']]
      .map(p=>'<a class="btn alt" style="display:block;text-align:center;margin:0 0 8px;text-decoration:none" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query='+encodeURIComponent(p[1])+'">▶ '+p[0]+'</a>').join(''));
-  h+='<div class="week"><b>'+wh.length+'</b><span>de '+wkg()+' treinos nesta semana. Qualquer número já é vitória.</span></div>';
-  h+=vibeBox();
-  h+=lkLine();
-  h+=cyTip();
-  h+=box('info','Antes de começar','',
+  p+='<div class="week"><b>'+wh.length+'</b><span>de '+wkg()+' treinos nesta semana. Qualquer número já é vitória.</span></div>';
+  p+=vibeBox();
+  p+=lkLine();
+  p+=cyTip();
+  p+=box('info','Antes de começar','',
     '<h3>Como ler o treino</h3><p><b>Série</b> é um grupo de repetições. <b>Repetição</b> é cada vez que você faz o movimento. Entre as séries, descanse.</p>'
    +'<h3>Qual peso usar</h3><p>Comece leve. Ao final de cada série, você deve sentir que ainda dava para fazer mais 3 repetições. Se ficou fácil por duas vezes seguidas, suba meio quilo.</p>'
    +'<h3>Cuidados com você</h3><p>Nunca prenda a respiração. Solte o ar quando fizer força. Lombar e tornozelo: vá devagar e pare se doer. Dor que não passa merece conversa com seu médico.</p>'
    +'<h3>Pare e procure ajuda se</h3><p>Sentir tontura, dor no peito, falta de ar forte ou dor forte na lombar.</p>'
    +'<h3>Vem todo dia?</h3><p>Ótimo! Mas escute o corpo. Em dia cansado, faça só o aquecimento e o alongamento. Isso também conta.</p>');
   const wc=S.water||0, mc=MEALS.filter(m=>S.meals[m[0]]).length;
-  h+=box('agua','Água e alimentação','· '+wc+'/'+wg()+' copos',
+  p+=box('agua','Água e alimentação','· '+wc+'/'+wg()+' copos',
     '<h3>Meta de água: '+k1(wg()*0.25)+' litros</h3><p style="margin:0 0 8px">São '+wg()+' copos de 250 ml. Se suar muito no treino, some 1 ou 2 copos. Você muda a meta na aba Agenda.</p>'
    +'<div class="bar"><i style="width:'+Math.min(100,Math.round(wc/wg()*100))+'%"></i></div>'
    +'<p class="cnt" style="margin-bottom:8px">'+(wc>=wg()?'Meta batida! Parabéns pelo cuidado.':wc+' de '+wg()+' copos hoje')+'</p>'
@@ -883,6 +913,7 @@ function renderTreino(){
   h+='<h2>'+esc(day.nome)+'</h2><p class="sub" style="margin:4px 0 0">'+esc(day.foco)+'</p>';
   h+='<div class="meta"><span class="chip">cerca de '+day.min+' min</span><span class="chip">'+day.itens.length+' exercícios</span></div>';
   h+='<div class="bar"><i style="width:'+pct+'%"></i></div><p class="cnt">'+doneCount+' de '+day.itens.length+' feitos</p>';
+  h+='<button class="btn go" data-act="start">'+(doneCount>0&&doneCount<day.itens.length?'Continuar treino':doneCount>=day.itens.length?'Treino completo':'Começar treino')+'</button>';
   dayItems(day).forEach((it,i)=>{
     const e=EX[it.id], key=day.n+':'+i, isDone=!!S.done[key], isOpen=openId===key;
     h+='<div class="card'+(isDone?' done':'')+(isOpen?' open':'')+'">'
@@ -913,6 +944,7 @@ function renderTreino(){
        +'<div class="row"><button class="btn" data-act="ck">Salvar</button><button class="btn alt" data-act="ckskip">Pular</button></div></div>';
     }
   }
+  h+='<h2 class="more-h">Mais para o seu dia</h2>'+p;
   return h;
 }
 function rng(id,label,hint,v){return '<div class="rg"><label for="'+id+'">'+label+' <span class="how">('+hint+')</span></label><div class="rgr"><input type="range" id="'+id+'" min="0" max="10" step="1" value="'+v+'" data-act="rng"><output id="'+id+'-o">'+v+'</output></div></div>';}
@@ -984,12 +1016,9 @@ function quickTiles(wp,wtp,mp){
   const T=(act,v,i,val,lab,hot)=>'<button class="qtile'+(hot?' hot':'')+'" data-act="'+act+'"'+(v?' data-v="'+v+'"':'')+'>'+ic[i]+'<div><div class="v">'+val+'</div><div class="l">'+lab+'</div></div></button>';
   const st=streak();
   return '<div class="qa">'
-   +T('view','treino','t',wp+'<small>%</small>','Treino de hoje',true)
    +T('view','cardio','c',cardioWeekMin()+'<small>/'+cg()+'min</small>','Cardio')
    +T('view','prog','p',st+'<small> dias</small>','Sequência')
    +T('goagua','','w',(S.water||0)+'<small>/'+wg()+'</small>','Água')
-   +T('view','agenda','a',weekHist().length+'<small>/'+wkg()+'</small>','Agenda')
-   +T('view','compras','s','<span style="font-size:15px">Lista</span>','Compras')
    +'</div>';
 }
 function heroHtml(){
@@ -1684,14 +1713,27 @@ function renderLook(){
 const VIEWS=[['treino','Treino'],['corpo','Corpo'],['cardio','Cardio'],['agenda','Agenda'],['ciclo','Ciclo'],['look','Look'],['prog','Progresso'],['compras','Compras'],['receitas','Receitas'],['mesa','Mesa']];
 const FIRSTBOX={corpo:'peso',cardio:'medidor',prog:'trein',treino:null,agenda:null,ciclo:null,look:null,compras:null,receitas:null,mesa:null};
 let lastView=null;
+
+const EXTRA=['corpo','ciclo','look','compras','receitas','mesa'];
+const NAVI={treino:'<path d="M6 8v8M3 10v4M18 8v8M21 10v4M6 12h12"/>',cardio:'<path d="M3 12h4l2-6 4 12 2-6h6"/>',prog:'<path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/>',agenda:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/>',mais:'<circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/>'};
+function drawNav(){
+  const el=document.getElementById('bnav');if(!el)return;
+  const items=[['treino','Treino'],['cardio','Cardio'],['prog','Progresso'],['agenda','Agenda'],['mais','Mais']];
+  const cur=EXTRA.includes(view)?'mais':view;
+  el.innerHTML=items.map(i=>'<button data-act="view" data-v="'+i[0]+'" aria-current="'+(cur===i[0])+'"><svg viewBox="0 0 24 24" aria-hidden="true">'+NAVI[i[0]]+'</svg><span>'+i[1]+'</span></button>').join('');
+}
+function renderMais(){
+  const D={corpo:['Corpo','Peso, cintura e medidas'],ciclo:['Ciclo','Treino conforme o seu dia'],look:['Look','Fotos e roupa de treino'],compras:['Compras','Lista do mercado'],receitas:['Receitas','Ideias para as refeições'],mesa:['Mesa','Refeição montada']};
+  return '<h2>Mais</h2><p class="sub" style="margin:4px 0 12px">Tudo o que não é o treino do dia.</p><div class="more">'
+   +EXTRA.filter(k=>!(k==='ciclo'&&S.showCyc===false)).map(k=>'<button class="mt" data-act="view" data-v="'+k+'"><b>'+D[k][0]+'</b><span>'+D[k][1]+'</span></button>').join('')+'</div>';
+}
 function render(){
   if(view==='ciclo'&&S.showCyc===false)view='treino';
-  let h='<div class="nav" role="tablist">'+VIEWS.filter(v=>!(v[0]==='ciclo'&&S.showCyc===false)).map(v=>'<button class="tab" role="tab" data-act="view" data-v="'+v[0]+'" aria-selected="'+(view===v[0])+'">'+v[1]+'</button>').join('')+'</div>';
-  h=heroHtml()+h;
-  h+=view==='treino'?renderTreino():view==='corpo'?renderCorpo():view==='cardio'?renderCardio():view==='agenda'?renderAgenda():view==='ciclo'?renderCiclo():view==='look'?renderLook():view==='compras'?renderCompras():view==='receitas'?renderReceitas():view==='mesa'?renderMesa():renderProgresso();
+  let h=heroHtml();
+  h+=view==='mais'?renderMais():view==='treino'?renderTreino():view==='corpo'?renderCorpo():view==='cardio'?renderCardio():view==='agenda'?renderAgenda():view==='ciclo'?renderCiclo():view==='look'?renderLook():view==='compras'?renderCompras():view==='receitas'?renderReceitas():view==='mesa'?renderMesa():renderProgresso();
   const ap=document.getElementById('app');ap.innerHTML=h;
   if(lastView!==view){lastView=view;ap.classList.add('go');setTimeout(()=>ap.classList.remove('go'),700);}
-  startAnim();
+  drawNav();startAnim();
 }
 
 /* ---------- Cronômetro ---------- */
@@ -1747,7 +1789,7 @@ function doFinish(){
   {const n=weekHist().length;celebrate(n>=wkg()?'Meta da semana batida! Você é incrível 🏆':'Parabéns! Treino feito 🎉',true);}
   const m=document.querySelector('.done-msg');if(m)m.scrollIntoView({behavior:'smooth',block:'center'});
 }
-document.getElementById('app').addEventListener('click',e=>{
+function onAct(e){
   const b=e.target.closest('[data-act]'); if(!b)return;
   const a=b.dataset.act;
   if(a!=='cup'&&a!=='done'&&a!=='meal')SND.tap();
@@ -1755,6 +1797,7 @@ document.getElementById('app').addEventListener('click',e=>{
   if(a==='view'){view=b.dataset.v;openId=FIRSTBOX[view];save();render();window.scrollTo({top:0});}
   else if(a==='box'||a==='info'||a==='agua'){const k=b.dataset.k||a;openId=openId===k?null:k;render();}
   else if(a==='day'){S.cur=+b.dataset.n;openId=null;finished=false;ckPending=false;save();render();window.scrollTo({top:0});}
+  else if(a==='start'){const day=DAYS.find(d=>d.n===S.cur);const it=dayItems(day);let k=it.findIndex((x,i)=>!S.done[day.n+':'+i]);if(k<0)k=0;openId=day.n+':'+k;render();setTimeout(()=>{const c=document.querySelector('.card.open');if(c)c.scrollIntoView({behavior:'smooth',block:'start'});},50);}
   else if(a==='open'){openId=openId===b.dataset.k?null:b.dataset.k;render();}
   else if(a==='done'){const k=b.dataset.k;S.done[k]=!S.done[k];if(S.done[k])SND.check();else SND.uncheck();try{navigator.vibrate&&navigator.vibrate(12)}catch(e){}save();render();
     if(S.done[k]){const dy=DAYS.find(d=>d.n===S.cur);if(dy.itens.every((it,i)=>S.done[dy.n+':'+i]))celebrate('Parabéns! Todos os exercícios de hoje 🎉',true);else celebrate(PRAISE[Math.floor(Math.random()*PRAISE.length)],false);}}
@@ -1789,7 +1832,7 @@ document.getElementById('app').addEventListener('click',e=>{
   else if(a==='swap'){const k=b.dataset.k,pr=k.split(':'),base=DAYS.find(d=>d.n===+pr[0]).itens[+pr[1]].id;S.swap=S.swap||{};if(b.dataset.v===base)delete S.swap[k];else S.swap[k]=b.dataset.v;save();render();}
   else if(a==='cyAsk'){S.yas=S.yas||{list:[]};S.yas.q=b.dataset.q;view='receitas';openId='yas';save();render();window.scrollTo({top:0});}
   else if(a==='goperfil'){view='corpo';openId='perfil';render();window.scrollTo({top:0});}
-  else if(a==='goagua'){view='treino';openId='agua';render();window.scrollTo({top:0});}
+  else if(a==='goagua'){view='treino';openId='agua';render();setTimeout(()=>{const c=document.querySelector('.info.open');if(c)c.scrollIntoView({behavior:'smooth',block:'start'});},60);}
   else if(a==='resumo'){
     const w=S.weights[S.weights.length-1],c=S.waist[S.waist.length-1],bp=S.bp[S.bp.length-1];
     let t='Meu resumo ('+dm(today)+')\n';
@@ -1855,7 +1898,8 @@ document.getElementById('app').addEventListener('click',e=>{
       save();render();
     }catch(er){msg.textContent='Não consegui ler. Cole o texto completo que você copiou.';}
   }
-});
+}
+document.getElementById("app").addEventListener("click",onAct);document.getElementById("bnav").addEventListener("click",onAct);
 function flash(id){const e=document.getElementById(id);if(e){e.focus();e.classList.add('bad');}}
 document.getElementById('app').addEventListener('input',e=>{
   const i=e.target.closest('[data-act]'); if(!i)return;
